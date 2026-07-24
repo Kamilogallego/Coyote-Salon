@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fidelización con Restaurante Coyote</title>
+  <link rel="stylesheet" href="formulario.css" />
+</head>
+<body>
+  <main class="form-container">
+    <header class="form-header">
+      <img class="brand-icon" src="images/coyote-fox.png" alt="" aria-hidden="true" />
+      <p class="brand-wordmark">Coyote</p>
+      <h1>Fidelización con Restaurante Coyote</h1>
+      <p class="subtitle">Regístrate</p>
+    </header>
+
+    <form id="formulario-coyote" novalidate>
+
+      <section class="accordion-section" data-section="personales">
+        <button type="button" class="accordion-toggle" aria-expanded="true" aria-controls="panel-personales">
+          <span>Datos personales</span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <div id="panel-personales" class="accordion-panel">
+          <div class="field">
+            <label for="nombre">Nombre completo <span class="required">*</span></label>
+            <input type="text" id="nombre" name="nombre" autocomplete="name" required />
+            <span class="error-message" data-error-for="nombre"></span>
+          </div>
+
+          <div class="field">
+            <label for="telefono">Número de teléfono <span class="required">*</span></label>
+            <input type="tel" id="telefono" name="telefono" inputmode="numeric" autocomplete="tel"
+                   pattern="[0-9]{7,10}" placeholder="Ej: 3001234567" required />
+            <span class="error-message" data-error-for="telefono"></span>
+          </div>
+
+          <div class="field">
+            <label for="cedula">Cédula <span class="required">*</span></label>
+            <input type="text" id="cedula" name="cedula" inputmode="numeric" pattern="[0-9]{5,10}" required />
+            <span class="hint">Este dato es necesario para poder redimir tus puntos.</span>
+            <span class="error-message" data-error-for="cedula"></span>
+          </div>
+
+          <div class="field">
+            <label for="correo">Correo electrónico <span class="required">*</span></label>
+            <input type="email" id="correo" name="correo" autocomplete="email" required />
+            <span class="error-message" data-error-for="correo"></span>
+          </div>
+
+          <div class="field">
+            <label for="ciudad">Ciudad de residencia <span class="required">*</span></label>
+            <input type="text" id="ciudad" name="ciudad" autocomplete="address-level2" required />
+            <span class="error-message" data-error-for="ciudad"></span>
+          </div>
+
+          <div class="field">
+            <label for="genero">Género <span class="required">*</span></label>
+            <select id="genero" name="genero" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="masculino">Masculino</option>
+              <option value="femenino">Femenino</option>
+              <option value="otro">Otro</option>
+            </select>
+            <span class="error-message" data-error-for="genero"></span>
+          </div>
+
+          <div class="field">
+            <label for="fecha-nacimiento">Fecha de nacimiento <span class="required">*</span></label>
+            <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" required />
+            <span class="error-message" data-error-for="fecha-nacimiento"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="accordion-section" data-section="sobre-ti">
+        <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="panel-sobre-ti">
+          <span>Sobre ti</span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <div id="panel-sobre-ti" class="accordion-panel is-collapsed">
+          <div class="field">
+            <label for="es-padre">¿Eres padre? <span class="required">*</span></label>
+            <select id="es-padre" name="es_padre" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+            <span class="error-message" data-error-for="es-padre"></span>
+          </div>
+
+          <div class="field">
+            <label for="tiene-pareja">¿Tienes pareja? <span class="required">*</span></label>
+            <select id="tiene-pareja" name="tiene_pareja" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="si">Sí</option>
+              <option value="no">No</option>
+            </select>
+            <span class="error-message" data-error-for="tiene-pareja"></span>
+          </div>
+
+          <div class="field is-collapsed" id="campo-aniversario">
+            <label for="fecha-aniversario">Fecha de tu aniversario</label>
+            <input type="date" id="fecha-aniversario" name="fecha_aniversario" />
+            <span class="error-message" data-error-for="fecha-aniversario"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="accordion-section" data-section="contacto">
+        <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="panel-contacto">
+          <span>Preferencias de contacto</span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <div id="panel-contacto" class="accordion-panel is-collapsed">
+          <div class="field">
+            <label for="medio-contacto">¿Cómo te gustaría que te contactemos? <span class="required">*</span></label>
+            <select id="medio-contacto" name="medio_contacto" required>
+              <option value="" disabled selected>Selecciona una opción</option>
+              <option value="correo">Correo electrónico</option>
+              <option value="llamada">Llamada telefónica</option>
+              <option value="whatsapp">WhatsApp / SMS</option>
+              <option value="ninguno">No deseo ser contactado</option>
+            </select>
+            <span class="error-message" data-error-for="medio-contacto"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal">
+        <div class="checkbox-field">
+          <input type="checkbox" id="mayor-edad" name="mayor_edad" required />
+          <label for="mayor-edad">Declaro que soy mayor de edad (18 años o más). <span class="required">*</span></label>
+        </div>
+        <span class="error-message" data-error-for="mayor-edad"></span>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="habeas-data" name="habeas_data" required />
+          <label for="habeas-data">
+            Autorizo el tratamiento de mis datos personales conforme a la
+            <strong>Ley 1581 de 2012</strong> y el <strong>Decreto 1377 de 2013</strong>
+            sobre Protección de Datos Personales (Habeas Data), y acepto la Política de
+            Tratamiento de Datos de Restaurante Coyote.
+            <span class="required">*</span>
+          </label>
+        </div>
+        <span class="error-message" data-error-for="habeas-data"></span>
+      </section>
+
+      <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+
+      <button type="submit" class="submit-btn">Enviar</button>
+    </form>
+  </main>
+
+  <script src="formulario.js"></script>
+</body>
+</html>
