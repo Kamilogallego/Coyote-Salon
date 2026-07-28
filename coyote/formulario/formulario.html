@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fidelización con Restaurante Coyote</title>
+  <link rel="stylesheet" href="formulario.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23/build/css/intlTelInput.css" />
+</head>
+<body>
+  <main class="form-container">
+    <div class="lang-switch" role="group" aria-label="Idioma / Language">
+      <button type="button" class="lang-btn" data-lang="es" aria-pressed="true" aria-label="Español">
+        <span class="flag flag-es" aria-hidden="true"></span> ES
+      </button>
+      <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+        <span class="flag flag-en" aria-hidden="true"></span> EN
+      </button>
+    </div>
+
+    <header class="form-header">
+      <img class="brand-logo" src="../images/logo-coyote.png" alt="Coyote Salón Social" />
+      <h1 data-i18n="header.title">Sé parte de nuestra comunidad</h1>
+      <p class="subtitle" data-i18n="header.subtitle">Regístrate</p>
+    </header>
+
+    <form id="formulario-coyote" novalidate>
+
+      <section class="accordion-section" data-section="personales">
+        <button type="button" class="accordion-toggle" aria-expanded="true" aria-controls="panel-personales">
+          <span data-i18n="section.personales">Datos personales</span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <div id="panel-personales" class="accordion-panel">
+          <div class="field">
+            <label for="nombre"><span data-i18n="label.nombre">Nombre completo</span> <span class="required">*</span></label>
+            <input type="text" id="nombre" name="nombre" autocomplete="name" required />
+            <span class="error-message" data-error-for="nombre"></span>
+          </div>
+
+          <div class="field">
+            <label for="telefono"><span data-i18n="label.telefono">Número de teléfono</span> <span class="required">*</span></label>
+            <input type="tel" id="telefono" name="telefono" autocomplete="tel" data-i18n-placeholder="placeholder.telefono" placeholder="Ej: 3001234567" required />
+            <span class="error-message" data-error-for="telefono"></span>
+          </div>
+
+          <div class="field">
+            <label for="tipo-documento"><span data-i18n="label.tipoDocumento">Tipo de documento</span> <span class="required">*</span></label>
+            <select id="tipo-documento" name="tipo_documento" required>
+              <option value="" disabled selected data-i18n="common.selecciona">Selecciona una opción</option>
+              <option value="cedula" data-i18n="tipoDocumento.cedula">Cédula de ciudadanía</option>
+              <option value="cedula_extranjeria" data-i18n="tipoDocumento.cedulaExtranjeria">Cédula de extranjería</option>
+              <option value="pasaporte" data-i18n="tipoDocumento.pasaporte">Pasaporte</option>
+              <option value="ppt" data-i18n="tipoDocumento.ppt">Permiso por Protección Temporal (PPT)</option>
+              <option value="pep" data-i18n="tipoDocumento.pep">Permiso Especial de Permanencia (PEP)</option>
+            </select>
+            <span class="error-message" data-error-for="tipo-documento"></span>
+          </div>
+
+          <div class="field">
+            <label for="cedula"><span data-i18n="label.cedula">Número de documento</span> <span class="required">*</span></label>
+            <input type="text" id="cedula" name="cedula" required />
+            <span class="hint" data-i18n="hint.cedula">Este dato es necesario para poder redimir tus puntos.</span>
+            <span class="error-message" data-error-for="cedula"></span>
+          </div>
+
+          <div class="field">
+            <label for="correo"><span data-i18n="label.correo">Correo electrónico</span> <span class="required">*</span></label>
+            <input type="email" id="correo" name="correo" autocomplete="email" required />
+            <span class="error-message" data-error-for="correo"></span>
+          </div>
+
+          <div class="field">
+            <label for="pais"><span data-i18n="label.pais">País</span> <span class="required">*</span></label>
+            <div class="autocomplete">
+              <input type="text" id="pais" autocomplete="off" required
+                     role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="pais-suggestions" />
+              <ul class="autocomplete-list" id="pais-suggestions" role="listbox" hidden></ul>
+            </div>
+            <input type="hidden" id="pais-codigo" name="pais" />
+            <span class="error-message" data-error-for="pais"></span>
+          </div>
+
+          <div class="field">
+            <label for="ciudad"><span data-i18n="label.ciudad">Ciudad de residencia</span> <span class="required">*</span></label>
+            <div class="autocomplete">
+              <input type="text" id="ciudad" name="ciudad" autocomplete="off" required
+                     role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="ciudad-suggestions" />
+              <ul class="autocomplete-list" id="ciudad-suggestions" role="listbox" hidden></ul>
+            </div>
+            <span class="hint" id="hint-ciudad" data-i18n="hint.ciudad.sinPais">Elige primero tu país para ver ciudades sugeridas.</span>
+            <span class="error-message" data-error-for="ciudad"></span>
+          </div>
+
+          <div class="field">
+            <label for="genero"><span data-i18n="label.genero">Género</span> <span class="required">*</span></label>
+            <select id="genero" name="genero" required>
+              <option value="" disabled selected data-i18n="common.selecciona">Selecciona una opción</option>
+              <option value="femenino" data-i18n="genero.femenino">Femenino (F)</option>
+              <option value="masculino" data-i18n="genero.masculino">Masculino (M)</option>
+              <option value="no_binario" data-i18n="genero.noBinario">No Binario (NB)</option>
+              <option value="trans" data-i18n="genero.trans">Trans (T)</option>
+              <option value="otro" data-i18n="genero.otro">Otro</option>
+            </select>
+            <span class="error-message" data-error-for="genero"></span>
+          </div>
+
+          <div class="field">
+            <label for="fecha-nacimiento"><span data-i18n="label.fechaNacimiento">Fecha de nacimiento</span> <span class="required">*</span></label>
+            <input type="date" id="fecha-nacimiento" name="fecha_nacimiento" required />
+            <span class="error-message" data-error-for="fecha-nacimiento"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="accordion-section" data-section="sobre-ti">
+        <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="panel-sobre-ti">
+          <span data-i18n="section.sobreti">Sobre ti</span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <div id="panel-sobre-ti" class="accordion-panel is-collapsed">
+          <div class="field">
+            <label for="es-padre"><span data-i18n="label.esPadre">¿Eres padre?</span> <span class="required">*</span></label>
+            <select id="es-padre" name="es_padre" required>
+              <option value="" disabled selected data-i18n="common.selecciona">Selecciona una opción</option>
+              <option value="si" data-i18n="common.si">Sí</option>
+              <option value="no" data-i18n="common.no">No</option>
+            </select>
+            <span class="error-message" data-error-for="es-padre"></span>
+          </div>
+
+          <div class="field">
+            <label for="tiene-pareja"><span data-i18n="label.tienePareja">¿Tienes pareja?</span> <span class="required">*</span></label>
+            <select id="tiene-pareja" name="tiene_pareja" required>
+              <option value="" disabled selected data-i18n="common.selecciona">Selecciona una opción</option>
+              <option value="si" data-i18n="common.si">Sí</option>
+              <option value="no" data-i18n="common.no">No</option>
+            </select>
+            <span class="error-message" data-error-for="tiene-pareja"></span>
+          </div>
+
+          <div class="field is-collapsed" id="campo-aniversario">
+            <label for="fecha-aniversario" data-i18n="label.fechaAniversario">Fecha de tu aniversario</label>
+            <input type="date" id="fecha-aniversario" name="fecha_aniversario" />
+            <span class="error-message" data-error-for="fecha-aniversario"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="accordion-section" data-section="contacto">
+        <button type="button" class="accordion-toggle" aria-expanded="false" aria-controls="panel-contacto">
+          <span data-i18n="section.contacto">Preferencias de contacto</span>
+          <span class="chevron" aria-hidden="true"></span>
+        </button>
+        <div id="panel-contacto" class="accordion-panel is-collapsed">
+          <div class="field">
+            <label for="medio-contacto"><span data-i18n="label.medioContacto">¿Cómo te gustaría que te contactemos?</span> <span class="required">*</span></label>
+            <select id="medio-contacto" name="medio_contacto" required>
+              <option value="" disabled selected data-i18n="common.selecciona">Selecciona una opción</option>
+              <option value="correo" data-i18n="medioContacto.correo">Correo electrónico</option>
+              <option value="llamada" data-i18n="medioContacto.llamada">Llamada telefónica</option>
+              <option value="whatsapp" data-i18n="medioContacto.whatsapp">WhatsApp / SMS</option>
+              <option value="ninguno" data-i18n="medioContacto.ninguno">No deseo ser contactado</option>
+            </select>
+            <span class="error-message" data-error-for="medio-contacto"></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="legal">
+        <div class="checkbox-field">
+          <input type="checkbox" id="mayor-edad" name="mayor_edad" required />
+          <label for="mayor-edad"><span data-i18n="checkbox.mayorEdad">Declaro que soy mayor de edad (18 años o más).</span> <span class="required">*</span></label>
+        </div>
+        <span class="error-message" data-error-for="mayor-edad"></span>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="habeas-data" name="habeas_data" required />
+          <label for="habeas-data">
+            <span data-i18n="checkbox.habeasIntro0">Acepto los </span><a href="terminos.html" target="_blank" rel="noopener" data-i18n="checkbox.terminosLink">Términos y Condiciones</a><span data-i18n="checkbox.habeasIntro"> y autorizo el tratamiento de mis datos personales conforme a la</span>
+            <strong>Ley 1581 de 2012</strong><span data-i18n="checkbox.habeasMid"> y el </span><strong>Decreto 1377 de 2013</strong>
+            <span data-i18n="checkbox.habeasEnd">sobre Protección de Datos Personales (Habeas Data), según la </span><a href="privacidad.html" target="_blank" rel="noopener" data-i18n="checkbox.habeasPoliticaLink">Política de Tratamiento de Datos de Coyote Salón Social</a>.
+            <span class="required">*</span>
+          </label>
+        </div>
+        <span class="error-message" data-error-for="habeas-data"></span>
+
+        <div class="checkbox-field">
+          <input type="checkbox" id="recibir-novedades" name="recibir_novedades" />
+          <label for="recibir-novedades">
+            <span data-i18n="checkbox.novedades">Sí, quiero enterarme de promociones, eventos y un beneficio especial en mi
+            cumpleaños por correo y/o WhatsApp. Es opcional y puedo darme de baja cuando quiera (</span><a href="privacidad.html" target="_blank" rel="noopener" data-i18n="checkbox.novedadesPoliticaLink">ver cómo</a><span data-i18n="checkbox.novedadesFin">).</span>
+          </label>
+        </div>
+      </section>
+
+      <div class="form-status" id="form-status" role="status" aria-live="polite"></div>
+
+      <button type="submit" class="submit-btn" data-i18n="common.enviar">Enviar</button>
+    </form>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23/build/js/intlTelInputWithUtils.min.js"></script>
+  <script src="formulario.js"></script>
+</body>
+</html>
