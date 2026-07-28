@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("fonts/Lora-Regular.woff2") format("woff2");
+  src: url("../fonts/Lora-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url("fonts/Lora-SemiBold.woff2") format("woff2");
+  src: url("../fonts/Lora-SemiBold.woff2") format("woff2");
 }
 
 @font-face {
@@ -19,7 +19,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("fonts/Lora-Bold.woff2") format("woff2");
+  src: url("../fonts/Lora-Bold.woff2") format("woff2");
 }
 
 @font-face {
@@ -27,7 +27,7 @@
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url("fonts/UnifrakturCook-Bold.woff2") format("woff2");
+  src: url("../fonts/UnifrakturCook-Bold.woff2") format("woff2");
 }
 
 :root {
@@ -35,10 +35,18 @@
   --coyote-rojo: #e91f1b;
   --coyote-crema: #d1c9b6;
   --coyote-texto: #1c1c1c;
+  color-scheme: light;
 }
 
 * {
   box-sizing: border-box;
+}
+
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
 }
 
 body {
@@ -54,28 +62,78 @@ body {
   padding: 1.25rem 1rem 3rem;
 }
 
+.lang-switch {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.lang-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border: 1px solid var(--coyote-crema);
+  background: #fffdfb;
+  color: var(--coyote-azul);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.flag {
+  display: inline-block;
+  width: 1.15rem;
+  height: 0.8rem;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.flag-es {
+  background: linear-gradient(to bottom, #aa151b 0 25%, #f1bf00 25% 75%, #aa151b 75% 100%);
+}
+
+.flag-en {
+  position: relative;
+  background: repeating-linear-gradient(to bottom, #b22234 0 12.5%, #fff 12.5% 25%);
+}
+
+.flag-en::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 55%;
+  background: #3c3b6e;
+}
+
+.lang-btn[aria-pressed="true"] {
+  background: var(--coyote-azul);
+  color: #fff;
+  border-color: var(--coyote-azul);
+}
+
 .form-header {
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
-.brand-icon {
-  width: 130px;
+.brand-logo {
+  width: 260px;
+  max-width: 100%;
   height: auto;
-  margin-bottom: 0.35rem;
-}
-
-.brand-wordmark {
-  font-family: "UnifrakturCook", "Segoe UI", serif;
-  font-weight: 700;
-  font-size: 2.6rem;
-  line-height: 1;
-  color: var(--coyote-azul);
-  margin: 0 0 0.5rem;
+  margin-bottom: 0.5rem;
+  mix-blend-mode: multiply;
 }
 
 .form-header h1 {
-  font-size: 1.4rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.03em;
   text-transform: uppercase;
@@ -86,9 +144,10 @@ body {
 .subtitle {
   margin: 0;
   color: var(--coyote-rojo);
-  letter-spacing: 0.08em;
+  font-weight: 600;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
 }
 
 .accordion-section {
@@ -142,6 +201,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
+  min-width: 0;
 }
 
 .field.is-collapsed {
@@ -162,25 +222,98 @@ label {
   color: #6b5b52;
 }
 
-input,
+.autocomplete {
+  position: relative;
+}
+
+.autocomplete-list {
+  position: absolute;
+  top: calc(100% + 0.3rem);
+  left: 0;
+  right: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 0.3rem 0;
+  list-style: none;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #fff;
+  border: 1px solid var(--coyote-crema);
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgba(28, 28, 28, 0.12);
+}
+
+.autocomplete-list[hidden] {
+  display: none;
+}
+
+.autocomplete-list li {
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  color: var(--coyote-texto);
+  cursor: pointer;
+}
+
+.autocomplete-list li:hover,
+.autocomplete-list li.is-active {
+  background: #f2ede3;
+}
+
+.autocomplete-list li.autocomplete-hint {
+  font-size: 0.8rem;
+  color: #6b5b52;
+  font-style: italic;
+  cursor: default;
+}
+
+.autocomplete-list li.autocomplete-hint:hover {
+  background: none;
+}
+
+input:not([type="checkbox"]),
 select {
   font-size: 1rem;
-  padding: 0.6rem 0.7rem;
+  padding: 0.75rem 0.7rem;
   border: 1px solid var(--coyote-crema);
   border-radius: 8px;
   background: #fffdfb;
   color: var(--coyote-texto);
+  min-height: 3rem;
 }
 
-input:focus,
+input:not([type="checkbox"]):focus,
 select:focus {
   outline: 2px solid var(--coyote-azul);
   outline-offset: 1px;
 }
 
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--coyote-azul);
+  outline-offset: 2px;
+}
+
 input.invalid,
 select.invalid {
   border-color: var(--coyote-rojo);
+}
+
+.iti {
+  display: block;
+  width: 100%;
+  min-width: 0;
+}
+
+.iti input {
+  width: 100%;
+}
+
+.iti .iti__selected-country {
+  border-right: 1px solid var(--coyote-crema);
+}
+
+.iti .iti__selected-dial-code {
+  margin-left: 2px;
+  margin-right: 10px;
 }
 
 .error-message {
@@ -200,11 +333,15 @@ select.invalid {
   display: flex;
   align-items: flex-start;
   gap: 0.5rem;
+  padding: 0.2rem 0;
 }
 
 .checkbox-field input {
-  margin-top: 0.2rem;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin-top: 0.1rem;
   flex-shrink: 0;
+  accent-color: var(--coyote-azul);
 }
 
 .checkbox-field label {
@@ -251,6 +388,6 @@ select.invalid {
   }
 
   .form-header h1 {
-    font-size: 1.7rem;
+    font-size: 1.25rem;
   }
 }
