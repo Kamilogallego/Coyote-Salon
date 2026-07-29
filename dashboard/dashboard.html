@@ -17,8 +17,6 @@
         <button type="button" class="nav-item is-active" data-page="resumen">Resumen</button>
         <button type="button" class="nav-item" data-page="clientes">Clientes</button>
         <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
-        <button type="button" class="nav-item" data-page="edad">Rango de edad</button>
-        <button type="button" class="nav-item" data-page="medio">Medio de contacto</button>
         <button type="button" class="nav-item" data-page="compartir">🔗 Formulario</button>
         <button type="button" class="nav-item nav-item-con-badge" data-page="papelera">
           🗑 Papelera
@@ -78,16 +76,15 @@
             </div>
           </div>
 
-          <div class="panel-grid-3" style="grid-template-columns: 1fr 1fr;">
-            <div class="panel">
-              <h2>Medio de contacto</h2>
+          <div class="panel">
+            <h2>Medio de contacto y rango de edad</h2>
+            <div class="resumen-combo">
               <div id="resumen-medio" class="chart-slot"></div>
-            </div>
-            <div class="panel panel-destacado">
-              <h2>Rango de edad más frecuente</h2>
-              <div class="destacado-icono">🕐</div>
-              <strong id="resumen-edad-top">—</strong>
-              <span id="resumen-edad-detalle" class="destacado-detalle"></span>
+              <div class="resumen-combo-destacado">
+                <div class="destacado-icono">🕐</div>
+                <strong id="resumen-edad-top">—</strong>
+                <span id="resumen-edad-detalle" class="destacado-detalle"></span>
+              </div>
             </div>
           </div>
 
@@ -100,7 +97,7 @@
                 </thead>
                 <tbody id="resumen-ultimos"></tbody>
               </table>
-              <button type="button" class="link-btn" data-goto="clientes">Ver todos</button>
+              <button type="button" class="link-btn" id="btn-ver-todos-clientes">Ver todos</button>
             </div>
             <div class="panel">
               <h2>Crecimiento mensual</h2>
@@ -156,22 +153,6 @@
               </thead>
               <tbody id="mes-tabla"></tbody>
             </table>
-          </div>
-        </section>
-
-        <!-- ---- Rango de edad ---- -->
-        <section id="page-edad" class="page">
-          <div class="panel">
-            <h2>Distribución por rango de edad</h2>
-            <div id="chart-edad" class="chart-slot chart-slot-grande"></div>
-          </div>
-        </section>
-
-        <!-- ---- Medio de contacto ---- -->
-        <section id="page-medio" class="page">
-          <div class="panel">
-            <h2>Medio de contacto preferido</h2>
-            <div id="chart-medio" class="chart-slot chart-slot-grande"></div>
           </div>
         </section>
 
@@ -294,10 +275,16 @@
 
           <div class="summary" id="resumen"></div>
 
+          <div class="acciones-masivas is-oculto" id="acciones-masivas">
+            <span id="contador-seleccionados">0 seleccionados</span>
+            <button type="button" id="btn-eliminar-seleccionados" class="btn-secundario">🗑 Eliminar seleccionados</button>
+          </div>
+
           <div class="table-wrap">
             <table class="tabla-clientes-grid">
               <thead>
                 <tr>
+                  <th class="th-checkbox"><input type="checkbox" id="checkbox-todos" aria-label="Seleccionar todos" /></th>
                   <th>Nombre</th>
                   <th>Teléfono</th>
                   <th>Documento</th>
@@ -470,6 +457,30 @@
     <div class="detalle-grid" id="detalle-contenido"></div>
     <div class="modal-actions">
       <button type="button" id="btn-cerrar-detalle" class="btn-secundario">Cerrar</button>
+    </div>
+  </dialog>
+
+  <dialog id="modal-confirmar">
+    <h2 id="confirmar-titulo">Confirmar acción</h2>
+    <p id="confirmar-mensaje"></p>
+    <div class="modal-actions">
+      <button type="button" id="btn-confirmar-cancelar" class="btn-secundario">Cancelar</button>
+      <button type="button" id="btn-confirmar-aceptar">Confirmar</button>
+    </div>
+  </dialog>
+
+  <dialog id="modal-lista-clientes">
+    <h2>Todos los clientes registrados</h2>
+    <div class="table-wrap">
+      <table class="tabla-mini">
+        <thead>
+          <tr><th>Cliente</th><th>Contacto</th><th>Registro</th></tr>
+        </thead>
+        <tbody id="lista-clientes-cuerpo"></tbody>
+      </table>
+    </div>
+    <div class="modal-actions">
+      <button type="button" id="btn-cerrar-lista-clientes" class="btn-secundario">Cerrar</button>
     </div>
   </dialog>
 

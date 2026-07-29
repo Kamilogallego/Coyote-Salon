@@ -247,6 +247,20 @@ router.get("/papelera", requireAuth, async (req, res) => {
   res.json({ dias_retencion: DIAS_RETENCION_PAPELERA, clientes: result.rows });
 });
 
+// POST /api/clientes/eliminar-multiple - mover varios a la papelera a la vez (requiere sesión)
+router.post("/eliminar-multiple", requireAuth, async (req, res) => {
+  const ids = Array.isArray(req.body.ids) ? req.body.ids.map(Number).filter(Number.isInteger) : [];
+  if (ids.length === 0) {
+    return res.status(400).json({ errores: ["No se recibieron clientes para eliminar"] });
+  }
+
+  const result = await pool.query(
+    "UPDATE clientes SET eliminado_en = NOW() WHERE id = ANY($1) AND eliminado_en IS NULL RETURNING id",
+    [ids]
+  );
+  res.json({ ok: true, eliminados: result.rows.length, dias_retencion: DIAS_RETENCION_PAPELERA });
+});
+
 // DELETE /api/clientes/:id - mover a la papelera (requiere sesión)
 router.delete("/:id", requireAuth, async (req, res) => {
   const result = await pool.query(

@@ -419,13 +419,6 @@ main {
   text-align: left;
 }
 
-.panel-grid-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
 .panel-grid-2 {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
@@ -508,6 +501,35 @@ main {
   font-size: 0.8rem;
   color: #6b5b52;
   margin-top: 0.2rem;
+}
+
+.resumen-combo {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.resumen-combo-destacado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--coyote-crema);
+}
+
+@media (max-width: 700px) {
+  .resumen-combo {
+    grid-template-columns: 1fr;
+  }
+
+  .resumen-combo-destacado {
+    padding-left: 0;
+    padding-top: 1rem;
+    border-left: none;
+    border-top: 1px solid var(--coyote-crema);
+  }
 }
 
 .mes-navegador {
@@ -676,7 +698,6 @@ main {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .panel-grid-3,
   .panel-grid-2 {
     grid-template-columns: 1fr;
   }
@@ -981,35 +1002,36 @@ tbody tr.fila-por-eliminar {
   outline-offset: -2px;
 }
 
-/* ---- Tabla de clientes: Nombre, Teléfono, Documento, País, Ciudad, Edad, Padre, Pareja, Medio contacto, Acciones ---- */
+/* ---- Tabla de clientes: Selección, Nombre, Teléfono, Documento, País, Ciudad, Edad, Padre, Pareja, Medio contacto, Acciones ---- */
 
 .tabla-clientes-grid {
   table-layout: fixed;
 }
 
-.tabla-clientes-grid td:nth-child(2),
-.tabla-clientes-grid td:nth-child(6),
+.tabla-clientes-grid td:nth-child(3),
 .tabla-clientes-grid td:nth-child(7),
-.tabla-clientes-grid td:nth-child(8) {
+.tabla-clientes-grid td:nth-child(8),
+.tabla-clientes-grid td:nth-child(9) {
   white-space: nowrap;
 }
 
-.tabla-clientes-grid td:nth-child(3),
-.tabla-clientes-grid td:nth-child(4) {
+.tabla-clientes-grid td:nth-child(4),
+.tabla-clientes-grid td:nth-child(5) {
   white-space: normal;
   word-break: break-word;
 }
 
-.tabla-clientes-grid th:nth-child(1) { width: 16%; }
-.tabla-clientes-grid th:nth-child(2) { width: 12%; }
-.tabla-clientes-grid th:nth-child(3) { width: 17%; }
-.tabla-clientes-grid th:nth-child(4) { width: 10%; }
+.tabla-clientes-grid th:nth-child(1) { width: 3%; }
+.tabla-clientes-grid th:nth-child(2) { width: 15%; }
+.tabla-clientes-grid th:nth-child(3) { width: 12%; }
+.tabla-clientes-grid th:nth-child(4) { width: 15%; }
 .tabla-clientes-grid th:nth-child(5) { width: 9%; }
-.tabla-clientes-grid th:nth-child(6) { width: 5%; }
-.tabla-clientes-grid th:nth-child(7) { width: 6%; }
+.tabla-clientes-grid th:nth-child(6) { width: 9%; }
+.tabla-clientes-grid th:nth-child(7) { width: 5%; }
 .tabla-clientes-grid th:nth-child(8) { width: 6%; }
-.tabla-clientes-grid th:nth-child(9) { width: 9%; }
-.tabla-clientes-grid th:nth-child(10) { width: 10%; }
+.tabla-clientes-grid th:nth-child(9) { width: 6%; }
+.tabla-clientes-grid th:nth-child(10) { width: 9%; }
+.tabla-clientes-grid th:nth-child(11) { width: 11%; }
 
 /* ---- Tabla de papelera: Nombre, Documento, Eliminado el, Días restantes, Acciones ---- */
 
@@ -1033,6 +1055,31 @@ tbody tr.fila-por-eliminar {
   font-size: 0.85rem;
   color: #6b5b52;
   margin-bottom: 0.8rem;
+}
+
+.acciones-masivas {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.8rem;
+  padding: 0.6rem 0.9rem;
+  background: #faf8f3;
+  border: 1px solid var(--coyote-crema);
+  border-radius: 8px;
+}
+
+.acciones-masivas.is-oculto {
+  display: none;
+}
+
+#contador-seleccionados {
+  font-size: 0.85rem;
+  color: var(--coyote-texto);
+}
+
+.acciones-masivas .btn-secundario {
+  color: var(--coyote-rojo);
+  border-color: var(--coyote-rojo);
 }
 
 .fila-acciones {
@@ -1074,7 +1121,8 @@ tbody tr.fila-por-eliminar {
 /* ---- Modal ---- */
 
 dialog#modal-cliente,
-dialog#modal-detalle {
+dialog#modal-detalle,
+dialog#modal-confirmar {
   border: 1px solid var(--coyote-crema);
   border-radius: 12px;
   padding: 1.5rem;
@@ -1189,4 +1237,71 @@ dialog::backdrop {
   .modal-grid {
     grid-template-columns: 1fr;
   }
+}
+
+dialog#modal-confirmar {
+  width: min(420px, 92vw);
+}
+
+#confirmar-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+#confirmar-mensaje {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--coyote-texto);
+}
+
+#modal-confirmar.es-peligro #confirmar-titulo {
+  color: var(--coyote-rojo);
+}
+
+#modal-confirmar.es-peligro #btn-confirmar-aceptar {
+  background: var(--coyote-rojo);
+}
+
+#modal-confirmar:not(.es-peligro) #btn-confirmar-aceptar {
+  background: #2f8f4e;
+}
+
+#modal-confirmar:not(.es-peligro) #btn-confirmar-aceptar:active {
+  background: #24713c;
+}
+
+dialog#modal-lista-clientes {
+  border: 1px solid var(--coyote-crema);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(600px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #fff;
+  color: var(--coyote-texto);
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  box-shadow: 0 20px 45px rgba(28, 28, 28, 0.22);
+}
+
+dialog#modal-lista-clientes h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+dialog#modal-lista-clientes .table-wrap {
+  max-height: 60vh;
+  overflow-y: auto;
 }

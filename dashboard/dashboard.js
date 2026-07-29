@@ -136,8 +136,6 @@ const TITULOS_PAGINA = {
   resumen: "Resumen",
   clientes: "Clientes",
   crecimiento: "Crecimiento",
-  edad: "Rango de edad",
-  medio: "Medio de contacto",
   compartir: "Compartir formulario",
   papelera: "Papelera",
 };
@@ -276,8 +274,6 @@ async function cargarEstadisticas() {
   renderBarChart(document.getElementById("resumen-medio"), medioDatos);
   renderBarChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
 
-  renderBarChart(document.getElementById("chart-medio"), medioDatos);
-  renderBarChart(document.getElementById("chart-edad"), edadDatos);
   renderBarChart(document.getElementById("chart-crecimiento"), crecimientoDatos);
 
   document.getElementById("tabla-crecimiento-mensual").innerHTML = stats.crecimientoMensual
@@ -684,7 +680,78 @@ const modalDetalle = document.getElementById("modal-detalle");
 const detalleTitulo = document.getElementById("detalle-titulo");
 const detalleContenido = document.getElementById("detalle-contenido");
 
+const modalConfirmar = document.getElementById("modal-confirmar");
+const confirmarTitulo = document.getElementById("confirmar-titulo");
+const confirmarMensaje = document.getElementById("confirmar-mensaje");
+const btnConfirmarAceptar = document.getElementById("btn-confirmar-aceptar");
+const btnConfirmarCancelar = document.getElementById("btn-confirmar-cancelar");
+
+function confirmarAccion(mensaje, { titulo = "Confirmar acción", textoAceptar = "Confirmar", peligro = true } = {}) {
+  confirmarTitulo.textContent = titulo;
+  confirmarMensaje.textContent = mensaje;
+  btnConfirmarAceptar.textContent = textoAceptar;
+  modalConfirmar.classList.toggle("es-peligro", peligro);
+  modalConfirmar.showModal();
+
+  return new Promise((resolve) => {
+    const cerrar = (resultado) => {
+      btnConfirmarAceptar.removeEventListener("click", onAceptar);
+      btnConfirmarCancelar.removeEventListener("click", onCancelar);
+      modalConfirmar.removeEventListener("cancel", onCancelar);
+      modalConfirmar.close();
+      resolve(resultado);
+    };
+    const onAceptar = () => cerrar(true);
+    const onCancelar = () => cerrar(false);
+    btnConfirmarAceptar.addEventListener("click", onAceptar);
+    btnConfirmarCancelar.addEventListener("click", onCancelar);
+    modalConfirmar.addEventListener("cancel", onCancelar);
+  });
+}
+
+const modalListaClientes = document.getElementById("modal-lista-clientes");
+const listaClientesCuerpo = document.getElementById("lista-clientes-cuerpo");
+
+async function abrirListaClientes() {
+  const res = await fetch("/api/clientes", { credentials: "include" });
+  if (res.status === 401) {
+    window.location.href = "login.html";
+    return;
+  }
+  const clientes = await res.json();
+  listaClientesCuerpo.innerHTML = clientes
+    .map(
+      (c) => `
+      <tr>
+        <td>${escapeHtml(c.nombre)}</td>
+        <td>${ETIQUETAS_MEDIO[c.medio_contacto] || escapeHtml(c.medio_contacto)}</td>
+        <td>${formatearFecha(c.fecha_registro)}</td>
+      </tr>`
+    )
+    .join("");
+  modalListaClientes.showModal();
+}
+
+document.getElementById("btn-ver-todos-clientes").addEventListener("click", abrirListaClientes);
+document
+  .getElementById("btn-cerrar-lista-clientes")
+  .addEventListener("click", () => modalListaClientes.close());
+
 let clientesActuales = [];
+const seleccionados = new Set();
+
+const accionesMasivas = document.getElementById("acciones-masivas");
+const contadorSeleccionados = document.getElementById("contador-seleccionados");
+const checkboxTodos = document.getElementById("checkbox-todos");
+
+function actualizarAccionesMasivas() {
+  accionesMasivas.classList.toggle("is-oculto", seleccionados.size === 0);
+  contadorSeleccionados.textContent = `${seleccionados.size} seleccionado(s)`;
+  const idsVisibles = clientesActuales.map((c) => c.id);
+  const todosSeleccionados = idsVisibles.length > 0 && idsVisibles.every((id) => seleccionados.has(id));
+  checkboxTodos.checked = todosSeleccionados;
+  checkboxTodos.indeterminate = !todosSeleccionados && idsVisibles.some((id) => seleccionados.has(id));
+}
 
 function formatearFecha(valor) {
   if (!valor) return "";
@@ -733,6 +800,10 @@ async function cargarClientes() {
   }
 
   clientesActuales = await res.json();
+  const idsVisibles = new Set(clientesActuales.map((c) => c.id));
+  for (const id of seleccionados) {
+    if (!idsVisibles.has(id)) seleccionados.delete(id);
+  }
   renderizarTablaClientes();
 }
 
@@ -759,6 +830,7 @@ function renderizarTablaClientes() {
     .map(
       (c) => `
     <tr data-row-id="${c.id}">
+      <td class="th-checkbox"><input type="checkbox" class="checkbox-fila" data-id="${c.id}" aria-label="Seleccionar ${escapeHtml(c.nombre)}" ${seleccionados.has(c.id) ? "checked" : ""} /></td>
       <td>${escapeHtml(c.nombre)}</td>
       <td>${escapeHtml(formatearTelefono(c.telefono, c.pais))}</td>
       <td>${ETIQUETAS_DOCUMENTO[c.tipo_documento] || escapeHtml(c.tipo_documento)}: ${escapeHtml(c.cedula)}</td>
@@ -776,6 +848,8 @@ function renderizarTablaClientes() {
   `
     )
     .join("");
+
+  actualizarAccionesMasivas();
 }
 
 document.getElementById("th-edad").addEventListener("click", () => {
@@ -906,8 +980,9 @@ async function eliminarCliente(id) {
   const documento = cliente
     ? `${ETIQUETAS_DOCUMENTO[cliente.tipo_documento] || cliente.tipo_documento}: ${cliente.cedula}`
     : "";
-  const confirmado = confirm(
-    `¿Eliminar a "${nombre}"${documento ? ` (${documento})` : ""}? Se moverá a la papelera y podrás restaurarlo durante 30 días, luego se borrará solo.`
+  const confirmado = await confirmarAccion(
+    `¿Eliminar a "${nombre}"${documento ? ` (${documento})` : ""}? Se moverá a la papelera y podrás restaurarlo durante 30 días, luego se borrará solo.`,
+    { titulo: "Eliminar cliente", textoAceptar: "Eliminar" }
   );
 
   if (!confirmado) {
@@ -982,7 +1057,11 @@ async function cargarPapelera() {
 async function restaurarCliente(id) {
   const cliente = papeleraActual.find((c) => c.id === id);
   const nombre = cliente ? cliente.nombre : "este cliente";
-  if (!confirm(`¿Restaurar a "${nombre}"? Volverá a aparecer en la lista de clientes.`)) return;
+  const confirmado = await confirmarAccion(
+    `¿Restaurar a "${nombre}"? Volverá a aparecer en la lista de clientes.`,
+    { titulo: "Restaurar cliente", textoAceptar: "Restaurar", peligro: false }
+  );
+  if (!confirmado) return;
 
   const res = await fetch(`/api/clientes/${id}/restaurar`, { method: "POST", credentials: "include" });
   if (res.status === 401) {
@@ -1005,12 +1084,11 @@ async function eliminarDefinitivo(id) {
   const documento = cliente
     ? `${ETIQUETAS_DOCUMENTO[cliente.tipo_documento] || cliente.tipo_documento}: ${cliente.cedula}`
     : "";
-  if (
-    !confirm(
-      `¿Eliminar definitivamente a "${nombre}"${documento ? ` (${documento})` : ""}? Esta acción NO se puede deshacer.`
-    )
-  )
-    return;
+  const confirmado = await confirmarAccion(
+    `¿Eliminar definitivamente a "${nombre}"${documento ? ` (${documento})` : ""}? Esta acción NO se puede deshacer.`,
+    { titulo: "Eliminar definitivamente", textoAceptar: "Eliminar definitivo" }
+  );
+  if (!confirmado) return;
 
   const res = await fetch(`/api/clientes/${id}/definitivo`, { method: "DELETE", credentials: "include" });
   if (res.status === 401) {
@@ -1092,6 +1170,54 @@ tabla.addEventListener("click", (event) => {
   } else if (event.target.classList.contains("btn-eliminar")) {
     eliminarCliente(id);
   }
+});
+
+tabla.addEventListener("change", (event) => {
+  if (!event.target.classList.contains("checkbox-fila")) return;
+  const id = Number(event.target.dataset.id);
+  if (!id) return;
+  if (event.target.checked) {
+    seleccionados.add(id);
+  } else {
+    seleccionados.delete(id);
+  }
+  actualizarAccionesMasivas();
+});
+
+checkboxTodos.addEventListener("change", () => {
+  if (checkboxTodos.checked) {
+    clientesActuales.forEach((c) => seleccionados.add(c.id));
+  } else {
+    clientesActuales.forEach((c) => seleccionados.delete(c.id));
+  }
+  renderizarTablaClientes();
+});
+
+document.getElementById("btn-eliminar-seleccionados").addEventListener("click", async () => {
+  const cantidad = seleccionados.size;
+  if (cantidad === 0) return;
+
+  const confirmado = await confirmarAccion(
+    `¿Eliminar ${cantidad} cliente(s) seleccionado(s)? Se moverán a la papelera y podrás restaurarlos durante 30 días, luego se borrarán solos.`,
+    { titulo: "Eliminar seleccionados", textoAceptar: "Eliminar" }
+  );
+  if (!confirmado) return;
+
+  const res = await fetch("/api/clientes/eliminar-multiple", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ ids: [...seleccionados] }),
+  });
+  if (res.status === 401) {
+    window.location.href = "login.html";
+    return;
+  }
+  seleccionados.clear();
+  cargarClientes();
+  cargarEstadisticas();
+  cargarClientesDelMes();
+  cargarPapelera();
 });
 
 document.getElementById("btn-nuevo").addEventListener("click", abrirModalNuevo);
