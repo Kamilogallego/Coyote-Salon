@@ -211,6 +211,10 @@ body {
   cursor: pointer;
 }
 
+.accordion-toggle-fijo {
+  cursor: default;
+}
+
 .chevron {
   width: 0.6rem;
   height: 0.6rem;

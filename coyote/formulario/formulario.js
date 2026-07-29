@@ -695,7 +695,10 @@ function setupTelefono() {
 }
 
 function setupAccordion() {
-  const toggles = document.querySelectorAll(".accordion-toggle");
+  // Las secciones "Sobre ti" y "Preferencias de contacto" usan
+  // .accordion-toggle-fijo: siempre están abiertas y no se pueden ocultar,
+  // así que se excluyen de la lógica de expandir/colapsar.
+  const toggles = document.querySelectorAll(".accordion-toggle:not(.accordion-toggle-fijo)");
 
   toggles.forEach((toggle) => {
     toggle.addEventListener("click", () => {
