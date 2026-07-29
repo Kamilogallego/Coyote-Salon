@@ -639,12 +639,18 @@ function setupModalesLegales() {
 
   renderizarContenidoLegal();
 
+  Object.values(modales).forEach((dialogo) => {
+    // Se dispara también al cerrar con la tecla Esc, no solo con el botón "Cerrar".
+    dialogo.addEventListener("close", () => document.body.classList.remove("modal-abierto"));
+  });
+
   document.addEventListener("click", (event) => {
     const abrir = event.target.closest("[data-modal]");
     if (abrir) {
       const modal = modales[abrir.dataset.modal];
       if (modal) {
         Object.values(modales).forEach((m) => m.open && m.close());
+        document.body.classList.add("modal-abierto");
         if (typeof modal.showModal === "function") {
           modal.showModal();
         } else {
@@ -662,6 +668,7 @@ function setupModalesLegales() {
           dialogo.close();
         } else {
           dialogo.removeAttribute("open");
+          document.body.classList.remove("modal-abierto");
         }
       }
     }
@@ -732,7 +739,43 @@ function setupAniversarioCondicional() {
   });
 }
 
-async function setupPaisCiudad() {
+// Lista fija de códigos ISO 3166-1 alpha-2. Se resuelve en el momento (sin red);
+// los nombres se traducen con Intl.DisplayNames, que ya trae el navegador.
+// Así el selector de país nunca depende de que una CDN externa responda a tiempo.
+const CODIGOS_PAISES_ISO = [
+  "AD","AE","AF","AG","AI","AL","AM","AO","AQ","AR","AS","AT","AU","AW","AX","AZ",
+  "BA","BB","BD","BE","BF","BG","BH","BI","BJ","BL","BM","BN","BO","BQ","BR","BS",
+  "BT","BV","BW","BY","BZ","CA","CC","CD","CF","CG","CH","CI","CK","CL","CM","CN",
+  "CO","CR","CU","CV","CW","CX","CY","CZ","DE","DJ","DK","DM","DO","DZ","EC","EE",
+  "EG","EH","ER","ES","ET","FI","FJ","FK","FM","FO","FR","GA","GB","GD","GE","GF",
+  "GG","GH","GI","GL","GM","GN","GP","GQ","GR","GS","GT","GU","GW","GY","HK","HM",
+  "HN","HR","HT","HU","ID","IE","IL","IM","IN","IO","IQ","IR","IS","IT","JE","JM",
+  "JO","JP","KE","KG","KH","KI","KM","KN","KP","KR","KW","KY","KZ","LA","LB","LC",
+  "LI","LK","LR","LS","LT","LU","LV","LY","MA","MC","MD","ME","MF","MG","MH","MK",
+  "ML","MM","MN","MO","MP","MQ","MR","MS","MT","MU","MV","MW","MX","MY","MZ","NA",
+  "NC","NE","NF","NG","NI","NL","NO","NP","NR","NU","NZ","OM","PA","PE","PF","PG",
+  "PH","PK","PL","PM","PN","PR","PS","PT","PW","PY","QA","RE","RO","RS","RU","RW",
+  "SA","SB","SC","SD","SE","SG","SH","SI","SJ","SK","SL","SM","SN","SO","SR","SS",
+  "ST","SV","SX","SY","SZ","TC","TD","TF","TG","TH","TJ","TK","TL","TM","TN","TO",
+  "TR","TT","TV","TW","TZ","UA","UG","UM","US","UY","UZ","VA","VC","VE","VG","VI",
+  "VN","VU","WF","WS","YE","YT","ZA","ZM","ZW",
+];
+
+// La librería de ciudades sí requiere una base de datos grande, así que se sigue
+// cargando desde una CDN, pero de forma diferida (solo cuando hace falta) y con
+// reintento si falla: si no carga, la ciudad simplemente queda como texto libre.
+let promesaLibreriaCiudades = null;
+function cargarLibreriaCiudades() {
+  if (!promesaLibreriaCiudades) {
+    promesaLibreriaCiudades = import("https://esm.sh/country-state-city@3").catch((error) => {
+      promesaLibreriaCiudades = null; // permite reintentar en el próximo país seleccionado
+      throw error;
+    });
+  }
+  return promesaLibreriaCiudades;
+}
+
+function setupPaisCiudad() {
   const inputPais = document.getElementById("pais");
   const inputPaisCodigo = document.getElementById("pais-codigo");
   const listaPaisSugerencias = document.getElementById("pais-suggestions");
@@ -741,12 +784,11 @@ async function setupPaisCiudad() {
   const listaSugerencias = document.getElementById("ciudad-suggestions");
   const hint = document.getElementById("hint-ciudad");
 
-  const { Country, State, City } = await import("https://esm.sh/country-state-city@3");
   const nombresPorIdioma = {
     es: new Intl.DisplayNames(["es"], { type: "region" }),
     en: new Intl.DisplayNames(["en"], { type: "region" }),
   };
-  const codigosPaises = Country.getAllCountries().map((pais) => pais.isoCode);
+  const codigosPaises = CODIGOS_PAISES_ISO;
 
   function opcionesPaisOrdenadas(lang) {
     return codigosPaises
@@ -882,26 +924,45 @@ async function setupPaisCiudad() {
     }
   }
 
-  actualizarCiudades = (codigoPais) => {
+  let peticionCiudadesVigente = 0;
+
+  actualizarCiudades = async (codigoPais) => {
+    const idPeticion = ++peticionCiudadesVigente;
+
     if (!codigoPais) {
       ciudadesPais = [];
-    } else if (codigoPais === "CO") {
-      const departamentos = new Map(State.getStatesOfCountry("CO").map((d) => [d.isoCode, d.name]));
-      const vistas = new Set();
-      ciudadesPais = (City.getCitiesOfCountry("CO") || [])
-        .map((c) => `${c.name}, ${departamentos.get(c.stateCode) || ""}`.trim().replace(/,\s*$/, ""))
-        .filter((etiqueta) => {
-          const clave = normalizarNombreCiudad(etiqueta);
-          if (vistas.has(clave)) return false;
-          vistas.add(clave);
-          return true;
-        })
-        .sort((a, b) => a.localeCompare(b, "es"));
-    } else {
-      ciudadesPais = (City.getCitiesOfCountry(codigoPais) || [])
-        .map((c) => c.name)
-        .sort((a, b) => a.localeCompare(b, "es"));
+      ocultarSugerencias();
+      actualizarHint(codigoPais);
+      return;
     }
+
+    try {
+      const { State, City } = await cargarLibreriaCiudades();
+      if (idPeticion !== peticionCiudadesVigente) return; // el usuario ya cambió de país
+
+      if (codigoPais === "CO") {
+        const departamentos = new Map(State.getStatesOfCountry("CO").map((d) => [d.isoCode, d.name]));
+        const vistas = new Set();
+        ciudadesPais = (City.getCitiesOfCountry("CO") || [])
+          .map((c) => `${c.name}, ${departamentos.get(c.stateCode) || ""}`.trim().replace(/,\s*$/, ""))
+          .filter((etiqueta) => {
+            const clave = normalizarNombreCiudad(etiqueta);
+            if (vistas.has(clave)) return false;
+            vistas.add(clave);
+            return true;
+          })
+          .sort((a, b) => a.localeCompare(b, "es"));
+      } else {
+        ciudadesPais = (City.getCitiesOfCountry(codigoPais) || [])
+          .map((c) => c.name)
+          .sort((a, b) => a.localeCompare(b, "es"));
+      }
+    } catch (error) {
+      console.error("No se pudieron cargar las ciudades sugeridas, se usará texto libre:", error);
+      if (idPeticion !== peticionCiudadesVigente) return;
+      ciudadesPais = [];
+    }
+
     ocultarSugerencias();
     actualizarHint(codigoPais);
   };

@@ -439,8 +439,19 @@ dialog.modal-legal:not([open]) {
   display: none;
 }
 
+body.modal-abierto {
+  overflow: hidden;
+}
+
 dialog.modal-legal {
-  position: relative;
+  /* Posición fija y centrada explícita: no depender del centrado automático
+     del navegador (falla si el <dialog> no se abre por showModal, o en
+     algunos navegadores móviles con el teclado abierto). */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: 0;
   border: 1px solid var(--coyote-crema);
   border-radius: 12px;
   padding: 1.5rem;
