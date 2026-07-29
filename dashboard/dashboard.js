@@ -106,7 +106,7 @@ function renderDonut(contenedor, datos) {
   `;
 }
 
-function renderBarChart(contenedor, datos) {
+function renderBarChart(contenedor, datos, { multicolor = false } = {}) {
   if (!datos.length) {
     contenedor.innerHTML = `<span class="chart-empty">Sin datos todavía</span>`;
     return;
@@ -114,20 +114,32 @@ function renderBarChart(contenedor, datos) {
 
   const max = Math.max(...datos.map((d) => d.valor), 1);
   contenedor.innerHTML = `
-    <div class="bar-chart">
+    <div class="bar-list">
       ${datos
         .map(
-          (d) => `
-        <div class="bar-item">
-          <span class="bar-value">${d.valor}</span>
-          <div class="bar-fill" style="height:${(d.valor / max) * 100}%"></div>
-          <span class="bar-label">${escapeHtml(d.etiqueta)}</span>
+          (d, i) => `
+        <div class="bar-row">
+          <span class="bar-row-label" title="${escapeHtml(d.etiqueta)}">${escapeHtml(d.etiqueta)}</span>
+          <span class="bar-row-track">
+            <span class="bar-row-fill" data-final="${Math.max(2, (d.valor / max) * 100)}"
+              style="width:0%; background:${multicolor ? COLORES[i % COLORES.length] : "var(--coyote-azul)"}"></span>
+          </span>
+          <span class="bar-row-value">${d.valor}</span>
         </div>
       `
         )
         .join("")}
     </div>
   `;
+
+  // Arranca las barras en 0% y en el siguiente frame salta al ancho final;
+  // con la transition:width de .bar-row-fill esto hace que "crezcan" en vez
+  // de aparecer directo en su tamaño final.
+  requestAnimationFrame(() => {
+    contenedor.querySelectorAll(".bar-row-fill").forEach((fill) => {
+      fill.style.width = `${fill.dataset.final}%`;
+    });
+  });
 }
 
 // ---- Navegación entre páginas ----
@@ -271,7 +283,7 @@ async function cargarEstadisticas() {
     valor: c.cantidad,
   }));
 
-  renderBarChart(document.getElementById("resumen-medio"), medioDatos);
+  renderBarChart(document.getElementById("resumen-medio"), medioDatos, { multicolor: true });
   renderBarChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
 
   renderBarChart(document.getElementById("chart-crecimiento"), crecimientoDatos);
