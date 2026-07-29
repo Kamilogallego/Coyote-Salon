@@ -1029,16 +1029,16 @@ tbody tr.fila-por-eliminar {
 }
 
 .tabla-clientes-grid th:nth-child(1) { width: 3%; }
-.tabla-clientes-grid th:nth-child(2) { width: 17%; }
+.tabla-clientes-grid th:nth-child(2) { width: 18%; }
 .tabla-clientes-grid th:nth-child(3) { width: 12%; }
-.tabla-clientes-grid th:nth-child(4) { width: 17%; }
+.tabla-clientes-grid th:nth-child(4) { width: 18%; }
 .tabla-clientes-grid th:nth-child(5) { width: 9%; }
 .tabla-clientes-grid th:nth-child(6) { width: 9%; }
 .tabla-clientes-grid th:nth-child(7) { width: 5%; }
 .tabla-clientes-grid th:nth-child(8) { width: 6%; }
 .tabla-clientes-grid th:nth-child(9) { width: 6%; }
 .tabla-clientes-grid th:nth-child(10) { width: 9%; }
-.tabla-clientes-grid th:nth-child(11) { width: 7%; }
+.tabla-clientes-grid th:nth-child(11) { width: 5%; }
 
 /* ---- Tabla de papelera: Nombre, Documento, Eliminado el, Días restantes, Acciones ---- */
 
@@ -1114,12 +1114,6 @@ tbody tr.fila-por-eliminar {
 
 .btn-eliminar {
   background: #7a7a7a;
-}
-
-.btn-eliminar-icono {
-  padding: 0.2rem 0.4rem;
-  font-size: 0.85rem;
-  line-height: 1;
 }
 
 .btn-restaurar {

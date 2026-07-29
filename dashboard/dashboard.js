@@ -854,7 +854,6 @@ function renderizarTablaClientes() {
       <td>${ETIQUETAS_MEDIO[c.medio_contacto] || escapeHtml(c.medio_contacto)}</td>
       <td class="fila-acciones">
         <button type="button" class="btn-ver" data-id="${c.id}" title="Ver detalle">👁</button>
-        <button type="button" class="btn-eliminar btn-eliminar-icono" data-id="${c.id}" title="Eliminar">🗑</button>
       </td>
     </tr>
   `
@@ -981,41 +980,6 @@ function verDetalleCliente(id) {
     .join("");
 
   modalDetalle.showModal();
-}
-
-async function eliminarCliente(id) {
-  const cliente = clientesActuales.find((c) => c.id === id);
-  const fila = tabla.querySelector(`tr[data-row-id="${id}"]`);
-  if (fila) fila.classList.add("fila-por-eliminar");
-
-  const nombre = cliente ? cliente.nombre : "este cliente";
-  const documento = cliente
-    ? `${ETIQUETAS_DOCUMENTO[cliente.tipo_documento] || cliente.tipo_documento}: ${cliente.cedula}`
-    : "";
-  const confirmado = await confirmarAccion(
-    `¿Eliminar a "${nombre}"${documento ? ` (${documento})` : ""}? Se moverá a la papelera y podrás restaurarlo durante 30 días, luego se borrará solo.`,
-    { titulo: "Eliminar cliente", textoAceptar: "Eliminar" }
-  );
-
-  if (!confirmado) {
-    if (fila) fila.classList.remove("fila-por-eliminar");
-    return;
-  }
-
-  const res = await fetch(`/api/clientes/${id}`, { method: "DELETE", credentials: "include" });
-  if (res.status === 401) {
-    window.location.href = "login.html";
-    return;
-  }
-  if (!res.ok) {
-    if (fila) fila.classList.remove("fila-por-eliminar");
-    alert("No se pudo eliminar el cliente");
-    return;
-  }
-  cargarClientes();
-  cargarEstadisticas();
-  cargarClientesDelMes();
-  cargarPapelera();
 }
 
 const tablaPapelera = document.getElementById("tabla-papelera");
@@ -1179,8 +1143,6 @@ tabla.addEventListener("click", (event) => {
 
   if (event.target.classList.contains("btn-ver")) {
     verDetalleCliente(id);
-  } else if (event.target.classList.contains("btn-eliminar")) {
-    eliminarCliente(id);
   }
 });
 
@@ -1210,7 +1172,11 @@ document.getElementById("btn-eliminar-seleccionados").addEventListener("click", 
   if (cantidad === 0) return;
 
   const confirmado = await confirmarAccion(
-    `¿Eliminar ${cantidad} cliente(s) seleccionado(s)? Se moverán a la papelera y podrás restaurarlos durante 30 días, luego se borrarán solos.`,
+    `¿Eliminar ${cantidad} cliente${cantidad === 1 ? "" : "s"} seleccionado${cantidad === 1 ? "" : "s"}? Se moverá${
+      cantidad === 1 ? "" : "n"
+    } a la papelera y podrás restaurarlo${cantidad === 1 ? "" : "s"} durante 30 días, luego se borrará${
+      cantidad === 1 ? "" : "n"
+    } solo${cantidad === 1 ? "" : "s"}.`,
     { titulo: "Eliminar seleccionados", textoAceptar: "Eliminar" }
   );
   if (!confirmado) return;
