@@ -29,6 +29,9 @@ const TRANSLATIONS = {
     "common.si": "Sí",
     "common.no": "No",
     "common.enviar": "Enviar",
+    "common.cerrar": "Cerrar",
+    "modalTerminos.titulo": "Términos y Condiciones",
+    "modalPrivacidad.titulo": "Política de Privacidad",
     "tipoDocumento.cedula": "Cédula de ciudadanía",
     "tipoDocumento.cedulaExtranjeria": "Cédula de extranjería",
     "tipoDocumento.pasaporte": "Pasaporte",
@@ -42,7 +45,7 @@ const TRANSLATIONS = {
     "medioContacto.correo": "Correo electrónico",
     "medioContacto.llamada": "Llamada telefónica",
     "medioContacto.whatsapp": "WhatsApp / SMS",
-    "medioContacto.ninguno": "No deseo ser contactado",
+    "medioContacto.ninguno": "Me es indiferente",
     "checkbox.mayorEdad": "Declaro que soy mayor de edad (18 años o más).",
     "checkbox.habeasIntro0": "Acepto los ",
     "checkbox.terminosLink": "Términos y Condiciones",
@@ -51,7 +54,7 @@ const TRANSLATIONS = {
     "checkbox.habeasEnd": "sobre Protección de Datos Personales (Habeas Data), según la ",
     "checkbox.habeasPoliticaLink": "Política de Tratamiento de Datos de Coyote Salón Social",
     "checkbox.novedades":
-      "Sí, quiero enterarme de promociones, eventos y un beneficio especial en mi cumpleaños por correo y/o WhatsApp. Es opcional y puedo darme de baja cuando quiera (",
+      "Sí, quiero enterarme de promociones, eventos y un beneficio especial en fechas especiales, por tu preferencia de contacto. Es opcional y puedo darme de baja cuando quiera (",
     "checkbox.novedadesPoliticaLink": "ver cómo",
     "checkbox.novedadesFin": ").",
     "status.errores": "Por favor corrige los campos marcados.",
@@ -102,6 +105,9 @@ const TRANSLATIONS = {
     "common.si": "Yes",
     "common.no": "No",
     "common.enviar": "Submit",
+    "common.cerrar": "Close",
+    "modalTerminos.titulo": "Terms and Conditions",
+    "modalPrivacidad.titulo": "Privacy Policy",
     "tipoDocumento.cedula": "National ID",
     "tipoDocumento.cedulaExtranjeria": "Foreign resident ID",
     "tipoDocumento.pasaporte": "Passport",
@@ -115,7 +121,7 @@ const TRANSLATIONS = {
     "medioContacto.correo": "Email",
     "medioContacto.llamada": "Phone call",
     "medioContacto.whatsapp": "WhatsApp / SMS",
-    "medioContacto.ninguno": "I don't want to be contacted",
+    "medioContacto.ninguno": "I don't mind either way",
     "checkbox.mayorEdad": "I declare that I am of legal age (18 years or older).",
     "checkbox.habeasIntro0": "I accept the ",
     "checkbox.terminosLink": "Terms and Conditions",
@@ -124,7 +130,7 @@ const TRANSLATIONS = {
     "checkbox.habeasEnd": "on Personal Data Protection (Habeas Data), per the ",
     "checkbox.habeasPoliticaLink": "Coyote Salón Social Data Processing Policy",
     "checkbox.novedades":
-      "Yes, I'd like to hear about promotions, events, and a special birthday treat by email and/or WhatsApp. It's optional and I can unsubscribe anytime (",
+      "Yes, I'd like to hear about promotions, events, and a special treat on special dates, through my preferred contact method. It's optional and I can unsubscribe anytime (",
     "checkbox.novedadesPoliticaLink": "see how",
     "checkbox.novedadesFin": ").",
     "status.errores": "Please fix the highlighted fields.",
@@ -145,6 +151,276 @@ const TRANSLATIONS = {
     "err.habeasData": "You must authorize the processing of your personal data.",
     "iti.searchPlaceholder": "Search country",
   },
+};
+
+const CONTENIDO_TERMINOS = {
+  es: `
+    <p class="politica-fecha">Última actualización: 28 de julio de 2026</p>
+
+    <h3>1. Objeto</h3>
+    <p>
+      Estos Términos y Condiciones regulan el registro y la participación en el programa de fidelización de Coyote
+      Salón Social, restaurante de comida mexicana de ambiente familiar. Al diligenciar el formulario de registro,
+      usted acepta expresamente estos términos.
+    </p>
+
+    <h3>2. Elegibilidad y veracidad de la información</h3>
+    <p>
+      El registro está dirigido únicamente a personas mayores de 18 años. Al registrarse, usted declara que la
+      información suministrada (nombre, documento, contacto y demás datos solicitados) es veraz, completa y de su
+      titularidad, y que es responsable de mantenerla actualizada.
+    </p>
+
+    <h3>3. Uso de la información suministrada</h3>
+    <p>
+      Los datos que usted nos entrega se usan para identificarlo como miembro del programa de fidelización,
+      contactarlo por el canal de su preferencia, y — únicamente si lo autoriza de forma expresa y separada — para
+      enviarle publicidad y promociones. El detalle completo de cómo tratamos sus datos está en nuestra
+      <button type="button" class="link-modal" data-modal="privacidad">Política de Tratamiento de Datos Personales</button>.
+    </p>
+
+    <h3>4. Beneficios, puntos y promociones</h3>
+    <p>
+      Los puntos y beneficios del programa de fidelización son personales e intransferibles, y no son canjeables por
+      dinero en efectivo. Coyote Salón Social podrá modificar, suspender o finalizar el programa, sus beneficios o
+      cualquier promoción asociada en cualquier momento, informando oportunamente a través de sus canales oficiales.
+    </p>
+
+    <h3>5. Responsabilidad del titular de los datos</h3>
+    <p>
+      Es responsabilidad suya mantener actualizada la información de contacto que nos suministra (teléfono, correo
+      electrónico, etc.). Coyote Salón Social no se hace responsable por la imposibilidad de contactarlo o de
+      hacerle efectivo un beneficio debido a datos desactualizados o incorrectos.
+    </p>
+
+    <h3>6. Comunicaciones de mercadeo</h3>
+    <p>
+      El registro en el programa de fidelización no implica, por sí solo, la autorización para recibir publicidad o
+      promociones. Esa autorización es independiente, opcional y revocable en cualquier momento sin que afecte su
+      registro, tal como se describe en nuestra
+      <button type="button" class="link-modal" data-modal="privacidad">Política de Tratamiento de Datos Personales</button>.
+    </p>
+
+    <h3>7. Modificaciones a estos términos</h3>
+    <p>
+      Podemos actualizar estos Términos y Condiciones periódicamente. Cualquier cambio será publicado en esta misma
+      página con su fecha de actualización.
+    </p>
+
+    <h3>8. Contacto</h3>
+    <p>
+      Para dudas sobre estos Términos y Condiciones, escríbanos a <strong>privacidad@coyotesalonsocial.com</strong>.
+    </p>
+  `,
+  en: `
+    <p class="politica-fecha">Last updated: July 28, 2026</p>
+
+    <h3>1. Purpose</h3>
+    <p>
+      These Terms and Conditions govern registration and participation in the Coyote Salón Social loyalty program, a
+      family-style Mexican restaurant. By completing the registration form, you expressly accept these terms.
+    </p>
+
+    <h3>2. Eligibility and accuracy of information</h3>
+    <p>
+      Registration is intended only for persons over 18 years of age. By registering, you declare that the
+      information provided (name, ID, contact details, and other requested data) is true, complete, and belongs to
+      you, and that you are responsible for keeping it up to date.
+    </p>
+
+    <h3>3. Use of the information provided</h3>
+    <p>
+      The data you provide is used to identify you as a loyalty program member, contact you through your preferred
+      channel, and — only if you expressly and separately authorize it — to send you advertising and promotions.
+      Full details on how we handle your data are in our
+      <button type="button" class="link-modal" data-modal="privacidad">Personal Data Processing Policy</button>.
+    </p>
+
+    <h3>4. Benefits, points, and promotions</h3>
+    <p>
+      Loyalty program points and benefits are personal and non-transferable, and cannot be redeemed for cash. Coyote
+      Salón Social may modify, suspend, or end the program, its benefits, or any associated promotion at any time,
+      providing timely notice through its official channels.
+    </p>
+
+    <h3>5. Data subject's responsibility</h3>
+    <p>
+      It is your responsibility to keep the contact information you provide us up to date (phone, email, etc.).
+      Coyote Salón Social is not responsible for being unable to contact you or grant you a benefit due to outdated
+      or incorrect information.
+    </p>
+
+    <h3>6. Marketing communications</h3>
+    <p>
+      Registering in the loyalty program does not, by itself, authorize you to receive advertising or promotions.
+      That authorization is independent, optional, and revocable at any time without affecting your registration, as
+      described in our
+      <button type="button" class="link-modal" data-modal="privacidad">Personal Data Processing Policy</button>.
+    </p>
+
+    <h3>7. Changes to these terms</h3>
+    <p>
+      We may update these Terms and Conditions periodically. Any change will be published on this same page with its
+      update date.
+    </p>
+
+    <h3>8. Contact</h3>
+    <p>
+      For questions about these Terms and Conditions, write to us at <strong>privacidad@coyotesalonsocial.com</strong>.
+    </p>
+  `,
+};
+
+const CONTENIDO_PRIVACIDAD = {
+  es: `
+    <p class="politica-fecha">Última actualización: 28 de julio de 2026</p>
+    <p>
+      Este documento se complementa con nuestros
+      <button type="button" class="link-modal" data-modal="terminos">Términos y Condiciones</button> del programa de
+      fidelización.
+    </p>
+
+    <h3>1. Responsable del tratamiento</h3>
+    <p>
+      Coyote Salón Social es responsable del tratamiento de los datos personales que usted nos suministra a través
+      de nuestro formulario de registro y fidelización, de acuerdo con la Ley Estatutaria 1581 de 2012 y el Decreto
+      1377 de 2013 de la República de Colombia sobre Protección de Datos Personales.
+    </p>
+
+    <h3>2. Datos que recolectamos</h3>
+    <p>
+      A través de nuestro formulario de registro recolectamos: datos de identificación (nombre completo, tipo y
+      número de documento, fecha de nacimiento, género), datos de contacto (teléfono/WhatsApp, correo electrónico,
+      país y ciudad de residencia, preferencia de canal de contacto), datos de estilo de vida opcionales (si es
+      padre/madre, si tiene pareja y fecha de aniversario), y los consentimientos otorgados (autorización de
+      tratamiento de datos y, de forma independiente, autorización de mercadeo).
+    </p>
+
+    <h3>3. Finalidad del tratamiento</h3>
+    <p>
+      Sus datos se usan para gestionar su registro en el programa de fidelización, contactarlo por el canal de su
+      preferencia, y elaborar estadísticas internas anónimas sobre visitas y preferencias. No usamos sus datos para
+      ningún otro fin, ni los vendemos ni los compartimos con terceros ajenos a la operación del restaurante.
+    </p>
+
+    <h3>4. Autorización de mercadeo (independiente y opcional)</h3>
+    <p>
+      Además de lo anterior, en el formulario le preguntamos si desea autorizar, de forma expresa, independiente y
+      opcional, el envío de publicidad, promociones y novedades de Coyote Salón Social por correo electrónico y/o
+      WhatsApp. Esta autorización <strong>no es obligatoria</strong> para registrarse en el programa de
+      fidelización, y usted puede revocarla en cualquier momento sin que esto afecte su registro, escribiéndonos a
+      <strong>privacidad@coyotesalonsocial.com</strong> indicando su nombre y número de documento. Atenderemos su
+      solicitud de revocación dentro de los 15 días hábiles siguientes.
+    </p>
+
+    <h3>5. Derechos del titular</h3>
+    <p>
+      Usted tiene derecho a conocer qué datos suyos tenemos, actualizarlos y rectificarlos, solicitar su supresión,
+      y revocar su autorización en cualquier momento (incluyendo la de mercadeo, sin afectar su registro de
+      fidelización).
+    </p>
+
+    <h3>6. Cómo ejercer sus derechos</h3>
+    <p>
+      Escríbanos a <strong>privacidad@coyotesalonsocial.com</strong>. Responderemos su solicitud dentro de los
+      plazos legales (10 días hábiles para consultas, 15 días hábiles para reclamos), indicando como mínimo su
+      identificación, la descripción de su solicitud y un correo de contacto para responderle.
+    </p>
+
+    <h3>7. Conservación de los datos</h3>
+    <p>
+      Conservamos sus datos mientras exista una relación vigente con nuestro programa de fidelización, o hasta que
+      usted solicite su supresión.
+    </p>
+
+    <h3>8. Seguridad de la información</h3>
+    <p>
+      Sus datos se almacenan en una base de datos con acceso restringido y controles técnicos razonables para
+      evitar accesos no autorizados.
+    </p>
+
+    <h3>9. Menores de edad</h3>
+    <p>Nuestro formulario está dirigido únicamente a personas mayores de 18 años.</p>
+
+    <h3>10. Cambios en esta política</h3>
+    <p>
+      Podemos actualizar esta política periódicamente. Cualquier cambio será publicado en esta misma página con su
+      fecha de actualización.
+    </p>
+  `,
+  en: `
+    <p class="politica-fecha">Last updated: July 28, 2026</p>
+    <p>
+      This document complements our
+      <button type="button" class="link-modal" data-modal="terminos">Terms and Conditions</button> for the loyalty
+      program.
+    </p>
+
+    <h3>1. Data controller</h3>
+    <p>
+      Coyote Salón Social is responsible for processing the personal data you provide through our registration and
+      loyalty form, in accordance with Statutory Law 1581 of 2012 and Decree 1377 of 2013 of the Republic of
+      Colombia on Personal Data Protection.
+    </p>
+
+    <h3>2. Data we collect</h3>
+    <p>
+      Through our registration form we collect: identification data (full name, ID type and number, date of birth,
+      gender), contact data (phone/WhatsApp, email, country and city of residence, preferred contact channel),
+      optional lifestyle data (whether you are a parent, whether you have a partner, and anniversary date), and the
+      consents given (data processing authorization and, independently, marketing authorization).
+    </p>
+
+    <h3>3. Purpose of processing</h3>
+    <p>
+      Your data is used to manage your loyalty program registration, contact you through your preferred channel,
+      and produce anonymous internal statistics about visits and preferences. We do not use your data for any other
+      purpose, nor do we sell it or share it with third parties unrelated to the restaurant's operation.
+    </p>
+
+    <h3>4. Marketing authorization (independent and optional)</h3>
+    <p>
+      In addition to the above, on the form we ask whether you wish to expressly, independently, and optionally
+      authorize Coyote Salón Social to send you advertising, promotions, and news by email and/or WhatsApp. This
+      authorization <strong>is not required</strong> to register in the loyalty program, and you may revoke it at
+      any time without affecting your registration, by writing to <strong>privacidad@coyotesalonsocial.com</strong>
+      with your name and ID number. We will handle your revocation request within the following 15 business days.
+    </p>
+
+    <h3>5. Data subject rights</h3>
+    <p>
+      You have the right to know what data of yours we hold, update and correct it, request its deletion, and
+      revoke your authorization at any time (including marketing authorization, without affecting your loyalty
+      registration).
+    </p>
+
+    <h3>6. How to exercise your rights</h3>
+    <p>
+      Write to us at <strong>privacidad@coyotesalonsocial.com</strong>. We will respond to your request within the
+      legal timeframes (10 business days for inquiries, 15 business days for complaints), providing at minimum your
+      identification, a description of your request, and a contact email for our reply.
+    </p>
+
+    <h3>7. Data retention</h3>
+    <p>
+      We retain your data for as long as an active relationship with our loyalty program exists, or until you
+      request its deletion.
+    </p>
+
+    <h3>8. Information security</h3>
+    <p>
+      Your data is stored in a database with restricted access and reasonable technical controls to prevent
+      unauthorized access.
+    </p>
+
+    <h3>9. Minors</h3>
+    <p>Our form is intended only for persons over 18 years of age.</p>
+
+    <h3>10. Changes to this policy</h3>
+    <p>
+      We may update this policy periodically. Any change will be published on this same page with its update date.
+    </p>
+  `,
 };
 
 let idiomaActual = localStorage.getItem("coyote-idioma") || "es";
@@ -240,11 +516,8 @@ document.addEventListener("DOMContentLoaded", () => {
   setupDocumentoCondicional();
   setupTelefono();
   const paisCiudadListo = setupPaisCiudad();
+  setupModalesLegales();
   setupIdioma();
-
-  document.querySelectorAll(".checkbox-field label a").forEach((enlace) => {
-    enlace.addEventListener("click", (event) => event.stopPropagation());
-  });
 
   const borrador = leerBorrador();
   if (borrador) {
@@ -348,6 +621,51 @@ function aplicarIdioma(lang) {
 
   actualizarIdiomaPaisCiudad(lang);
   setupTelefono();
+  renderizarContenidoLegal();
+}
+
+function renderizarContenidoLegal() {
+  const contenidoTerminos = document.getElementById("contenido-terminos");
+  const contenidoPrivacidad = document.getElementById("contenido-privacidad");
+  if (contenidoTerminos) contenidoTerminos.innerHTML = CONTENIDO_TERMINOS[idiomaActual];
+  if (contenidoPrivacidad) contenidoPrivacidad.innerHTML = CONTENIDO_PRIVACIDAD[idiomaActual];
+}
+
+function setupModalesLegales() {
+  const modales = {
+    terminos: document.getElementById("modal-terminos"),
+    privacidad: document.getElementById("modal-privacidad"),
+  };
+
+  renderizarContenidoLegal();
+
+  document.addEventListener("click", (event) => {
+    const abrir = event.target.closest("[data-modal]");
+    if (abrir) {
+      const modal = modales[abrir.dataset.modal];
+      if (modal) {
+        Object.values(modales).forEach((m) => m.open && m.close());
+        if (typeof modal.showModal === "function") {
+          modal.showModal();
+        } else {
+          modal.setAttribute("open", "");
+        }
+      }
+      return;
+    }
+
+    const cerrar = event.target.closest("[data-cerrar-modal]");
+    if (cerrar) {
+      const dialogo = cerrar.closest("dialog");
+      if (dialogo) {
+        if (typeof dialogo.close === "function") {
+          dialogo.close();
+        } else {
+          dialogo.removeAttribute("open");
+        }
+      }
+    }
+  });
 }
 
 function setupTelefono() {

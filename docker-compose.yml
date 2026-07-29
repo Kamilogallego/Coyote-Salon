@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: coyote_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: coyote_admin
+      POSTGRES_PASSWORD: coyote123
+      POSTGRES_DB: coyote_salon
+    ports:
+      - "5433:5432"
+    volumes:
+      - coyote_data:/var/lib/postgresql/data
+      - ./backend/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: coyote_pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@coyote.com
+      PGADMIN_DEFAULT_PASSWORD: coyote123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+
+volumes:
+  coyote_data:

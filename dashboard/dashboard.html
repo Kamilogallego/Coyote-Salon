@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Coyote</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="app" id="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <img src="../coyote/images/logo-coyote.png" alt="Coyote Salón Social" />
+      </div>
+
+      <nav class="sidebar-nav">
+        <button type="button" class="nav-item is-active" data-page="resumen">Resumen</button>
+        <button type="button" class="nav-item" data-page="clientes">Clientes</button>
+        <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
+        <button type="button" class="nav-item" data-page="edad">Rango de edad</button>
+        <button type="button" class="nav-item" data-page="medio">Medio de contacto</button>
+        <button type="button" class="nav-item" data-page="compartir">🔗 Compartir formulario</button>
+        <button type="button" class="nav-item" data-page="papelera">🗑 Papelera</button>
+      </nav>
+
+      <button type="button" id="logout-btn" class="nav-logout">Cerrar sesión</button>
+    </aside>
+
+    <div class="content">
+      <header class="content-header">
+        <div class="content-header-izquierda">
+          <button type="button" id="toggle-sidebar" class="sidebar-toggle" aria-label="Ocultar/mostrar menú" title="Ocultar/mostrar menú">☰</button>
+          <h1 class="content-header-titulo">Resumen</h1>
+        </div>
+        <div class="content-header-derecha">
+          <div class="date-badge" id="fecha-hoy"></div>
+          <button type="button" id="btn-actualizar" class="btn-actualizar" title="Recargar la página">⟳ Actualizar</button>
+        </div>
+      </header>
+
+      <main>
+        <!-- ---- Resumen ---- -->
+        <section id="page-resumen" class="page is-active">
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="stat-card-top">
+                <span>Clientes registrados</span>
+                <span class="stat-icon">👥</span>
+              </div>
+              <strong id="stat-total">0</strong>
+              <button type="button" class="link-btn" data-goto="clientes">Ver clientes</button>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-top">
+                <span>Nuevos este mes</span>
+                <span class="stat-icon">🆕</span>
+              </div>
+              <strong id="stat-nuevos">0</strong>
+              <button type="button" class="link-btn" data-goto="crecimiento">Ver crecimiento</button>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-top">
+                <span>Con pareja</span>
+                <span class="stat-icon">💛</span>
+              </div>
+              <strong id="stat-pareja">0</strong>
+              <button type="button" class="link-btn" data-goto="clientes" data-filtro-campo="pareja" data-filtro-valor="si">Ver detalle</button>
+            </div>
+            <div class="stat-card">
+              <div class="stat-card-top">
+                <span>Con hijos</span>
+                <span class="stat-icon">👶</span>
+              </div>
+              <strong id="stat-hijos">0</strong>
+              <button type="button" class="link-btn" data-goto="clientes" data-filtro-campo="padre" data-filtro-valor="si">Ver detalle</button>
+            </div>
+          </div>
+
+          <div class="panel-grid-3" style="grid-template-columns: 1fr 1fr;">
+            <div class="panel">
+              <h2>Medio de contacto</h2>
+              <div id="resumen-medio" class="chart-slot"></div>
+            </div>
+            <div class="panel panel-destacado">
+              <h2>Rango de edad más frecuente</h2>
+              <div class="destacado-icono">🕐</div>
+              <strong id="resumen-edad-top">—</strong>
+              <span id="resumen-edad-detalle" class="destacado-detalle"></span>
+            </div>
+          </div>
+
+          <div class="panel-grid-2">
+            <div class="panel">
+              <h2>Últimos clientes registrados</h2>
+              <table class="tabla-mini">
+                <thead>
+                  <tr><th>Cliente</th><th>Contacto</th><th>Registro</th></tr>
+                </thead>
+                <tbody id="resumen-ultimos"></tbody>
+              </table>
+              <button type="button" class="link-btn" data-goto="clientes">Ver todos</button>
+            </div>
+            <div class="panel">
+              <h2>Crecimiento mensual</h2>
+              <div id="resumen-crecimiento" class="chart-slot"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- Crecimiento ---- -->
+        <section id="page-crecimiento" class="page">
+          <div class="panel">
+            <h2>Registros por mes (últimos 6 meses)</h2>
+            <div id="chart-crecimiento" class="chart-slot chart-slot-grande"></div>
+          </div>
+
+          <div class="panel">
+            <div class="mes-navegador">
+              <button type="button" id="mes-anterior" class="btn-mes" aria-label="Mes anterior">◀</button>
+              <h2 id="mes-actual-titulo">—</h2>
+              <button type="button" id="mes-siguiente" class="btn-mes" aria-label="Mes siguiente">▶</button>
+            </div>
+            <p class="summary" id="mes-resumen"></p>
+            <table class="tabla-mini">
+              <thead>
+                <tr><th>Cliente</th><th>Documento</th><th>Contacto</th><th>Registrado</th></tr>
+              </thead>
+              <tbody id="mes-tabla"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ---- Rango de edad ---- -->
+        <section id="page-edad" class="page">
+          <div class="panel">
+            <h2>Distribución por rango de edad</h2>
+            <div id="chart-edad" class="chart-slot chart-slot-grande"></div>
+          </div>
+        </section>
+
+        <!-- ---- Medio de contacto ---- -->
+        <section id="page-medio" class="page">
+          <div class="panel">
+            <h2>Medio de contacto preferido</h2>
+            <div id="chart-medio" class="chart-slot chart-slot-grande"></div>
+          </div>
+        </section>
+
+        <!-- ---- Clientes ---- -->
+        <section id="page-clientes" class="page">
+          <div class="filters-panel is-collapsed" id="filters-panel">
+            <button type="button" id="toggle-filtros" class="filters-toggle" aria-expanded="false" aria-controls="filtros-cuerpo">
+              <span>🔍 Filtros</span>
+              <span class="chevron" aria-hidden="true"></span>
+            </button>
+            <div id="filtros-cuerpo" class="filtros-cuerpo is-collapsed">
+              <div class="filters-grid">
+              <div class="filtro-campo">
+                <label for="filtro-nombre">Buscar por nombre</label>
+                <input type="text" id="filtro-nombre" placeholder="Escribe un nombre" />
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-telefono">Teléfono</label>
+                <input type="text" id="filtro-telefono" placeholder="Escribe un número" />
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-tipo-documento">Tipo de documento</label>
+                <select id="filtro-tipo-documento">
+                  <option value="">Todos</option>
+                  <option value="cedula">Cédula de ciudadanía</option>
+                  <option value="cedula_extranjeria">Cédula de extranjería</option>
+                  <option value="pasaporte">Pasaporte</option>
+                  <option value="ppt">PPT</option>
+                  <option value="pep">PEP</option>
+                </select>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-documento">Número de documento</label>
+                <input type="text" id="filtro-documento" placeholder="Escribe un número" />
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-pais">País</label>
+                <div class="autocomplete">
+                  <input type="text" id="filtro-pais" autocomplete="off" placeholder="Todos"
+                         role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="filtro-pais-suggestions" />
+                  <ul class="autocomplete-list" id="filtro-pais-suggestions" role="listbox" hidden></ul>
+                </div>
+                <input type="hidden" id="filtro-pais-codigo" />
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-ciudad">Ciudad</label>
+                <div class="autocomplete">
+                  <input type="text" id="filtro-ciudad" autocomplete="off" placeholder="Escribe una ciudad"
+                         role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="filtro-ciudad-suggestions" />
+                  <ul class="autocomplete-list" id="filtro-ciudad-suggestions" role="listbox" hidden></ul>
+                </div>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-genero">Género</label>
+                <select id="filtro-genero">
+                  <option value="">Todos</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="no_binario">No binario</option>
+                  <option value="trans">Trans</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-padre">Padre</label>
+                <select id="filtro-padre">
+                  <option value="">Todos</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-pareja">Pareja</label>
+                <select id="filtro-pareja">
+                  <option value="">Todos</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
+                </select>
+              </div>
+              <div class="filtro-campo filtro-aniversario is-oculto" id="filtro-campo-aniversario">
+                <label for="filtro-aniversario-desde">Fecha de aniversario <span class="filtro-opcional">(solo quienes tienen pareja)</span></label>
+                <div class="filtro-rango">
+                  <input type="date" id="filtro-aniversario-desde" title="Aniversario desde esta fecha (opcional)" />
+                  <span>—</span>
+                  <input type="date" id="filtro-aniversario-hasta" title="Aniversario hasta esta fecha (opcional)" />
+                </div>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-medio">Medio de contacto</label>
+                <select id="filtro-medio">
+                  <option value="">Todos</option>
+                  <option value="correo">Correo electrónico</option>
+                  <option value="llamada">Llamada telefónica</option>
+                  <option value="whatsapp">WhatsApp / SMS</option>
+                  <option value="ninguno">Me es indiferente</option>
+                </select>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-edad-min">Edad <span class="filtro-opcional">(rango; "Desde" = esa edad o más, "Hasta" = esa edad o menos)</span></label>
+                <div class="filtro-rango">
+                  <input type="number" id="filtro-edad-min" min="0" max="120" placeholder="Desde" title="Muestra clientes de esta edad en adelante" />
+                  <span>—</span>
+                  <input type="number" id="filtro-edad-max" min="0" max="120" placeholder="Hasta" title="Muestra clientes de esta edad hacia abajo" />
+                </div>
+              </div>
+              </div>
+              <div class="filters-actions">
+                <button type="button" id="btn-limpiar-filtros" class="btn-secundario">Limpiar filtros</button>
+                <div class="filters-actions-derecha">
+                  <button type="button" id="btn-exportar" class="btn-secundario">⬇ Exportar a Excel</button>
+                  <button type="button" id="btn-nuevo" class="btn-secundario">+ Agregar cliente</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="summary" id="resumen"></div>
+
+          <div class="table-wrap">
+            <table class="tabla-clientes-grid">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Teléfono</th>
+                  <th>Documento</th>
+                  <th>País</th>
+                  <th>Ciudad</th>
+                  <th>Edad</th>
+                  <th>Padre</th>
+                  <th>Pareja</th>
+                  <th>Medio contacto</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tabla-clientes"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ---- Compartir ---- -->
+        <section id="page-compartir" class="page">
+          <div class="panel">
+            <h2>Link público del formulario</h2>
+            <p class="summary">
+              Comparte este link o el código QR con cualquier cliente (por WhatsApp, redes sociales o impreso en el
+              local). Cualquier persona con el link puede registrarse, no requiere iniciar sesión.
+            </p>
+            <div class="compartir-link-row">
+              <input type="text" id="compartir-link" readonly />
+              <button type="button" id="btn-copiar-link" class="btn-secundario">Copiar link</button>
+            </div>
+            <div class="compartir-qr-wrap">
+              <canvas id="compartir-qr"></canvas>
+              <button type="button" id="btn-descargar-qr" class="btn-secundario">⬇ Descargar QR (PNG)</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ---- Papelera ---- -->
+        <section id="page-papelera" class="page">
+          <p class="summary">
+            Los clientes eliminados se guardan aquí durante <strong>30 días</strong>. Puedes restaurarlos o
+            eliminarlos definitivamente antes de que se borren solos.
+          </p>
+          <div class="summary" id="resumen-papelera"></div>
+
+          <div class="table-wrap">
+            <table class="tabla-papelera-grid">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Documento</th>
+                  <th>Eliminado el</th>
+                  <th>Días restantes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tabla-papelera"></tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <dialog id="modal-cliente">
+    <form id="form-cliente">
+      <h2 id="modal-titulo">Agregar cliente</h2>
+
+      <div class="modal-grid">
+        <div class="field">
+          <label for="m-nombre">Nombre completo</label>
+          <input type="text" id="m-nombre" name="nombre" required />
+        </div>
+        <div class="field">
+          <label for="m-telefono">Teléfono (con indicativo)</label>
+          <input type="text" id="m-telefono" name="telefono" placeholder="+573001234567" required />
+        </div>
+        <div class="field">
+          <label for="m-tipo-documento">Tipo de documento</label>
+          <select id="m-tipo-documento" name="tipo_documento" required>
+            <option value="cedula">Cédula de ciudadanía</option>
+            <option value="cedula_extranjeria">Cédula de extranjería</option>
+            <option value="pasaporte">Pasaporte</option>
+            <option value="ppt">PPT</option>
+            <option value="pep">PEP</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="m-cedula">Número de documento</label>
+          <input type="text" id="m-cedula" name="cedula" required />
+        </div>
+        <div class="field">
+          <label for="m-correo">Correo electrónico</label>
+          <input type="email" id="m-correo" name="correo" required />
+        </div>
+        <div class="field">
+          <label for="m-pais-nombre">País</label>
+          <div class="autocomplete">
+            <input type="text" id="m-pais-nombre" autocomplete="off" placeholder="Escribe un país" required
+                   role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="m-pais-suggestions" />
+            <ul class="autocomplete-list" id="m-pais-suggestions" role="listbox" hidden></ul>
+          </div>
+          <input type="hidden" id="m-pais" name="pais" />
+        </div>
+        <div class="field">
+          <label for="m-ciudad">Ciudad</label>
+          <input type="text" id="m-ciudad" name="ciudad" required />
+        </div>
+        <div class="field">
+          <label for="m-genero">Género</label>
+          <select id="m-genero" name="genero" required>
+            <option value="femenino">Femenino</option>
+            <option value="masculino">Masculino</option>
+            <option value="no_binario">No binario</option>
+            <option value="trans">Trans</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="m-fecha-nacimiento">Fecha de nacimiento</label>
+          <input type="date" id="m-fecha-nacimiento" name="fecha_nacimiento" required />
+        </div>
+        <div class="field">
+          <label for="m-es-padre">¿Es padre/madre?</label>
+          <select id="m-es-padre" name="es_padre" required>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="m-tiene-pareja">¿Tiene pareja?</label>
+          <select id="m-tiene-pareja" name="tiene_pareja" required>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="m-fecha-aniversario">Fecha de aniversario</label>
+          <input type="date" id="m-fecha-aniversario" name="fecha_aniversario" />
+        </div>
+        <div class="field">
+          <label for="m-medio-contacto">Medio de contacto</label>
+          <select id="m-medio-contacto" name="medio_contacto" required>
+            <option value="correo">Correo electrónico</option>
+            <option value="llamada">Llamada telefónica</option>
+            <option value="whatsapp">WhatsApp / SMS</option>
+            <option value="ninguno">Me es indiferente</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-checks">
+        <label><input type="checkbox" id="m-recibir-novedades" name="recibir_novedades" /> Desea recibir novedades</label>
+        <label><input type="checkbox" id="m-mayor-edad" name="mayor_edad" checked /> Confirma mayoría de edad</label>
+        <label><input type="checkbox" id="m-habeas-data" name="habeas_data" checked /> Autoriza tratamiento de datos</label>
+      </div>
+
+      <div class="error-msg" id="modal-error"></div>
+
+      <div class="modal-actions">
+        <button type="button" id="btn-cancelar" class="btn-secundario">Cancelar</button>
+        <button type="submit" id="btn-guardar">Guardar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="modal-detalle">
+    <h2 id="detalle-titulo">Detalle del cliente</h2>
+    <div class="detalle-grid" id="detalle-contenido"></div>
+    <div class="modal-actions">
+      <button type="button" id="btn-cerrar-detalle" class="btn-secundario">Cerrar</button>
+    </div>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

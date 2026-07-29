@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard Coyote - Iniciar sesión</title>
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body>
+  <div class="login-container">
+    <img class="brand-logo" src="../coyote/images/logo-coyote.png" alt="Coyote Salón Social" />
+    <h1>Bienvenido </h1>
+    <p class="subtitle">Restaurante Coyote</p>
+    <form id="login-form">
+      <div class="field">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" autocomplete="username" required />
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" autocomplete="current-password" required />
+      </div>
+      <button type="submit">Ingresar</button>
+      <div class="error-msg" id="error-msg"></div>
+    </form>
+  </div>
+  <script src="login.js"></script>
+</body>
+</html>

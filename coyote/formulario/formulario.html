@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Fidelización con Restaurante Coyote</title>
   <link rel="stylesheet" href="formulario.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23/build/css/intlTelInput.css" />
@@ -160,7 +160,7 @@
               <option value="correo" data-i18n="medioContacto.correo">Correo electrónico</option>
               <option value="llamada" data-i18n="medioContacto.llamada">Llamada telefónica</option>
               <option value="whatsapp" data-i18n="medioContacto.whatsapp">WhatsApp / SMS</option>
-              <option value="ninguno" data-i18n="medioContacto.ninguno">No deseo ser contactado</option>
+              <option value="ninguno" data-i18n="medioContacto.ninguno">Me es indiferente</option>
             </select>
             <span class="error-message" data-error-for="medio-contacto"></span>
           </div>
@@ -177,9 +177,9 @@
         <div class="checkbox-field">
           <input type="checkbox" id="habeas-data" name="habeas_data" required />
           <label for="habeas-data">
-            <span data-i18n="checkbox.habeasIntro0">Acepto los </span><a href="terminos.html" target="_blank" rel="noopener" data-i18n="checkbox.terminosLink">Términos y Condiciones</a><span data-i18n="checkbox.habeasIntro"> y autorizo el tratamiento de mis datos personales conforme a la</span>
+            <span data-i18n="checkbox.habeasIntro0">Acepto los </span><button type="button" class="link-modal" data-modal="terminos" data-i18n="checkbox.terminosLink">Términos y Condiciones</button><span data-i18n="checkbox.habeasIntro"> y autorizo el tratamiento de mis datos personales conforme a la</span>
             <strong>Ley 1581 de 2012</strong><span data-i18n="checkbox.habeasMid"> y el </span><strong>Decreto 1377 de 2013</strong>
-            <span data-i18n="checkbox.habeasEnd">sobre Protección de Datos Personales (Habeas Data), según la </span><a href="privacidad.html" target="_blank" rel="noopener" data-i18n="checkbox.habeasPoliticaLink">Política de Tratamiento de Datos de Coyote Salón Social</a>.
+            <span data-i18n="checkbox.habeasEnd">sobre Protección de Datos Personales (Habeas Data), según la </span><button type="button" class="link-modal" data-modal="privacidad" data-i18n="checkbox.habeasPoliticaLink">Política de Tratamiento de Datos de Coyote Salón Social</button>.
             <span class="required">*</span>
           </label>
         </div>
@@ -188,8 +188,8 @@
         <div class="checkbox-field">
           <input type="checkbox" id="recibir-novedades" name="recibir_novedades" />
           <label for="recibir-novedades">
-            <span data-i18n="checkbox.novedades">Sí, quiero enterarme de promociones, eventos y un beneficio especial en mi
-            cumpleaños por correo y/o WhatsApp. Es opcional y puedo darme de baja cuando quiera (</span><a href="privacidad.html" target="_blank" rel="noopener" data-i18n="checkbox.novedadesPoliticaLink">ver cómo</a><span data-i18n="checkbox.novedadesFin">).</span>
+            <span data-i18n="checkbox.novedades">Sí, quiero enterarme de promociones, eventos y un beneficio especial en
+            fechas especiales, por tu preferencia de contacto. Es opcional y puedo darme de baja cuando quiera (</span><button type="button" class="link-modal" data-modal="privacidad" data-i18n="checkbox.novedadesPoliticaLink">ver cómo</button><span data-i18n="checkbox.novedadesFin">).</span>
           </label>
         </div>
       </section>
@@ -199,6 +199,20 @@
       <button type="submit" class="submit-btn" data-i18n="common.enviar">Enviar</button>
     </form>
   </main>
+
+  <dialog id="modal-terminos" class="modal-legal">
+    <button type="button" class="modal-legal-cerrar-x" data-cerrar-modal aria-label="Cerrar">✕</button>
+    <h2 data-i18n="modalTerminos.titulo">Términos y Condiciones</h2>
+    <div class="modal-legal-cuerpo" id="contenido-terminos"></div>
+    <button type="button" class="modal-legal-cerrar" data-cerrar-modal data-i18n="common.cerrar">Cerrar</button>
+  </dialog>
+
+  <dialog id="modal-privacidad" class="modal-legal">
+    <button type="button" class="modal-legal-cerrar-x" data-cerrar-modal aria-label="Cerrar">✕</button>
+    <h2 data-i18n="modalPrivacidad.titulo">Política de Privacidad</h2>
+    <div class="modal-legal-cuerpo" id="contenido-privacidad"></div>
+    <button type="button" class="modal-legal-cerrar" data-cerrar-modal data-i18n="common.cerrar">Cerrar</button>
+  </dialog>
 
   <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23/build/js/intlTelInputWithUtils.min.js"></script>
   <script src="formulario.js"></script>

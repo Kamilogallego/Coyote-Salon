@@ -42,11 +42,47 @@
   box-sizing: border-box;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--coyote-crema) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--coyote-crema);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--coyote-azul);
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
 input,
 select,
 textarea,
 button {
   font-family: inherit;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
@@ -60,6 +96,9 @@ body {
   max-width: 480px;
   margin: 0 auto;
   padding: 1.25rem 1rem 3rem;
+  padding-left: max(1rem, env(safe-area-inset-left));
+  padding-right: max(1rem, env(safe-area-inset-right));
+  padding-bottom: max(3rem, env(safe-area-inset-bottom));
 }
 
 .lang-switch {
@@ -380,6 +419,120 @@ select.invalid {
 
 .submit-btn:active {
   background: #b5100d;
+}
+
+.link-modal {
+  display: inline;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: var(--coyote-azul);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+dialog.modal-legal:not([open]) {
+  display: none;
+}
+
+dialog.modal-legal {
+  position: relative;
+  border: 1px solid var(--coyote-crema);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(640px, 92vw);
+  max-height: 85vh;
+  overflow-y: auto;
+  background: #fff;
+  color: var(--coyote-texto);
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  box-shadow: 0 20px 45px rgba(28, 28, 28, 0.22);
+}
+
+dialog.modal-legal::backdrop {
+  background: rgba(28, 28, 28, 0.45);
+}
+
+dialog.modal-legal h2 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-right: 2rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+.modal-legal-cuerpo h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--coyote-azul);
+  margin: 1.5rem 0 0.4rem;
+}
+
+.modal-legal-cuerpo h3:first-child {
+  margin-top: 0;
+}
+
+.modal-legal-cuerpo p {
+  line-height: 1.6;
+  margin: 0 0 0.75rem;
+  font-size: 0.92rem;
+}
+
+.modal-legal-cuerpo .politica-fecha {
+  color: var(--coyote-rojo);
+  font-weight: 600;
+  font-size: 0.82rem;
+  margin: -0.5rem 0 1rem;
+}
+
+.modal-legal-cerrar-x {
+  position: absolute;
+  top: 1rem;
+  right: 1.1rem;
+  width: auto;
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #6b5b52;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-legal-cerrar-x:hover {
+  color: var(--coyote-rojo);
+}
+
+.modal-legal-cerrar {
+  display: block;
+  margin: 1.25rem auto 0;
+  width: auto;
+  padding: 0.7rem 2rem;
+  background: var(--coyote-rojo);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.modal-legal-cerrar:active {
+  background: #b5100d;
+}
+
+@media (max-width: 600px) {
+  dialog.modal-legal {
+    padding: 1.25rem;
+  }
 }
 
 @media (min-width: 600px) {

@@ -2,21 +2,31 @@ require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
 
+const pool = require("./db");
 const authRoutes = require("./routes/auth");
 const clientesRoutes = require("./routes/clientes");
 const estadisticasRoutes = require("./routes/estadisticas");
 
 const app = express();
+const isProduction = process.env.NODE_ENV === "production";
+
+// Necesario en Render (y cualquier PaaS detrás de proxy) para que las cookies
+// "secure" funcionen: Express debe confiar en el header X-Forwarded-Proto.
+app.set("trust proxy", 1);
 
 app.use(express.json());
 app.use(
   session({
+    store: new pgSession({ pool, tableName: "session", createTableIfMissing: true }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
+      secure: isProduction,
+      sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     },
   })
@@ -39,7 +49,7 @@ app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
 
-// Purga automática de la papelera (clientes eliminados hace más de 5 días)
+// Purga automática de la papelera (clientes eliminados hace más de 30 días)
 clientesRoutes.purgarPapeleraVencida().catch((err) => console.error("Error al purgar la papelera:", err));
 setInterval(() => {
   clientesRoutes.purgarPapeleraVencida().catch((err) => console.error("Error al purgar la papelera:", err));
