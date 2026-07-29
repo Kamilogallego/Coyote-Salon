@@ -433,6 +433,7 @@ function t(clave, ...args) {
 let iti;
 let actualizarCiudades = () => {};
 let actualizarIdiomaPaisCiudad = () => {};
+let intentarConfirmarPaisEscrito = () => false;
 
 // ---- Borrador del formulario (para no perder lo escrito al abrir la política de privacidad) ----
 
@@ -544,6 +545,11 @@ document.addEventListener("DOMContentLoaded", () => {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearErrors(form);
+
+    // Red de seguridad: si el usuario escribió un país válido pero nunca llegó a
+    // tocar la sugerencia (típico en móvil, donde ese toque puede no registrarse),
+    // lo confirmamos aquí en vez de rechazar el envío con un mensaje confuso.
+    intentarConfirmarPaisEscrito();
 
     const errors = validarFormulario(form);
 
@@ -845,6 +851,28 @@ function setupPaisCiudad() {
     inputPais.classList.remove("invalid");
   }
 
+  // Si ya hay un código elegido, o el campo está vacío, no hay nada que hacer.
+  // Si no, busca una coincidencia exacta (sin distinguir mayúsculas/acentos) entre
+  // lo que el usuario escribió y algún país de la lista, y lo confirma solo.
+  function normalizarTextoPais(texto) {
+    return texto
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase()
+      .trim();
+  }
+
+  intentarConfirmarPaisEscrito = () => {
+    if (inputPaisCodigo.value) return true;
+    const texto = normalizarTextoPais(inputPais.value);
+    if (!texto) return false;
+    const coincidencia = paisesActuales.find((p) => normalizarTextoPais(p.nombre) === texto);
+    if (!coincidencia) return false;
+    seleccionarPais(coincidencia.code);
+    actualizarCiudades(coincidencia.code);
+    return true;
+  };
+
   function ocultarSugerenciasPais() {
     listaPaisSugerencias.hidden = true;
     listaPaisSugerencias.innerHTML = "";
@@ -893,7 +921,7 @@ function setupPaisCiudad() {
     // aquí de inmediato, se perdería la selección que el usuario acaba de hacer.
     setTimeout(() => {
       ocultarSugerenciasPais();
-      if (!inputPaisCodigo.value) {
+      if (!intentarConfirmarPaisEscrito()) {
         inputPais.value = "";
         actualizarCiudades("");
       }
