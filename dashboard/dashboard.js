@@ -1171,14 +1171,25 @@ document.getElementById("btn-eliminar-seleccionados").addEventListener("click", 
   const cantidad = seleccionados.size;
   if (cantidad === 0) return;
 
-  const confirmado = await confirmarAccion(
-    `¿Eliminar ${cantidad} cliente${cantidad === 1 ? "" : "s"} seleccionado${cantidad === 1 ? "" : "s"}? Se moverá${
-      cantidad === 1 ? "" : "n"
-    } a la papelera y podrás restaurarlo${cantidad === 1 ? "" : "s"} durante 30 días, luego se borrará${
-      cantidad === 1 ? "" : "n"
-    } solo${cantidad === 1 ? "" : "s"}.`,
-    { titulo: "Eliminar seleccionados", textoAceptar: "Eliminar" }
-  );
+  let mensaje;
+  if (cantidad === 1) {
+    const id = [...seleccionados][0];
+    const cliente = clientesActuales.find((c) => c.id === id);
+    const nombre = cliente ? cliente.nombre : "este cliente";
+    const documento = cliente
+      ? `${ETIQUETAS_DOCUMENTO[cliente.tipo_documento] || cliente.tipo_documento}: ${cliente.cedula}`
+      : "";
+    mensaje = `¿Eliminar a "${nombre}"${
+      documento ? ` (${documento})` : ""
+    }? Se moverá a la papelera y podrás restaurarlo durante 30 días, luego se borrará solo.`;
+  } else {
+    mensaje = `¿Eliminar ${cantidad} clientes seleccionados? Se moverán a la papelera y podrás restaurarlos durante 30 días, luego se borrarán solos.`;
+  }
+
+  const confirmado = await confirmarAccion(mensaje, {
+    titulo: cantidad === 1 ? "Eliminar cliente" : "Eliminar seleccionados",
+    textoAceptar: "Eliminar",
+  });
   if (!confirmado) return;
 
   const res = await fetch("/api/clientes/eliminar-multiple", {
