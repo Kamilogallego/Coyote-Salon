@@ -1040,22 +1040,6 @@ document.getElementById("btn-limpiar-filtros").addEventListener("click", () => {
 
 document.getElementById("btn-exportar").addEventListener("click", exportarClientesExcel);
 
-document.getElementById("btn-actualizar").addEventListener("click", () => {
-  const activo = document.querySelector(".nav-item.is-active");
-  const pagina = activo ? activo.dataset.page : "resumen";
-
-  if (pagina === "clientes") {
-    cargarClientes();
-  } else if (pagina === "papelera") {
-    cargarPapelera();
-  } else if (pagina === "crecimiento") {
-    cargarEstadisticas();
-    cargarClientesDelMes();
-  } else {
-    cargarEstadisticas();
-  }
-});
-
 mostrarFechaHoy();
 setupFiltroPaisCiudad();
 const modalPaisListo = setupModalPaisAutocomplete();

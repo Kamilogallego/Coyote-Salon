@@ -333,28 +333,6 @@ button:active {
   white-space: nowrap;
 }
 
-.btn-actualizar {
-  width: auto;
-  background: #fff;
-  border: 1px solid var(--coyote-crema);
-  color: var(--coyote-azul);
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: 600;
-  font-size: 0.8rem;
-  padding: 0.45rem 0.9rem;
-  border-radius: 10px;
-  white-space: nowrap;
-}
-
-.btn-actualizar:hover {
-  background: #f7f3ea;
-}
-
-.btn-actualizar:active {
-  background: #f7f3ea;
-}
-
 main {
   padding: 1rem 1.25rem 2.5rem;
 }
