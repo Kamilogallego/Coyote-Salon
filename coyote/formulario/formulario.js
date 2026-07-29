@@ -441,7 +441,7 @@ const CLAVE_BORRADOR = "coyote-formulario-borrador";
 
 function leerBorrador() {
   try {
-    const crudo = localStorage.getItem(CLAVE_BORRADOR);
+    const crudo = sessionStorage.getItem(CLAVE_BORRADOR);
     return crudo ? JSON.parse(crudo) : null;
   } catch {
     return null;
@@ -449,7 +449,7 @@ function leerBorrador() {
 }
 
 function borrarBorrador() {
-  localStorage.removeItem(CLAVE_BORRADOR);
+  sessionStorage.removeItem(CLAVE_BORRADOR);
 }
 
 function guardarBorrador(form) {
@@ -473,7 +473,7 @@ function guardarBorrador(form) {
     mayor_edad: form.mayor_edad.checked,
     habeas_data: form.habeas_data.checked,
   };
-  localStorage.setItem(CLAVE_BORRADOR, JSON.stringify(datos));
+  sessionStorage.setItem(CLAVE_BORRADOR, JSON.stringify(datos));
 }
 
 function restaurarBorrador(form, datos) {
