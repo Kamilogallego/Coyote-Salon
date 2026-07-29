@@ -467,7 +467,7 @@ main {
   gap: 0.9rem;
 }
 
-.compartir-qr-wrap canvas {
+.compartir-qr-wrap img {
   max-width: 100%;
   height: auto;
   border: 1px solid var(--coyote-crema);

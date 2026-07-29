@@ -137,18 +137,19 @@ document.querySelectorAll(".nav-item[data-page]").forEach((btn) => {
 
 // ---- Compartir formulario (link + QR) ----
 
-let qrGenerado = false;
+let qrDataUrl = null;
 
 function cargarCompartir() {
   const url = `${window.location.origin}/coyote/formulario/formulario.html`;
   const input = document.getElementById("compartir-link");
   input.value = url;
 
-  if (!qrGenerado) {
-    QRCode.toCanvas(document.getElementById("compartir-qr"), url, { width: 260, margin: 1 }, (err) => {
-      if (err) console.error("Error al generar el QR:", err);
-    });
-    qrGenerado = true;
+  if (!qrDataUrl) {
+    const qr = qrcode(0, "M");
+    qr.addData(url);
+    qr.make();
+    qrDataUrl = qr.createDataURL(8, 4);
+    document.getElementById("compartir-qr").src = qrDataUrl;
   }
 }
 
@@ -162,10 +163,10 @@ document.getElementById("btn-copiar-link").addEventListener("click", async () =>
 });
 
 document.getElementById("btn-descargar-qr").addEventListener("click", () => {
-  const canvas = document.getElementById("compartir-qr");
+  if (!qrDataUrl) return;
   const enlace = document.createElement("a");
-  enlace.download = "coyote-qr-registro.png";
-  enlace.href = canvas.toDataURL("image/png");
+  enlace.download = "coyote-qr-registro.gif";
+  enlace.href = qrDataUrl;
   enlace.click();
 });
 

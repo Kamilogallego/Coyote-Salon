@@ -295,8 +295,8 @@
               <button type="button" id="btn-copiar-link" class="btn-secundario">Copiar link</button>
             </div>
             <div class="compartir-qr-wrap">
-              <canvas id="compartir-qr"></canvas>
-              <button type="button" id="btn-descargar-qr" class="btn-secundario">⬇ Descargar QR (PNG)</button>
+              <img id="compartir-qr" alt="Código QR del formulario de registro" width="260" height="260" />
+              <button type="button" id="btn-descargar-qr" class="btn-secundario">⬇ Descargar QR</button>
             </div>
           </div>
         </section>
@@ -438,7 +438,7 @@
     </div>
   </dialog>
 
-  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/lib/browser.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
   <script src="dashboard.js"></script>
 </body>
 </html>
