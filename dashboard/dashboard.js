@@ -138,7 +138,6 @@ const TITULOS_PAGINA = {
   crecimiento: "Crecimiento",
   edad: "Rango de edad",
   medio: "Medio de contacto",
-  fechas: "Fechas especiales",
   compartir: "Compartir formulario",
   papelera: "Papelera",
 };

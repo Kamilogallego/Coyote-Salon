@@ -19,7 +19,6 @@
         <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
         <button type="button" class="nav-item" data-page="edad">Rango de edad</button>
         <button type="button" class="nav-item" data-page="medio">Medio de contacto</button>
-        <button type="button" class="nav-item" data-page="fechas">🎂 Fechas especiales</button>
         <button type="button" class="nav-item" data-page="compartir">🔗 Formulario</button>
         <button type="button" class="nav-item nav-item-con-badge" data-page="papelera">
           🗑 Papelera
@@ -108,6 +107,27 @@
               <div id="resumen-crecimiento" class="chart-slot"></div>
             </div>
           </div>
+
+          <div class="panel-grid-2">
+            <div class="panel">
+              <h2>🎂 Próximos cumpleaños</h2>
+              <table class="tabla-mini">
+                <thead>
+                  <tr><th>Cliente</th><th>Fecha</th><th>Faltan</th></tr>
+                </thead>
+                <tbody id="tabla-cumpleanos"></tbody>
+              </table>
+            </div>
+            <div class="panel">
+              <h2>💛 Próximos aniversarios</h2>
+              <table class="tabla-mini">
+                <thead>
+                  <tr><th>Cliente</th><th>Fecha</th><th>Faltan</th></tr>
+                </thead>
+                <tbody id="tabla-aniversarios"></tbody>
+              </table>
+            </div>
+          </div>
         </section>
 
         <!-- ---- Crecimiento ---- -->
@@ -152,30 +172,6 @@
           <div class="panel">
             <h2>Medio de contacto preferido</h2>
             <div id="chart-medio" class="chart-slot chart-slot-grande"></div>
-          </div>
-        </section>
-
-        <!-- ---- Fechas especiales ---- -->
-        <section id="page-fechas" class="page">
-          <div class="panel-grid-2">
-            <div class="panel">
-              <h2>🎂 Próximos cumpleaños</h2>
-              <table class="tabla-mini">
-                <thead>
-                  <tr><th>Cliente</th><th>Fecha</th><th>Faltan</th></tr>
-                </thead>
-                <tbody id="tabla-cumpleanos"></tbody>
-              </table>
-            </div>
-            <div class="panel">
-              <h2>💛 Próximos aniversarios</h2>
-              <table class="tabla-mini">
-                <thead>
-                  <tr><th>Cliente</th><th>Fecha</th><th>Faltan</th></tr>
-                </thead>
-                <tbody id="tabla-aniversarios"></tbody>
-              </table>
-            </div>
           </div>
         </section>
 
