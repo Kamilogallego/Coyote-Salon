@@ -870,10 +870,12 @@ function setupPaisCiudad() {
     inputPais.setAttribute("aria-expanded", "true");
   }
 
-  listaPaisSugerencias.addEventListener("mousedown", (event) => {
+  // "click" (no "mousedown") porque es el evento que de forma más confiable llega
+  // después de un toque en móvil. El blur del input se retrasa un poco (ver abajo)
+  // para darle tiempo a este click de ejecutarse antes de que se borre la selección.
+  listaPaisSugerencias.addEventListener("click", (event) => {
     const li = event.target.closest("li");
     if (!li) return;
-    event.preventDefault();
     seleccionarPais(li.dataset.code);
     ocultarSugerenciasPais();
     inputCiudad.value = "";
@@ -886,11 +888,16 @@ function setupPaisCiudad() {
   });
   inputPais.addEventListener("focus", mostrarSugerenciasPais);
   inputPais.addEventListener("blur", () => {
-    ocultarSugerenciasPais();
-    if (!inputPaisCodigo.value) {
-      inputPais.value = "";
-      actualizarCiudades("");
-    }
+    // Retraso corto: en móvil, el toque sobre una sugerencia dispara el blur del
+    // input ANTES de que su propio "click" termine de procesarse. Si limpiáramos
+    // aquí de inmediato, se perdería la selección que el usuario acaba de hacer.
+    setTimeout(() => {
+      ocultarSugerenciasPais();
+      if (!inputPaisCodigo.value) {
+        inputPais.value = "";
+        actualizarCiudades("");
+      }
+    }, 200);
   });
 
   const MAX_SUGERENCIAS_MOSTRADAS = 200;
@@ -929,9 +936,8 @@ function setupPaisCiudad() {
     inputCiudad.setAttribute("aria-expanded", "true");
   }
 
-  listaSugerencias.addEventListener("mousedown", (event) => {
+  listaSugerencias.addEventListener("click", (event) => {
     if (event.target.tagName === "LI" && !event.target.classList.contains("autocomplete-hint")) {
-      event.preventDefault();
       inputCiudad.value = event.target.textContent;
       ocultarSugerencias();
     }
@@ -939,7 +945,7 @@ function setupPaisCiudad() {
 
   inputCiudad.addEventListener("input", mostrarSugerencias);
   inputCiudad.addEventListener("focus", mostrarSugerencias);
-  inputCiudad.addEventListener("blur", ocultarSugerencias);
+  inputCiudad.addEventListener("blur", () => setTimeout(ocultarSugerencias, 200));
 
   function actualizarHint(codigoPais) {
     if (!codigoPais) {

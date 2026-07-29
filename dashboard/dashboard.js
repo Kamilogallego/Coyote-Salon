@@ -439,10 +439,9 @@ async function setupFiltroPaisCiudad() {
     filtroPais.value = paisesOrdenados.find((p) => p.code === code)?.nombre || code;
   }
 
-  listaPaisSugerencias.addEventListener("mousedown", (event) => {
+  listaPaisSugerencias.addEventListener("click", (event) => {
     const li = event.target.closest("li");
     if (!li) return;
-    event.preventDefault();
     seleccionarPais(li.dataset.code);
     ocultarSugerenciasPais();
     actualizarCiudadesFiltro(li.dataset.code);
@@ -455,12 +454,15 @@ async function setupFiltroPaisCiudad() {
   });
   filtroPais.addEventListener("focus", mostrarSugerenciasPais);
   filtroPais.addEventListener("blur", () => {
-    ocultarSugerenciasPais();
-    if (!filtroPaisCodigo.value && filtroPais.value.trim()) {
-      filtroPais.value = "";
-      actualizarCiudadesFiltro("");
-      cargarClientes();
-    }
+    // Retraso: en tactil el blur puede llegar antes que el click de la sugerencia.
+    setTimeout(() => {
+      ocultarSugerenciasPais();
+      if (!filtroPaisCodigo.value && filtroPais.value.trim()) {
+        filtroPais.value = "";
+        actualizarCiudadesFiltro("");
+        cargarClientes();
+      }
+    }, 200);
   });
 
   let ciudadesPais = [];
@@ -491,17 +493,16 @@ async function setupFiltroPaisCiudad() {
     filtroCiudad.setAttribute("aria-expanded", "true");
   }
 
-  listaCiudadSugerencias.addEventListener("mousedown", (event) => {
+  listaCiudadSugerencias.addEventListener("click", (event) => {
     const li = event.target.closest("li");
     if (!li) return;
-    event.preventDefault();
     filtroCiudad.value = li.textContent;
     ocultarSugerenciasCiudad();
     cargarClientes();
   });
 
   filtroCiudad.addEventListener("focus", mostrarSugerenciasCiudad);
-  filtroCiudad.addEventListener("blur", ocultarSugerenciasCiudad);
+  filtroCiudad.addEventListener("blur", () => setTimeout(ocultarSugerenciasCiudad, 200));
   filtroCiudad.addEventListener("input", mostrarSugerenciasCiudad);
 
   actualizarCiudadesFiltro = (codigoPais) => {
@@ -579,10 +580,9 @@ async function setupModalPaisAutocomplete() {
     inputPaisNombre.classList.remove("invalid");
   }
 
-  listaSugerencias.addEventListener("mousedown", (event) => {
+  listaSugerencias.addEventListener("click", (event) => {
     const li = event.target.closest("li");
     if (!li) return;
-    event.preventDefault();
     seleccionarPais(li.dataset.code);
     ocultarSugerencias();
   });
@@ -593,10 +593,12 @@ async function setupModalPaisAutocomplete() {
   });
   inputPaisNombre.addEventListener("focus", mostrarSugerencias);
   inputPaisNombre.addEventListener("blur", () => {
-    ocultarSugerencias();
-    if (!inputPaisCodigo.value) {
-      inputPaisNombre.value = "";
-    }
+    setTimeout(() => {
+      ocultarSugerencias();
+      if (!inputPaisCodigo.value) {
+        inputPaisNombre.value = "";
+      }
+    }, 200);
   });
 
   establecerPaisModal = seleccionarPais;
