@@ -461,7 +461,7 @@ function guardarBorrador(form) {
     cedula: form.cedula.value,
     correo: form.correo.value,
     pais_codigo: document.getElementById("pais-codigo").value,
-    pais_texto: document.getElementById("pais").value,
+    pais_texto: document.getElementById("pais-nombre").value,
     ciudad: form.ciudad.value,
     genero: form.genero.value,
     fecha_nacimiento: form.fecha_nacimiento.value,
@@ -494,7 +494,7 @@ function restaurarBorrador(form, datos) {
   form.habeas_data.checked = Boolean(datos.habeas_data);
 
   document.getElementById("pais-codigo").value = datos.pais_codigo || "";
-  document.getElementById("pais").value = datos.pais_texto || "";
+  document.getElementById("pais-nombre").value = datos.pais_texto || "";
 
   if (iti && datos.telefonoPaisIso2) {
     iti.setCountry(datos.telefonoPaisIso2);
@@ -818,7 +818,7 @@ const CIUDADES_COLOMBIA = [
 ].map(([ciudad, departamento]) => `${ciudad}, ${departamento}`);
 
 function setupPaisCiudad() {
-  const inputPais = document.getElementById("pais");
+  const inputPais = document.getElementById("pais-nombre");
   const inputPaisCodigo = document.getElementById("pais-codigo");
   const listaPaisSugerencias = document.getElementById("pais-suggestions");
 
@@ -1092,7 +1092,7 @@ function validarFormulario(form) {
     }
   }
 
-  if (!form.pais.value) errors["pais"] = t("err.seleccionaOpcion");
+  if (!form.pais.value) errors["pais-nombre"] = t("err.seleccionaOpcion");
 
   if (!form.ciudad.value.trim()) errors["ciudad"] = t("err.ciudad");
 
