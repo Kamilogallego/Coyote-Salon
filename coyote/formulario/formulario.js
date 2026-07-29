@@ -761,19 +761,55 @@ const CODIGOS_PAISES_ISO = [
   "VN","VU","WF","WS","YE","YT","ZA","ZM","ZW",
 ];
 
-// La librería de ciudades sí requiere una base de datos grande, así que se sigue
-// cargando desde una CDN, pero de forma diferida (solo cuando hace falta) y con
-// reintento si falla: si no carga, la ciudad simplemente queda como texto libre.
-let promesaLibreriaCiudades = null;
-function cargarLibreriaCiudades() {
-  if (!promesaLibreriaCiudades) {
-    promesaLibreriaCiudades = import("https://esm.sh/country-state-city@3").catch((error) => {
-      promesaLibreriaCiudades = null; // permite reintentar en el próximo país seleccionado
-      throw error;
-    });
-  }
-  return promesaLibreriaCiudades;
-}
+// Ciudades principales de Colombia (la mayoría de quienes llenan este formulario),
+// embebidas directamente: nada de descargar una base de datos mundial de ciudades
+// (llegaba a pesar más de 2 MB comprimidos) solo para sugerir un puñado de nombres.
+// Para cualquier otro país, el campo de ciudad sigue funcionando como texto libre.
+const CIUDADES_COLOMBIA = [
+  ["Leticia", "Amazonas"], ["Puerto Nariño", "Amazonas"],
+  ["Medellín", "Antioquia"], ["Bello", "Antioquia"], ["Itagüí", "Antioquia"],
+  ["Envigado", "Antioquia"], ["Sabaneta", "Antioquia"], ["Rionegro", "Antioquia"],
+  ["Apartadó", "Antioquia"], ["Turbo", "Antioquia"], ["Caucasia", "Antioquia"],
+  ["Copacabana", "Antioquia"], ["La Estrella", "Antioquia"], ["Girardota", "Antioquia"],
+  ["Arauca", "Arauca"],
+  ["Barranquilla", "Atlántico"], ["Soledad", "Atlántico"], ["Malambo", "Atlántico"],
+  ["Puerto Colombia", "Atlántico"],
+  ["Cartagena", "Bolívar"], ["Magangué", "Bolívar"], ["Turbaco", "Bolívar"],
+  ["Bogotá", "Bogotá D.C."],
+  ["Tunja", "Boyacá"], ["Duitama", "Boyacá"], ["Sogamoso", "Boyacá"], ["Chiquinquirá", "Boyacá"],
+  ["Manizales", "Caldas"], ["La Dorada", "Caldas"], ["Chinchiná", "Caldas"],
+  ["Florencia", "Caquetá"],
+  ["Yopal", "Casanare"],
+  ["Popayán", "Cauca"], ["Santander de Quilichao", "Cauca"],
+  ["Valledupar", "Cesar"], ["Aguachica", "Cesar"],
+  ["Quibdó", "Chocó"],
+  ["Montería", "Córdoba"], ["Cereté", "Córdoba"], ["Lorica", "Córdoba"], ["Sahagún", "Córdoba"],
+  ["Soacha", "Cundinamarca"], ["Facatativá", "Cundinamarca"], ["Zipaquirá", "Cundinamarca"],
+  ["Chía", "Cundinamarca"], ["Girardot", "Cundinamarca"], ["Fusagasugá", "Cundinamarca"],
+  ["Cajicá", "Cundinamarca"], ["Mosquera", "Cundinamarca"], ["Madrid", "Cundinamarca"],
+  ["Inírida", "Guainía"],
+  ["San José del Guaviare", "Guaviare"],
+  ["Neiva", "Huila"], ["Pitalito", "Huila"], ["Garzón", "Huila"],
+  ["Riohacha", "La Guajira"], ["Maicao", "La Guajira"],
+  ["Santa Marta", "Magdalena"], ["Ciénaga", "Magdalena"],
+  ["Villavicencio", "Meta"], ["Acacías", "Meta"], ["Granada", "Meta"],
+  ["Pasto", "Nariño"], ["Ipiales", "Nariño"], ["Tumaco", "Nariño"],
+  ["Cúcuta", "Norte de Santander"], ["Ocaña", "Norte de Santander"],
+  ["Pamplona", "Norte de Santander"], ["Villa del Rosario", "Norte de Santander"],
+  ["Mocoa", "Putumayo"],
+  ["Armenia", "Quindío"], ["Calarcá", "Quindío"],
+  ["Pereira", "Risaralda"], ["Dosquebradas", "Risaralda"], ["Santa Rosa de Cabal", "Risaralda"],
+  ["San Andrés", "San Andrés y Providencia"],
+  ["Bucaramanga", "Santander"], ["Floridablanca", "Santander"], ["Girón", "Santander"],
+  ["Piedecuesta", "Santander"], ["Barrancabermeja", "Santander"],
+  ["Sincelejo", "Sucre"], ["Corozal", "Sucre"],
+  ["Ibagué", "Tolima"], ["Espinal", "Tolima"], ["Melgar", "Tolima"],
+  ["Cali", "Valle del Cauca"], ["Palmira", "Valle del Cauca"], ["Buenaventura", "Valle del Cauca"],
+  ["Tuluá", "Valle del Cauca"], ["Cartago", "Valle del Cauca"], ["Buga", "Valle del Cauca"],
+  ["Yumbo", "Valle del Cauca"], ["Jamundí", "Valle del Cauca"],
+  ["Mitú", "Vaupés"],
+  ["Puerto Carreño", "Vichada"],
+].map(([ciudad, departamento]) => `${ciudad}, ${departamento}`);
 
 function setupPaisCiudad() {
   const inputPais = document.getElementById("pais");
@@ -860,15 +896,6 @@ function setupPaisCiudad() {
   const MAX_SUGERENCIAS_MOSTRADAS = 200;
   let ciudadesPais = [];
 
-  function normalizarNombreCiudad(texto) {
-    return texto
-      .normalize("NFD")
-      .replace(/[̀-ͯ]/g, "")
-      .replace(/d\.?\s*c\.?/gi, "")
-      .replace(/[^a-z0-9]/gi, "")
-      .toLowerCase();
-  }
-
   function ocultarSugerencias() {
     listaSugerencias.hidden = true;
     listaSugerencias.innerHTML = "";
@@ -924,45 +951,8 @@ function setupPaisCiudad() {
     }
   }
 
-  let peticionCiudadesVigente = 0;
-
-  actualizarCiudades = async (codigoPais) => {
-    const idPeticion = ++peticionCiudadesVigente;
-
-    if (!codigoPais) {
-      ciudadesPais = [];
-      ocultarSugerencias();
-      actualizarHint(codigoPais);
-      return;
-    }
-
-    try {
-      const { State, City } = await cargarLibreriaCiudades();
-      if (idPeticion !== peticionCiudadesVigente) return; // el usuario ya cambió de país
-
-      if (codigoPais === "CO") {
-        const departamentos = new Map(State.getStatesOfCountry("CO").map((d) => [d.isoCode, d.name]));
-        const vistas = new Set();
-        ciudadesPais = (City.getCitiesOfCountry("CO") || [])
-          .map((c) => `${c.name}, ${departamentos.get(c.stateCode) || ""}`.trim().replace(/,\s*$/, ""))
-          .filter((etiqueta) => {
-            const clave = normalizarNombreCiudad(etiqueta);
-            if (vistas.has(clave)) return false;
-            vistas.add(clave);
-            return true;
-          })
-          .sort((a, b) => a.localeCompare(b, "es"));
-      } else {
-        ciudadesPais = (City.getCitiesOfCountry(codigoPais) || [])
-          .map((c) => c.name)
-          .sort((a, b) => a.localeCompare(b, "es"));
-      }
-    } catch (error) {
-      console.error("No se pudieron cargar las ciudades sugeridas, se usará texto libre:", error);
-      if (idPeticion !== peticionCiudadesVigente) return;
-      ciudadesPais = [];
-    }
-
+  actualizarCiudades = (codigoPais) => {
+    ciudadesPais = codigoPais === "CO" ? CIUDADES_COLOMBIA : [];
     ocultarSugerencias();
     actualizarHint(codigoPais);
   };
