@@ -4,6 +4,31 @@ const { requireAuth } = require("../middleware/auth");
 
 const router = express.Router();
 
+// Calcula la próxima ocurrencia (este año o el siguiente) de una fecha guardada
+// sin año relevante (cumpleaños, aniversario), a partir de mes/día.
+function sqlProximaFecha(columnaFecha, condicionExtra = "") {
+  return `
+    WITH base AS (
+      SELECT id, nombre, ${columnaFecha} AS fecha,
+        EXTRACT(MONTH FROM ${columnaFecha})::int AS mes,
+        EXTRACT(DAY FROM ${columnaFecha})::int AS dia
+      FROM clientes
+      WHERE eliminado_en IS NULL AND ${columnaFecha} IS NOT NULL ${condicionExtra}
+    ),
+    candidatos AS (
+      SELECT id, nombre, fecha,
+        (make_date(EXTRACT(YEAR FROM CURRENT_DATE)::int, mes, 1) + (dia - 1) * INTERVAL '1 day')::date AS este_anio
+      FROM base
+    )
+    SELECT id, nombre, fecha,
+      (CASE WHEN este_anio >= CURRENT_DATE THEN este_anio ELSE (este_anio + INTERVAL '1 year')::date END) AS proxima_fecha,
+      ((CASE WHEN este_anio >= CURRENT_DATE THEN este_anio ELSE (este_anio + INTERVAL '1 year')::date END) - CURRENT_DATE)::int AS dias_faltantes
+    FROM candidatos
+    ORDER BY dias_faltantes ASC
+    LIMIT 10
+  `;
+}
+
 router.get("/", requireAuth, async (req, res) => {
   const [
     total,
@@ -15,6 +40,8 @@ router.get("/", requireAuth, async (req, res) => {
     rangoEdad,
     crecimientoMensual,
     ultimosClientes,
+    proximosCumpleanos,
+    proximosAniversarios,
   ] = await Promise.all([
     pool.query("SELECT COUNT(*)::int AS total FROM clientes WHERE eliminado_en IS NULL"),
     pool.query(
@@ -59,6 +86,8 @@ router.get("/", requireAuth, async (req, res) => {
        ORDER BY fecha_registro DESC
        LIMIT 5`
     ),
+    pool.query(sqlProximaFecha("fecha_nacimiento")),
+    pool.query(sqlProximaFecha("fecha_aniversario", "AND tiene_pareja = true")),
   ]);
 
   res.json({
@@ -71,6 +100,8 @@ router.get("/", requireAuth, async (req, res) => {
     rangoEdad: rangoEdad.rows,
     crecimientoMensual: crecimientoMensual.rows,
     ultimosClientes: ultimosClientes.rows,
+    proximosCumpleanos: proximosCumpleanos.rows,
+    proximosAniversarios: proximosAniversarios.rows,
   });
 });
 

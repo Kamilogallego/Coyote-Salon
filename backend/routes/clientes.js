@@ -128,9 +128,17 @@ router.get("/", requireAuth, async (req, res) => {
     aniversario_hasta,
     registrado_desde,
     registrado_hasta,
+    busqueda,
   } = req.query;
   const condiciones = [];
   const valores = [];
+
+  if (busqueda) {
+    valores.push(`%${busqueda.replace(/[^0-9A-Za-zÀ-ÿ\s]/g, "")}%`);
+    condiciones.push(
+      `(nombre ILIKE $${valores.length} OR telefono ILIKE $${valores.length} OR cedula ILIKE $${valores.length})`
+    );
+  }
 
   if (nombre) {
     valores.push(`%${nombre}%`);

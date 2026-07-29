@@ -19,8 +19,12 @@
         <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
         <button type="button" class="nav-item" data-page="edad">Rango de edad</button>
         <button type="button" class="nav-item" data-page="medio">Medio de contacto</button>
+        <button type="button" class="nav-item" data-page="fechas">🎂 Fechas especiales</button>
         <button type="button" class="nav-item" data-page="compartir">🔗 Formulario</button>
-        <button type="button" class="nav-item" data-page="papelera">🗑 Papelera</button>
+        <button type="button" class="nav-item nav-item-con-badge" data-page="papelera">
+          🗑 Papelera
+          <span class="nav-badge is-oculto" id="badge-papelera">0</span>
+        </button>
       </nav>
 
       <button type="button" id="logout-btn" class="nav-logout">Cerrar sesión</button>
@@ -111,6 +115,12 @@
           <div class="panel">
             <h2>Registros por mes (últimos 6 meses)</h2>
             <div id="chart-crecimiento" class="chart-slot chart-slot-grande"></div>
+            <table class="tabla-mini tabla-crecimiento">
+              <thead>
+                <tr><th>Mes</th><th>Registros</th><th>Variación</th></tr>
+              </thead>
+              <tbody id="tabla-crecimiento-mensual"></tbody>
+            </table>
           </div>
 
           <div class="panel">
@@ -145,8 +155,36 @@
           </div>
         </section>
 
+        <!-- ---- Fechas especiales ---- -->
+        <section id="page-fechas" class="page">
+          <div class="panel-grid-2">
+            <div class="panel">
+              <h2>🎂 Próximos cumpleaños</h2>
+              <table class="tabla-mini">
+                <thead>
+                  <tr><th>Cliente</th><th>Fecha</th><th>Faltan</th></tr>
+                </thead>
+                <tbody id="tabla-cumpleanos"></tbody>
+              </table>
+            </div>
+            <div class="panel">
+              <h2>💛 Próximos aniversarios</h2>
+              <table class="tabla-mini">
+                <thead>
+                  <tr><th>Cliente</th><th>Fecha</th><th>Faltan</th></tr>
+                </thead>
+                <tbody id="tabla-aniversarios"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
         <!-- ---- Clientes ---- -->
         <section id="page-clientes" class="page">
+          <div class="buscador-rapido">
+            <input type="search" id="buscador-clientes" placeholder="Buscar por nombre, teléfono o número de documento…" />
+          </div>
+
           <div class="filters-panel is-collapsed" id="filters-panel">
             <button type="button" id="toggle-filtros" class="filters-toggle" aria-expanded="false" aria-controls="filtros-cuerpo">
               <span>🔍 Filtros</span>
@@ -269,7 +307,9 @@
                   <th>Documento</th>
                   <th>País</th>
                   <th>Ciudad</th>
-                  <th>Edad</th>
+                  <th class="th-ordenable" id="th-edad" tabindex="0" role="button" aria-label="Ordenar por edad">
+                    Edad <span class="orden-icono" aria-hidden="true"></span>
+                  </th>
                   <th>Padre</th>
                   <th>Pareja</th>
                   <th>Medio contacto</th>

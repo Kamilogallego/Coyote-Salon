@@ -34,6 +34,31 @@ function nombreCompletoPais(codigo) {
   }
 }
 
+function formatearDiasFaltantes(dias) {
+  if (dias === 0) return "¡Hoy!";
+  if (dias === 1) return "Mañana";
+  return `${dias} días`;
+}
+
+function renderizarTablaFechas(contenedorId, filas) {
+  const tbody = document.getElementById(contenedorId);
+  if (filas.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" class="chart-empty">Sin fechas registradas</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filas
+    .map((f) => {
+      const urgente = f.dias_faltantes <= 7;
+      return `
+      <tr>
+        <td>${escapeHtml(f.nombre)}</td>
+        <td>${new Date(f.fecha).toLocaleDateString("es-CO", { day: "2-digit", month: "long" })}</td>
+        <td class="${urgente ? "dias-restantes-urgente" : ""}">${formatearDiasFaltantes(f.dias_faltantes)}</td>
+      </tr>`;
+    })
+    .join("");
+}
+
 function formatearMes(valorYYYYMM) {
   const [anio, mes] = valorYYYYMM.split("-");
   const fecha = new Date(Number(anio), Number(mes) - 1, 1);
@@ -113,6 +138,7 @@ const TITULOS_PAGINA = {
   crecimiento: "Crecimiento",
   edad: "Rango de edad",
   medio: "Medio de contacto",
+  fechas: "Fechas especiales",
   compartir: "Compartir formulario",
   papelera: "Papelera",
 };
@@ -255,6 +281,33 @@ async function cargarEstadisticas() {
   renderBarChart(document.getElementById("chart-edad"), edadDatos);
   renderBarChart(document.getElementById("chart-crecimiento"), crecimientoDatos);
 
+  document.getElementById("tabla-crecimiento-mensual").innerHTML = stats.crecimientoMensual
+    .map((c, i) => {
+      const anterior = i > 0 ? stats.crecimientoMensual[i - 1].cantidad : null;
+      let variacion = "—";
+      if (anterior !== null) {
+        if (anterior === 0) {
+          variacion = c.cantidad > 0 ? "▲ nuevo" : "—";
+        } else {
+          const cambio = Math.round(((c.cantidad - anterior) / anterior) * 100);
+          variacion =
+            cambio > 0 ? `▲ ${cambio}%` : cambio < 0 ? `▼ ${Math.abs(cambio)}%` : "— 0%";
+        }
+      }
+      const claseVariacion = variacion.startsWith("▲")
+        ? "variacion-positiva"
+        : variacion.startsWith("▼")
+        ? "variacion-negativa"
+        : "";
+      return `
+        <tr>
+          <td>${escapeHtml(formatearMes(c.mes))}</td>
+          <td>${c.cantidad}</td>
+          <td class="${claseVariacion}">${variacion}</td>
+        </tr>`;
+    })
+    .join("");
+
   const edadTop = edadDatos.reduce((max, d) => (d.valor > (max?.valor ?? -1) ? d : max), null);
   document.getElementById("resumen-edad-top").textContent = edadTop ? edadTop.etiqueta : "—";
   document.getElementById("resumen-edad-detalle").textContent = edadTop
@@ -272,6 +325,9 @@ async function cargarEstadisticas() {
     `
     )
     .join("");
+
+  renderizarTablaFechas("tabla-cumpleanos", stats.proximosCumpleanos);
+  renderizarTablaFechas("tabla-aniversarios", stats.proximosAniversarios);
 }
 
 // ---- Navegador de meses (ver clientes registrados mes a mes) ----
@@ -337,6 +393,7 @@ document.getElementById("mes-siguiente").addEventListener("click", () => {
 
 const tabla = document.getElementById("tabla-clientes");
 const resumen = document.getElementById("resumen");
+const buscadorClientes = document.getElementById("buscador-clientes");
 const filtroNombre = document.getElementById("filtro-nombre");
 const filtroTelefono = document.getElementById("filtro-telefono");
 const filtroTipoDocumento = document.getElementById("filtro-tipo-documento");
@@ -614,6 +671,7 @@ function aplicarFiltroDesdeResumen(campo, valor) {
   if (!campoFiltro) return;
 
   CAMPOS_FILTRO.forEach((elemento) => (elemento.value = ""));
+  buscadorClientes.value = "";
   campoFiltro.value = valor;
   cargarClientes();
 }
@@ -651,6 +709,7 @@ function calcularEdad(fechaNacimiento) {
 
 async function cargarClientes() {
   const params = new URLSearchParams();
+  if (buscadorClientes.value.trim()) params.set("busqueda", buscadorClientes.value.trim());
   if (filtroNombre.value.trim()) params.set("nombre", filtroNombre.value.trim());
   if (filtroTelefono.value.trim()) params.set("telefono", filtroTelefono.value.trim());
   if (filtroTipoDocumento.value) params.set("tipo_documento", filtroTipoDocumento.value);
@@ -675,9 +734,29 @@ async function cargarClientes() {
   }
 
   clientesActuales = await res.json();
+  renderizarTablaClientes();
+}
+
+let ordenEdad = null; // null | "asc" | "desc"
+
+function ordenarClientesParaTabla() {
+  if (!ordenEdad) return clientesActuales;
+  const copia = [...clientesActuales];
+  copia.sort((a, b) => {
+    const edadA = calcularEdad(a.fecha_nacimiento) ?? -1;
+    const edadB = calcularEdad(b.fecha_nacimiento) ?? -1;
+    return ordenEdad === "asc" ? edadA - edadB : edadB - edadA;
+  });
+  return copia;
+}
+
+function renderizarTablaClientes() {
   resumen.textContent = `${clientesActuales.length} cliente(s) encontrados`;
 
-  tabla.innerHTML = clientesActuales
+  const iconoOrden = document.querySelector("#th-edad .orden-icono");
+  iconoOrden.textContent = ordenEdad === "asc" ? "▲" : ordenEdad === "desc" ? "▼" : "";
+
+  tabla.innerHTML = ordenarClientesParaTabla()
     .map(
       (c) => `
     <tr data-row-id="${c.id}">
@@ -699,6 +778,18 @@ async function cargarClientes() {
     )
     .join("");
 }
+
+document.getElementById("th-edad").addEventListener("click", () => {
+  ordenEdad = ordenEdad === "asc" ? "desc" : ordenEdad === "desc" ? null : "asc";
+  renderizarTablaClientes();
+});
+
+document.getElementById("th-edad").addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    document.getElementById("th-edad").click();
+  }
+});
 
 async function exportarClientesExcel() {
   if (clientesActuales.length === 0) {
@@ -723,7 +814,7 @@ async function exportarClientesExcel() {
     "Medio contacto",
   ];
 
-  const filas = clientesActuales.map((c) => [
+  const filas = ordenarClientesParaTabla().map((c) => [
     c.nombre,
     c.telefono,
     ETIQUETAS_DOCUMENTO[c.tipo_documento] || c.tipo_documento,
@@ -813,8 +904,11 @@ async function eliminarCliente(id) {
   if (fila) fila.classList.add("fila-por-eliminar");
 
   const nombre = cliente ? cliente.nombre : "este cliente";
+  const documento = cliente
+    ? `${ETIQUETAS_DOCUMENTO[cliente.tipo_documento] || cliente.tipo_documento}: ${cliente.cedula}`
+    : "";
   const confirmado = confirm(
-    `¿Eliminar a "${nombre}"? Se moverá a la papelera y podrás restaurarlo durante 30 días, luego se borrará solo.`
+    `¿Eliminar a "${nombre}"${documento ? ` (${documento})` : ""}? Se moverá a la papelera y podrás restaurarlo durante 30 días, luego se borrará solo.`
   );
 
   if (!confirmado) {
@@ -835,11 +929,18 @@ async function eliminarCliente(id) {
   cargarClientes();
   cargarEstadisticas();
   cargarClientesDelMes();
+  cargarPapelera();
 }
 
 const tablaPapelera = document.getElementById("tabla-papelera");
 const resumenPapelera = document.getElementById("resumen-papelera");
 let papeleraActual = [];
+
+function actualizarBadgePapelera(cantidad) {
+  const badge = document.getElementById("badge-papelera");
+  badge.textContent = cantidad > 99 ? "99+" : String(cantidad);
+  badge.classList.toggle("is-oculto", cantidad === 0);
+}
 
 async function cargarPapelera() {
   const res = await fetch("/api/clientes/papelera", { credentials: "include" });
@@ -849,6 +950,7 @@ async function cargarPapelera() {
   }
   const data = await res.json();
   papeleraActual = data.clientes;
+  actualizarBadgePapelera(papeleraActual.length);
 
   resumenPapelera.textContent = `${papeleraActual.length} cliente(s) en la papelera`;
 
@@ -901,7 +1003,15 @@ async function restaurarCliente(id) {
 async function eliminarDefinitivo(id) {
   const cliente = papeleraActual.find((c) => c.id === id);
   const nombre = cliente ? cliente.nombre : "este cliente";
-  if (!confirm(`¿Eliminar definitivamente a "${nombre}"? Esta acción NO se puede deshacer.`)) return;
+  const documento = cliente
+    ? `${ETIQUETAS_DOCUMENTO[cliente.tipo_documento] || cliente.tipo_documento}: ${cliente.cedula}`
+    : "";
+  if (
+    !confirm(
+      `¿Eliminar definitivamente a "${nombre}"${documento ? ` (${documento})` : ""}? Esta acción NO se puede deshacer.`
+    )
+  )
+    return;
 
   const res = await fetch(`/api/clientes/${id}/definitivo`, { method: "DELETE", credentials: "include" });
   if (res.status === 401) {
@@ -1033,9 +1143,16 @@ filtroEdadMax.addEventListener("change", cargarClientes);
 
 document.getElementById("btn-limpiar-filtros").addEventListener("click", () => {
   CAMPOS_FILTRO.forEach((campo) => (campo.value = ""));
+  buscadorClientes.value = "";
   actualizarCiudadesFiltro("");
   actualizarVisibilidadAniversario();
   cargarClientes();
+});
+
+let temporizadorBusqueda = null;
+buscadorClientes.addEventListener("input", () => {
+  clearTimeout(temporizadorBusqueda);
+  temporizadorBusqueda = setTimeout(cargarClientes, 300);
 });
 
 document.getElementById("btn-exportar").addEventListener("click", exportarClientesExcel);
@@ -1047,4 +1164,5 @@ verificarSesion().then(() => {
   cargarClientes();
   cargarEstadisticas();
   cargarClientesDelMes();
+  cargarPapelera();
 });
