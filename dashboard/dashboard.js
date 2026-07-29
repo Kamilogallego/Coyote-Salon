@@ -854,7 +854,7 @@ function renderizarTablaClientes() {
       <td>${ETIQUETAS_MEDIO[c.medio_contacto] || escapeHtml(c.medio_contacto)}</td>
       <td class="fila-acciones">
         <button type="button" class="btn-ver" data-id="${c.id}" title="Ver detalle">👁</button>
-        <button type="button" class="btn-eliminar" data-id="${c.id}">Eliminar</button>
+        <button type="button" class="btn-eliminar btn-eliminar-icono" data-id="${c.id}" title="Eliminar">🗑</button>
       </td>
     </tr>
   `
