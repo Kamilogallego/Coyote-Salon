@@ -650,45 +650,103 @@ main {
   font-size: 0.85rem;
 }
 
-.donut-wrap {
+.donut-chart-wrap {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 1.25rem;
   width: 100%;
 }
 
-.donut {
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
+.donut-chart-svg {
+  width: 128px;
+  height: 128px;
+  flex-shrink: 0;
 }
 
-.chart-slot-grande .donut {
-  width: 220px;
-  height: 220px;
+.donut-pista {
+  fill: none;
+  stroke: #f1ece2;
 }
 
-.donut-legend {
+.donut-segmento {
+  cursor: pointer;
+  transition: opacity 200ms ease;
+}
+
+.donut-segmento.is-atenuado {
+  opacity: 0.28;
+}
+
+.donut-centro-valor {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  fill: var(--coyote-azul);
+}
+
+.donut-centro-etiqueta {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  fill: #6b5b52;
+}
+
+.donut-legend-nueva {
+  flex: 1;
+  min-width: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.5rem 1rem;
-  font-size: 0.8rem;
+  flex-direction: column;
+  gap: 0.15rem;
 }
 
-.donut-legend li {
+.donut-legend-fila {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  list-style: none;
+  gap: 0.5rem;
+  padding: 0.35rem 0.4rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 150ms ease;
 }
 
-.legend-dot {
-  width: 0.7rem;
-  height: 0.7rem;
+.donut-legend-fila:hover,
+.donut-legend-fila.is-activa {
+  background: #f7f3ea;
+}
+
+.donut-legend-dot {
+  width: 0.65rem;
+  height: 0.65rem;
   border-radius: 50%;
   flex-shrink: 0;
+}
+
+.donut-legend-etiqueta {
+  flex: 1;
+  min-width: 0;
+  font-size: 0.8rem;
+  color: var(--coyote-texto);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.donut-legend-valor {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--coyote-texto);
+}
+
+.donut-legend-pct {
+  width: 2.4rem;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  color: #6b5b52;
+  text-align: right;
 }
 
 .bar-list {
@@ -769,22 +827,81 @@ main {
   stroke-width: 2.5;
 }
 
-.linea-valor {
-  font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: 0.68rem;
-  font-weight: 700;
-  fill: var(--coyote-azul);
-}
-
 .linea-etiqueta {
   font-family: "Lora", Georgia, "Times New Roman", serif;
   font-size: 0.62rem;
   fill: #6b5b52;
 }
 
+.linea-overlay {
+  cursor: crosshair;
+}
+
+.linea-guia,
+.linea-punto-hover,
+.linea-tooltip {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.linea-chart.con-hover .linea-guia,
+.linea-chart.con-hover .linea-punto-hover,
+.linea-chart.con-hover .linea-tooltip {
+  opacity: 1;
+}
+
+.linea-guia {
+  stroke: var(--coyote-azul);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0;
+}
+
+.linea-chart.con-hover .linea-guia {
+  opacity: 0.35;
+}
+
+.linea-punto-hover {
+  fill: var(--coyote-azul);
+  stroke: #fff;
+  stroke-width: 2;
+}
+
+.linea-tooltip-fondo {
+  fill: var(--coyote-texto);
+  opacity: 0.92;
+}
+
+.linea-tooltip-mes,
+.linea-tooltip-valor {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  text-anchor: middle;
+  fill: #fff;
+}
+
+.linea-tooltip-mes {
+  font-size: 0.62rem;
+  text-transform: capitalize;
+}
+
+.linea-tooltip-valor {
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
 @media (max-width: 1000px) {
   .stat-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  .donut-chart-wrap {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .donut-chart-svg {
+    align-self: center;
   }
 
   .panel-grid-2 {

@@ -73,37 +73,148 @@ function escapeHtml(valor) {
 
 // ---- Gráficas con CSS puro (sin librerías externas) ----
 
+// Donut interactivo (anillo hecho con circles apilados vía
+// stroke-dasharray/dashoffset): al pasar el mouse por un segmento o su fila
+// en la leyenda, el centro muestra el valor de esa categoría y el resto de
+// segmentos se atenúa.
 function renderDonut(contenedor, datos) {
-  if (!datos.length) {
+  const visibles = datos.filter((d) => d.valor > 0);
+  const total = visibles.reduce((suma, d) => suma + d.valor, 0);
+  if (!visibles.length || total === 0) {
     contenedor.innerHTML = `<span class="chart-empty">Sin datos todavía</span>`;
     return;
   }
 
-  const total = datos.reduce((suma, d) => suma + d.valor, 0);
+  const tam = 160;
+  const radio = 58;
+  const grosor = 24;
+  const centro = tam / 2;
+  const circunferencia = 2 * Math.PI * radio;
+
   let acumulado = 0;
-  const segmentos = datos.map((d, i) => {
-    const inicio = (acumulado / total) * 360;
-    acumulado += d.valor;
-    const fin = (acumulado / total) * 360;
-    return `${COLORES[i % COLORES.length]} ${inicio}deg ${fin}deg`;
+  const segmentos = visibles.map((d, i) => {
+    const pct = d.valor / total;
+    const largo = pct * circunferencia;
+    const seg = {
+      etiqueta: d.etiqueta,
+      valor: d.valor,
+      pct: Math.round(pct * 100),
+      color: COLORES[i % COLORES.length],
+      largo,
+      offset: -acumulado,
+    };
+    acumulado += largo;
+    return seg;
   });
 
-  const leyenda = datos
-    .map(
-      (d, i) => `
-      <li>
-        <span class="legend-dot" style="background:${COLORES[i % COLORES.length]}"></span>
-        ${escapeHtml(d.etiqueta)} (${d.valor})
-      </li>`
-    )
-    .join("");
+  const svgNS = "http://www.w3.org/2000/svg";
+  contenedor.innerHTML = "";
 
-  contenedor.innerHTML = `
-    <div class="donut-wrap">
-      <div class="donut" style="background: conic-gradient(${segmentos.join(", ")})"></div>
-      <ul class="donut-legend">${leyenda}</ul>
-    </div>
-  `;
+  const wrap = document.createElement("div");
+  wrap.className = "donut-chart-wrap";
+
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${tam} ${tam}`);
+  svg.classList.add("donut-chart-svg");
+
+  const g = document.createElementNS(svgNS, "g");
+  g.setAttribute("transform", `rotate(-90 ${centro} ${centro})`);
+
+  const pista = document.createElementNS(svgNS, "circle");
+  pista.setAttribute("cx", centro);
+  pista.setAttribute("cy", centro);
+  pista.setAttribute("r", radio);
+  pista.setAttribute("stroke-width", grosor);
+  pista.setAttribute("class", "donut-pista");
+  g.appendChild(pista);
+
+  const centroValor = document.createElementNS(svgNS, "text");
+  centroValor.setAttribute("x", centro);
+  centroValor.setAttribute("y", centro - 3);
+  centroValor.setAttribute("text-anchor", "middle");
+  centroValor.setAttribute("class", "donut-centro-valor");
+  centroValor.textContent = total;
+
+  const centroEtiqueta = document.createElementNS(svgNS, "text");
+  centroEtiqueta.setAttribute("x", centro);
+  centroEtiqueta.setAttribute("y", centro + 15);
+  centroEtiqueta.setAttribute("text-anchor", "middle");
+  centroEtiqueta.setAttribute("class", "donut-centro-etiqueta");
+  centroEtiqueta.textContent = "Total";
+
+  function mostrarInfo(seg) {
+    centroValor.textContent = seg ? seg.valor : total;
+    centroEtiqueta.textContent = seg ? `${seg.etiqueta} · ${seg.pct}%` : "Total";
+  }
+
+  const circulos = [];
+  const filasLeyenda = [];
+
+  function activarSegmento(indice) {
+    mostrarInfo(segmentos[indice]);
+    circulos.forEach((c, j) => c.classList.toggle("is-atenuado", j !== indice));
+    filasLeyenda.forEach((f, j) => f.classList.toggle("is-activa", j === indice));
+  }
+
+  function desactivarSegmento() {
+    mostrarInfo(null);
+    circulos.forEach((c) => c.classList.remove("is-atenuado"));
+    filasLeyenda.forEach((f) => f.classList.remove("is-activa"));
+  }
+
+  segmentos.forEach((seg, i) => {
+    const circ = document.createElementNS(svgNS, "circle");
+    circ.setAttribute("cx", centro);
+    circ.setAttribute("cy", centro);
+    circ.setAttribute("r", radio);
+    circ.setAttribute("stroke", seg.color);
+    circ.setAttribute("stroke-width", grosor);
+    circ.setAttribute("fill", "none");
+    circ.setAttribute("stroke-dashoffset", seg.offset);
+    circ.setAttribute("stroke-dasharray", `0 ${circunferencia}`);
+    circ.dataset.final = `${seg.largo} ${circunferencia - seg.largo}`;
+    circ.classList.add("donut-segmento");
+    circ.addEventListener("mouseenter", () => activarSegmento(i));
+    circ.addEventListener("mouseleave", desactivarSegmento);
+    circulos.push(circ);
+    g.appendChild(circ);
+  });
+
+  svg.appendChild(g);
+  svg.appendChild(centroValor);
+  svg.appendChild(centroEtiqueta);
+
+  const legend = document.createElement("ul");
+  legend.className = "donut-legend-nueva";
+  segmentos.forEach((seg, i) => {
+    const li = document.createElement("li");
+    li.className = "donut-legend-fila";
+    li.innerHTML = `
+      <span class="donut-legend-dot" style="background:${seg.color}"></span>
+      <span class="donut-legend-etiqueta" title="${escapeHtml(seg.etiqueta)}">${escapeHtml(seg.etiqueta)}</span>
+      <span class="donut-legend-valor">${seg.valor}</span>
+      <span class="donut-legend-pct">${seg.pct}%</span>
+    `;
+    li.addEventListener("mouseenter", () => activarSegmento(i));
+    li.addEventListener("mouseleave", desactivarSegmento);
+    filasLeyenda.push(li);
+    legend.appendChild(li);
+  });
+
+  wrap.append(svg, legend);
+  contenedor.appendChild(wrap);
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    circulos.forEach((c) => c.setAttribute("stroke-dasharray", c.dataset.final));
+    return;
+  }
+
+  requestAnimationFrame(() => {
+    circulos.forEach((c, i) => {
+      c.style.transition = `stroke-dasharray 600ms ease ${i * 80}ms`;
+      c.setAttribute("stroke-dasharray", c.dataset.final);
+    });
+  });
 }
 
 function renderBarChart(contenedor, datos, { multicolor = false } = {}) {
@@ -221,14 +332,6 @@ function renderLineChart(contenedor, datos) {
     punto.setAttribute("class", "linea-punto");
     svg.appendChild(punto);
 
-    const valor = document.createElementNS(svgNS, "text");
-    valor.setAttribute("x", p.x);
-    valor.setAttribute("y", Math.max(12, p.y - 10));
-    valor.setAttribute("text-anchor", "middle");
-    valor.setAttribute("class", "linea-valor");
-    valor.textContent = p.valor;
-    svg.appendChild(valor);
-
     const etiqueta = document.createElementNS(svgNS, "text");
     etiqueta.setAttribute("x", p.x);
     etiqueta.setAttribute("y", alto - 6);
@@ -237,6 +340,85 @@ function renderLineChart(contenedor, datos) {
     etiqueta.textContent = p.etiqueta;
     svg.appendChild(etiqueta);
   });
+
+  // Guía vertical + punto agrandado + tooltip que siguen al mouse (el rect
+  // transparente al final es el que captura el mousemove sobre todo el
+  // ancho útil, para no depender de acertarle justo a un punto pequeño).
+  const guia = document.createElementNS(svgNS, "line");
+  guia.setAttribute("y1", padArriba);
+  guia.setAttribute("y2", base);
+  guia.setAttribute("class", "linea-guia");
+  svg.appendChild(guia);
+
+  const puntoHover = document.createElementNS(svgNS, "circle");
+  puntoHover.setAttribute("r", 6);
+  puntoHover.setAttribute("class", "linea-punto-hover");
+  svg.appendChild(puntoHover);
+
+  const tooltip = document.createElementNS(svgNS, "g");
+  tooltip.setAttribute("class", "linea-tooltip");
+  const tooltipAncho = 96;
+  const tooltipAlto = 34;
+  const tooltipFondo = document.createElementNS(svgNS, "rect");
+  tooltipFondo.setAttribute("width", tooltipAncho);
+  tooltipFondo.setAttribute("height", tooltipAlto);
+  tooltipFondo.setAttribute("rx", 6);
+  tooltipFondo.setAttribute("class", "linea-tooltip-fondo");
+  const tooltipMes = document.createElementNS(svgNS, "text");
+  tooltipMes.setAttribute("x", tooltipAncho / 2);
+  tooltipMes.setAttribute("y", 14);
+  tooltipMes.setAttribute("text-anchor", "middle");
+  tooltipMes.setAttribute("class", "linea-tooltip-mes");
+  const tooltipValor = document.createElementNS(svgNS, "text");
+  tooltipValor.setAttribute("x", tooltipAncho / 2);
+  tooltipValor.setAttribute("y", 27);
+  tooltipValor.setAttribute("text-anchor", "middle");
+  tooltipValor.setAttribute("class", "linea-tooltip-valor");
+  tooltip.append(tooltipFondo, tooltipMes, tooltipValor);
+  svg.appendChild(tooltip);
+
+  function mostrarHover(p) {
+    guia.setAttribute("x1", p.x);
+    guia.setAttribute("x2", p.x);
+    puntoHover.setAttribute("cx", p.x);
+    puntoHover.setAttribute("cy", p.y);
+    const tooltipX = Math.min(Math.max(p.x - tooltipAncho / 2, padIzq), ancho - padDer - tooltipAncho);
+    const tooltipY = Math.max(p.y - tooltipAlto - 14, 2);
+    tooltip.setAttribute("transform", `translate(${tooltipX} ${tooltipY})`);
+    tooltipMes.textContent = p.etiqueta;
+    tooltipValor.textContent = `${p.valor} registro${p.valor === 1 ? "" : "s"}`;
+    svg.classList.add("con-hover");
+  }
+
+  function ocultarHover() {
+    svg.classList.remove("con-hover");
+  }
+
+  const overlay = document.createElementNS(svgNS, "rect");
+  overlay.setAttribute("x", 0);
+  overlay.setAttribute("y", 0);
+  overlay.setAttribute("width", ancho);
+  overlay.setAttribute("height", alto);
+  overlay.setAttribute("fill", "transparent");
+  overlay.setAttribute("class", "linea-overlay");
+  overlay.addEventListener("mousemove", (evento) => {
+    const punto = svg.createSVGPoint();
+    punto.x = evento.clientX;
+    punto.y = evento.clientY;
+    const cursor = punto.matrixTransform(svg.getScreenCTM().inverse());
+    let cercano = puntos[0];
+    let mejorDistancia = Infinity;
+    puntos.forEach((p) => {
+      const distancia = Math.abs(p.x - cursor.x);
+      if (distancia < mejorDistancia) {
+        mejorDistancia = distancia;
+        cercano = p;
+      }
+    });
+    mostrarHover(cercano);
+  });
+  overlay.addEventListener("mouseleave", ocultarHover);
+  svg.appendChild(overlay);
 
   contenedor.appendChild(svg);
 
@@ -405,10 +587,10 @@ async function cargarEstadisticas() {
     valor: n.cantidad,
   }));
 
-  renderBarChart(document.getElementById("resumen-medio"), medioDatos, { multicolor: true });
+  renderDonut(document.getElementById("resumen-medio"), medioDatos);
   renderLineChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
-  renderBarChart(document.getElementById("resumen-genero"), generoDatos, { multicolor: true });
-  renderBarChart(document.getElementById("resumen-novedades"), novedadesDatos, { multicolor: true });
+  renderDonut(document.getElementById("resumen-genero"), generoDatos);
+  renderDonut(document.getElementById("resumen-novedades"), novedadesDatos);
 
   document.getElementById("resumen-novedades-total").textContent =
     stats.total > 0
