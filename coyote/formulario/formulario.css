@@ -559,3 +559,14 @@ dialog.modal-legal h2 {
     font-size: 1.25rem;
   }
 }
+
+/* Campo trampa anti-bot: fuera de pantalla, no display:none, para que los
+   bots que no revisan la posición real del elemento lo llenen igual. */
+.campo-trampa {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

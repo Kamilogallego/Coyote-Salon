@@ -1,22 +1,27 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const pool = require("../db");
+const rateLimit = require("express-rate-limit");
+const authRepository = require("../repositories/authRepository");
 
 const router = express.Router();
 
-router.post("/login", async (req, res) => {
+// Protege contra fuerza bruta: 10 intentos de login por IP cada 15 minutos.
+const limiteLogin = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Demasiados intentos. Espera unos minutos e intenta de nuevo." },
+});
+
+router.post("/login", limiteLogin, async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
     return res.status(400).json({ error: "Usuario y contraseña son obligatorios" });
   }
 
-  const result = await pool.query(
-    "SELECT id, username, password_hash FROM admin_users WHERE username = $1",
-    [username]
-  );
-  const user = result.rows[0];
-
+  const user = await authRepository.buscarAdminPorUsername(username);
   if (!user) {
     return res.status(401).json({ error: "Credenciales inválidas" });
   }

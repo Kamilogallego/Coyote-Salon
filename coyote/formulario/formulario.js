@@ -1,3 +1,8 @@
+// Hora de carga de la página, para el chequeo anti-bot del backend (un bot
+// suele enviar el formulario casi instantáneamente; una persona real tarda
+// al menos unos segundos en llenarlo).
+const INICIO_FORMULARIO = Date.now();
+
 const TRANSLATIONS = {
   es: {
     "header.title": "Sé parte de nuestra comunidad",
@@ -1167,6 +1172,8 @@ function enviarRegistro(form) {
     mayor_edad: datos.get("mayor_edad") === "on",
     habeas_data: datos.get("habeas_data") === "on",
     recibir_novedades: datos.get("recibir_novedades") === "on",
+    sitio_web: datos.get("sitio_web") || "",
+    iniciado_en: INICIO_FORMULARIO,
   };
 
   return fetch("/api/clientes", {
