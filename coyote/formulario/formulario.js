@@ -79,6 +79,8 @@ const TRANSLATIONS = {
     "err.mayorEdad": "Debes confirmar que eres mayor de edad.",
     "err.habeasData": "Debes autorizar el tratamiento de tus datos personales.",
     "iti.searchPlaceholder": "Buscar país",
+    "footer.direccion.etiqueta": "Dirección:",
+    "footer.telefono.etiqueta": "Teléfono:",
   },
   en: {
     "header.title": "Be part of our community",
@@ -155,6 +157,8 @@ const TRANSLATIONS = {
     "err.mayorEdad": "You must confirm that you are of legal age.",
     "err.habeasData": "You must authorize the processing of your personal data.",
     "iti.searchPlaceholder": "Search country",
+    "footer.direccion.etiqueta": "Address:",
+    "footer.telefono.etiqueta": "Phone:",
   },
 };
 

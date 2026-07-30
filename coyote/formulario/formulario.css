@@ -189,6 +189,28 @@ body {
   font-size: 0.75rem;
 }
 
+.form-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--coyote-crema);
+  text-align: center;
+  font-size: 0.8rem;
+  color: #5a5a5a;
+}
+
+.form-footer p {
+  margin: 0.25rem 0;
+}
+
+.form-footer a {
+  color: var(--coyote-azul);
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
 .accordion-section {
   background: #fff;
   border: 1px solid var(--coyote-crema);
