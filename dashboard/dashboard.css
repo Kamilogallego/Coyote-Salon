@@ -387,10 +387,6 @@ main {
   .page.is-active {
     animation: none;
   }
-
-  .bar-row-fill {
-    transition: none;
-  }
 }
 
 /* ---- Tarjetas de resumen y paneles ---- */
@@ -517,59 +513,6 @@ main {
 @media (max-width: 600px) {
   .compartir-link-row {
     flex-direction: column;
-  }
-}
-
-.panel-destacado {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  justify-content: center;
-}
-
-.destacado-icono {
-  font-size: 1.6rem;
-  margin-bottom: 0.3rem;
-}
-
-.panel-destacado strong {
-  font-size: 1.6rem;
-  color: var(--coyote-azul);
-}
-
-.destacado-detalle {
-  font-size: 0.8rem;
-  color: #6b5b52;
-  margin-top: 0.2rem;
-}
-
-.resumen-combo {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 1.5rem;
-  align-items: center;
-}
-
-.resumen-combo-destacado {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  padding-left: 1.5rem;
-  border-left: 1px solid var(--coyote-crema);
-}
-
-@media (max-width: 700px) {
-  .resumen-combo {
-    grid-template-columns: 1fr;
-  }
-
-  .resumen-combo-destacado {
-    padding-left: 0;
-    padding-top: 1rem;
-    border-left: none;
-    border-top: 1px solid var(--coyote-crema);
   }
 }
 
@@ -749,54 +692,20 @@ main {
   text-align: right;
 }
 
-.bar-list {
-  width: 100%;
-  align-self: flex-start;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-
-.bar-row {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-}
-
-.bar-row-label {
-  width: 6.5rem;
-  flex-shrink: 0;
-  font-size: 0.8rem;
-  color: #6b5b52;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.bar-row-track {
-  flex: 1;
-  position: relative;
-  height: 0.9rem;
-  background: #f1ece2;
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.bar-row-fill {
+.columnas-chart {
   display: block;
-  height: 100%;
-  border-radius: 999px;
-  min-width: 2%;
-  transition: width 500ms ease;
+  overflow: visible;
 }
 
-.bar-row-value {
-  width: 2.2rem;
-  flex-shrink: 0;
-  font-size: 0.8rem;
+.columna-barra {
+  transition: none;
+}
+
+.columna-valor {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: 0.7rem;
   font-weight: 700;
-  color: var(--coyote-texto);
-  text-align: right;
+  fill: var(--coyote-azul);
 }
 
 .linea-chart {

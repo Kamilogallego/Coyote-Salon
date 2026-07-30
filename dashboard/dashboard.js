@@ -217,38 +217,112 @@ function renderDonut(contenedor, datos) {
   });
 }
 
-function renderBarChart(contenedor, datos, { multicolor = false } = {}) {
-  if (!datos.length) {
+function interpolarColor(colorInicio, colorFin, fraccion) {
+  const c1 = colorInicio.match(/\w\w/g).map((h) => parseInt(h, 16));
+  const c2 = colorFin.match(/\w\w/g).map((h) => parseInt(h, 16));
+  const mezcla = c1.map((v, i) => Math.round(v + (c2[i] - v) * fraccion));
+  return `rgb(${mezcla.join(",")})`;
+}
+
+// Gráfica de barras verticales (para datos ordinales con pocas categorías,
+// ej. rango de edad): columnas de ancho fijo repartidas en bandas iguales,
+// con una rampa de color secuencial (claro → oscuro) en vez de colores
+// categóricos, ya que los rangos tienen un orden natural.
+function renderColumnChart(contenedor, datos) {
+  const visibles = datos.filter((d) => d.valor > 0);
+  if (!visibles.length) {
     contenedor.innerHTML = `<span class="chart-empty">Sin datos todavía</span>`;
     return;
   }
 
-  const max = Math.max(...datos.map((d) => d.valor), 1);
-  contenedor.innerHTML = `
-    <div class="bar-list">
-      ${datos
-        .map(
-          (d, i) => `
-        <div class="bar-row">
-          <span class="bar-row-label" title="${escapeHtml(d.etiqueta)}">${escapeHtml(d.etiqueta)}</span>
-          <span class="bar-row-track">
-            <span class="bar-row-fill" data-final="${Math.max(2, (d.valor / max) * 100)}"
-              style="width:0%; background:${multicolor ? COLORES[i % COLORES.length] : "var(--coyote-azul)"}"></span>
-          </span>
-          <span class="bar-row-value">${d.valor}</span>
-        </div>
-      `
-        )
-        .join("")}
-    </div>
-  `;
+  const grande = contenedor.classList.contains("chart-slot-grande");
+  const alto = grande ? 240 : 160;
+  const ancho = 600;
+  const padIzq = 20;
+  const padDer = 20;
+  const padArriba = 24;
+  const padAbajo = 30;
+  const anchoUtil = ancho - padIzq - padDer;
+  const altoUtil = alto - padArriba - padAbajo;
+  const base = padArriba + altoUtil;
 
-  // Arranca las barras en 0% y en el siguiente frame salta al ancho final;
-  // con la transition:width de .bar-row-fill esto hace que "crezcan" en vez
-  // de aparecer directo en su tamaño final.
+  const max = Math.max(...visibles.map((d) => d.valor), 1);
+  const anchoBanda = anchoUtil / visibles.length;
+  const anchoBarra = Math.min(anchoBanda * 0.56, 48);
+
+  const barras = visibles.map((d, i) => {
+    const cx = padIzq + anchoBanda * i + anchoBanda / 2;
+    const alturaFinal = Math.max(2, (d.valor / max) * altoUtil);
+    const color = interpolarColor("#bcdcf5", "#05559c", visibles.length === 1 ? 1 : i / (visibles.length - 1));
+    return { ...d, cx, alturaFinal, color };
+  });
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  contenedor.innerHTML = "";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${ancho} ${alto}`);
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", alto);
+  svg.classList.add("columnas-chart");
+
+  [0, 0.5, 1].forEach((frac) => {
+    const y = padArriba + altoUtil * frac;
+    const linea = document.createElementNS(svgNS, "line");
+    linea.setAttribute("x1", padIzq);
+    linea.setAttribute("x2", ancho - padDer);
+    linea.setAttribute("y1", y);
+    linea.setAttribute("y2", y);
+    linea.setAttribute("class", "linea-grid");
+    svg.appendChild(linea);
+  });
+
+  const rects = [];
+  barras.forEach((b) => {
+    const rect = document.createElementNS(svgNS, "rect");
+    rect.setAttribute("x", b.cx - anchoBarra / 2);
+    rect.setAttribute("width", anchoBarra);
+    rect.setAttribute("y", base);
+    rect.setAttribute("height", 0);
+    rect.setAttribute("rx", 4);
+    rect.setAttribute("fill", b.color);
+    rect.classList.add("columna-barra");
+    rect.dataset.finalY = base - b.alturaFinal;
+    rect.dataset.finalAltura = b.alturaFinal;
+    svg.appendChild(rect);
+    rects.push(rect);
+
+    const valor = document.createElementNS(svgNS, "text");
+    valor.setAttribute("x", b.cx);
+    valor.setAttribute("y", Math.max(12, base - b.alturaFinal - 8));
+    valor.setAttribute("text-anchor", "middle");
+    valor.setAttribute("class", "columna-valor");
+    valor.textContent = b.valor;
+    svg.appendChild(valor);
+
+    const etiqueta = document.createElementNS(svgNS, "text");
+    etiqueta.setAttribute("x", b.cx);
+    etiqueta.setAttribute("y", alto - 8);
+    etiqueta.setAttribute("text-anchor", "middle");
+    etiqueta.setAttribute("class", "linea-etiqueta");
+    etiqueta.textContent = b.etiqueta;
+    svg.appendChild(etiqueta);
+  });
+
+  contenedor.appendChild(svg);
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    rects.forEach((r) => {
+      r.setAttribute("y", r.dataset.finalY);
+      r.setAttribute("height", r.dataset.finalAltura);
+    });
+    return;
+  }
+
   requestAnimationFrame(() => {
-    contenedor.querySelectorAll(".bar-row-fill").forEach((fill) => {
-      fill.style.width = `${fill.dataset.final}%`;
+    rects.forEach((r, i) => {
+      r.style.transition = `y 500ms ease ${i * 40}ms, height 500ms ease ${i * 40}ms`;
+      r.setAttribute("y", r.dataset.finalY);
+      r.setAttribute("height", r.dataset.finalAltura);
     });
   });
 }
@@ -588,6 +662,7 @@ async function cargarEstadisticas() {
   }));
 
   renderDonut(document.getElementById("resumen-medio"), medioDatos);
+  renderColumnChart(document.getElementById("resumen-edad"), edadDatos);
   renderLineChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
   renderDonut(document.getElementById("resumen-genero"), generoDatos);
   renderDonut(document.getElementById("resumen-novedades"), novedadesDatos);
@@ -625,12 +700,6 @@ async function cargarEstadisticas() {
         </tr>`;
     })
     .join("");
-
-  const edadTop = edadDatos.reduce((max, d) => (d.valor > (max?.valor ?? -1) ? d : max), null);
-  document.getElementById("resumen-edad-top").textContent = edadTop ? edadTop.etiqueta : "—";
-  document.getElementById("resumen-edad-detalle").textContent = edadTop
-    ? `${edadTop.valor} cliente(s) en este rango`
-    : "";
 
   document.getElementById("resumen-ultimos").innerHTML = stats.ultimosClientes
     .map(
