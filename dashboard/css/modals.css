@@ -1,0 +1,200 @@
+/* Todos los <dialog>: agregar/editar cliente, detalle, confirmación (con
+   contraseña) y "ver todos los clientes". */
+
+dialog#modal-cliente,
+dialog#modal-detalle,
+dialog#modal-confirmar {
+  border: 1px solid var(--coyote-crema);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(680px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #fff;
+  color: var(--coyote-texto);
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  box-shadow: 0 20px 45px rgba(28, 28, 28, 0.22);
+}
+
+#detalle-titulo {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+.detalle-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem 1.2rem;
+}
+
+.detalle-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.detalle-etiqueta {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #6b5b52;
+}
+
+.detalle-valor {
+  font-size: 0.95rem;
+  color: var(--coyote-texto);
+}
+
+@media (max-width: 600px) {
+  .detalle-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+dialog::backdrop {
+  background: rgba(28, 28, 28, 0.45);
+}
+
+#modal-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.9rem 1rem;
+}
+
+.modal-checks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--coyote-crema);
+  font-size: 0.85rem;
+}
+
+.modal-checks label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-checks input {
+  width: 1.1rem;
+  height: 1.1rem;
+  accent-color: var(--coyote-azul);
+  flex-shrink: 0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--coyote-crema);
+}
+
+.modal-actions button {
+  width: auto;
+  padding: 0.7rem 1.3rem;
+}
+
+@media (max-width: 600px) {
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+dialog#modal-confirmar {
+  width: min(420px, 92vw);
+}
+
+#confirmar-titulo {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+#confirmar-mensaje {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--coyote-texto);
+}
+
+#modal-confirmar.es-peligro #confirmar-titulo {
+  color: var(--coyote-rojo);
+}
+
+#modal-confirmar.es-peligro #btn-confirmar-aceptar {
+  background: var(--coyote-rojo);
+}
+
+#modal-confirmar:not(.es-peligro) #btn-confirmar-aceptar {
+  background: #2f8f4e;
+}
+
+#modal-confirmar:not(.es-peligro) #btn-confirmar-aceptar:active {
+  background: #24713c;
+}
+
+#confirmar-password-wrap {
+  margin-top: 1rem;
+}
+
+#confirmar-password-wrap.is-oculto {
+  display: none;
+}
+
+#confirmar-password-error {
+  min-height: 1.1em;
+}
+
+dialog#modal-lista-clientes {
+  border: 1px solid var(--coyote-crema);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: min(600px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: #fff;
+  color: var(--coyote-texto);
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  box-shadow: 0 20px 45px rgba(28, 28, 28, 0.22);
+}
+
+dialog#modal-lista-clientes h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--coyote-azul);
+  margin: 0 0 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--coyote-crema);
+}
+
+dialog#modal-lista-clientes .table-wrap {
+  max-height: 60vh;
+  overflow-y: auto;
+}
