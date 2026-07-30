@@ -5,6 +5,7 @@ import "./navegacion.js";
 import { cargarClientes, setupFiltroPaisCiudad, setupModalPaisAutocomplete } from "./clientes.js";
 import { cargarEstadisticas, cargarClientesDelMes } from "./resumen.js";
 import { cargarPapelera } from "./papelera.js";
+import { confirmarAccion } from "./modales.js";
 
 async function verificarSesion() {
   const res = await fetch("/api/auth/me", { credentials: "include" });
@@ -25,6 +26,12 @@ function mostrarFechaHoy() {
 }
 
 document.getElementById("logout-btn").addEventListener("click", async () => {
+  const confirmado = await confirmarAccion("¿Estás seguro de que quieres cerrar sesión?", {
+    titulo: "Cerrar sesión",
+    textoAceptar: "Cerrar sesión",
+  });
+  if (!confirmado) return;
+
   await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
   window.location.href = "login.html";
 });
