@@ -189,6 +189,45 @@ body {
   font-size: 0.75rem;
 }
 
+.pantalla-gracias {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+
+.gracias-titulo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--coyote-azul);
+  margin: 0 0 0.6rem;
+}
+
+.gracias-mensaje {
+  margin: 0;
+  color: var(--coyote-texto);
+}
+
+.form-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--coyote-crema);
+  text-align: center;
+  font-size: 0.8rem;
+  color: #5a5a5a;
+}
+
+.form-footer p {
+  margin: 0.25rem 0;
+}
+
+.form-footer a {
+  color: var(--coyote-azul);
+  text-decoration: none;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}
+
 .accordion-section {
   background: #fff;
   border: 1px solid var(--coyote-crema);
