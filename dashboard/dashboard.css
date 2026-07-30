@@ -886,6 +886,7 @@ main {
 
 .buscador-rapido input {
   width: 100%;
+  max-width: 480px;
   padding: 0.65rem 0.9rem;
   border: 1px solid var(--coyote-crema);
   border-radius: 10px;
