@@ -304,6 +304,8 @@ const FILTROS_RESUMEN = {
   pareja: filtroPareja,
   padre: filtroPadre,
   novedades: filtroNovedades,
+  medio: filtroMedio,
+  genero: filtroGenero,
 };
 
 export function aplicarFiltroDesdeResumen(campo, valor) {
@@ -313,6 +315,24 @@ export function aplicarFiltroDesdeResumen(campo, valor) {
   CAMPOS_FILTRO.forEach((elemento) => (elemento.value = ""));
   buscadorClientes.value = "";
   campoFiltro.value = valor;
+  cargarClientes();
+}
+
+// El rango de edad no es un único campo con valor fijo (como pareja/genero):
+// llega como texto "18-24" o "65+" y hay que traducirlo a edad_min/edad_max.
+export function aplicarFiltroEdadDesdeResumen(rango) {
+  CAMPOS_FILTRO.forEach((elemento) => (elemento.value = ""));
+  buscadorClientes.value = "";
+
+  if (rango.endsWith("+")) {
+    filtroEdadMin.value = rango.slice(0, -1);
+    filtroEdadMax.value = "";
+  } else {
+    const [min, max] = rango.split("-");
+    filtroEdadMin.value = min;
+    filtroEdadMax.value = max;
+  }
+
   cargarClientes();
 }
 

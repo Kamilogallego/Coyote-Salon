@@ -125,6 +125,16 @@
   transition: none;
 }
 
+.columna-barra-clicable {
+  cursor: pointer;
+}
+
+.donut-legend-clicable:focus-visible,
+.columna-barra-clicable:focus-visible {
+  outline: 2px solid var(--coyote-azul);
+  outline-offset: 2px;
+}
+
 .columna-valor {
   font-family: "Lora", Georgia, "Times New Roman", serif;
   font-size: 0.9rem;

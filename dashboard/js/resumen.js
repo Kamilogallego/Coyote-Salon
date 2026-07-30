@@ -1,6 +1,7 @@
 // Pestaña Resumen: tarjetas, gráficas y el navegador de "clientes
 // registrados este mes" (usado también desde la pestaña Crecimiento).
 import { renderDonut, renderColumnChart, renderLineChart, renderizarTablaFechas } from "./graficas.js";
+import { aplicarFiltroDesdeResumen, aplicarFiltroEdadDesdeResumen } from "./clientes.js";
 import {
   ETIQUETAS_MEDIO,
   ETIQUETAS_GENERO,
@@ -10,6 +11,13 @@ import {
   formatearFecha,
   formatearFechaISO,
 } from "./utils.js";
+
+// Lleva a la pestaña Clientes ya filtrada (reutiliza el click del propio
+// menú lateral, que es quien sabe cómo cambiar de pestaña).
+function irAClientesFiltrado(aplicarFiltro) {
+  aplicarFiltro();
+  document.querySelector('.nav-item[data-page="clientes"]').click();
+}
 
 export async function cargarEstadisticas() {
   const res = await fetch("/api/estadisticas", { credentials: "include" });
@@ -26,6 +34,7 @@ export async function cargarEstadisticas() {
 
   const medioDatos = stats.medioContacto.map((m) => ({
     etiqueta: ETIQUETAS_MEDIO[m.medio_contacto] || m.medio_contacto,
+    codigo: m.medio_contacto,
     valor: m.cantidad,
   }));
   const edadDatos = stats.rangoEdad.map((r) => ({ etiqueta: r.rango, valor: r.cantidad }));
@@ -35,6 +44,7 @@ export async function cargarEstadisticas() {
   }));
   const generoDatos = stats.genero.map((g) => ({
     etiqueta: ETIQUETAS_GENERO[g.genero] || g.genero,
+    codigo: g.genero,
     valor: g.cantidad,
   }));
   const sinNovedadesDatos = stats.sinNovedadesPorMedio.map((n) => ({
@@ -42,10 +52,16 @@ export async function cargarEstadisticas() {
     valor: n.cantidad,
   }));
 
-  renderDonut(document.getElementById("resumen-medio"), medioDatos);
-  renderColumnChart(document.getElementById("resumen-edad"), edadDatos);
+  renderDonut(document.getElementById("resumen-medio"), medioDatos, {
+    alClicSegmento: (seg) => irAClientesFiltrado(() => aplicarFiltroDesdeResumen("medio", seg.codigo)),
+  });
+  renderColumnChart(document.getElementById("resumen-edad"), edadDatos, {
+    alClicBarra: (barra) => irAClientesFiltrado(() => aplicarFiltroEdadDesdeResumen(barra.etiqueta)),
+  });
   renderLineChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
-  renderDonut(document.getElementById("resumen-genero"), generoDatos);
+  renderDonut(document.getElementById("resumen-genero"), generoDatos, {
+    alClicSegmento: (seg) => irAClientesFiltrado(() => aplicarFiltroDesdeResumen("genero", seg.codigo)),
+  });
   renderDonut(document.getElementById("resumen-novedades"), sinNovedadesDatos);
 
   document.getElementById("resumen-novedades-total").textContent =

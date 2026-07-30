@@ -7,7 +7,7 @@ import { escapeHtml, COLORES, interpolarColor, formatearDiasFaltantes } from "./
 // stroke-dasharray/dashoffset): al pasar el mouse por un segmento o su fila
 // en la leyenda, el centro muestra el valor de esa categoría y el resto de
 // segmentos se atenúa.
-export function renderDonut(contenedor, datos) {
+export function renderDonut(contenedor, datos, { alClicSegmento } = {}) {
   const visibles = datos.filter((d) => d.valor > 0);
   const total = visibles.reduce((suma, d) => suma + d.valor, 0);
   if (!visibles.length || total === 0) {
@@ -27,6 +27,7 @@ export function renderDonut(contenedor, datos) {
     const largo = pct * circunferencia;
     const seg = {
       etiqueta: d.etiqueta,
+      codigo: d.codigo ?? d.etiqueta,
       valor: d.valor,
       pct: Math.round(pct * 100),
       color: COLORES[i % COLORES.length],
@@ -106,6 +107,10 @@ export function renderDonut(contenedor, datos) {
     circ.classList.add("donut-segmento");
     circ.addEventListener("mouseenter", () => activarSegmento(i));
     circ.addEventListener("mouseleave", desactivarSegmento);
+    if (alClicSegmento) {
+      circ.classList.add("donut-segmento-clicable");
+      circ.addEventListener("click", () => alClicSegmento(seg));
+    }
     circulos.push(circ);
     g.appendChild(circ);
   });
@@ -127,6 +132,18 @@ export function renderDonut(contenedor, datos) {
     `;
     li.addEventListener("mouseenter", () => activarSegmento(i));
     li.addEventListener("mouseleave", desactivarSegmento);
+    if (alClicSegmento) {
+      li.classList.add("donut-legend-clicable");
+      li.setAttribute("role", "button");
+      li.setAttribute("tabindex", "0");
+      li.addEventListener("click", () => alClicSegmento(seg));
+      li.addEventListener("keydown", (evento) => {
+        if (evento.key === "Enter" || evento.key === " ") {
+          evento.preventDefault();
+          alClicSegmento(seg);
+        }
+      });
+    }
     filasLeyenda.push(li);
     legend.appendChild(li);
   });
@@ -151,7 +168,7 @@ export function renderDonut(contenedor, datos) {
 // ej. rango de edad): columnas de ancho fijo repartidas en bandas iguales,
 // con una rampa de color secuencial (claro → oscuro) en vez de colores
 // categóricos, ya que los rangos tienen un orden natural.
-export function renderColumnChart(contenedor, datos) {
+export function renderColumnChart(contenedor, datos, { alClicBarra } = {}) {
   const visibles = datos.filter((d) => d.valor > 0);
   if (!visibles.length) {
     contenedor.innerHTML = `<span class="chart-empty">Sin datos todavía</span>`;
@@ -211,6 +228,19 @@ export function renderColumnChart(contenedor, datos) {
     rect.classList.add("columna-barra");
     rect.dataset.finalY = base - b.alturaFinal;
     rect.dataset.finalAltura = b.alturaFinal;
+    if (alClicBarra) {
+      rect.classList.add("columna-barra-clicable");
+      rect.setAttribute("role", "button");
+      rect.setAttribute("tabindex", "0");
+      rect.setAttribute("aria-label", `Ver clientes: ${b.etiqueta}`);
+      rect.addEventListener("click", () => alClicBarra(b));
+      rect.addEventListener("keydown", (evento) => {
+        if (evento.key === "Enter" || evento.key === " ") {
+          evento.preventDefault();
+          alClicBarra(b);
+        }
+      });
+    }
     svg.appendChild(rect);
     rects.push(rect);
 
