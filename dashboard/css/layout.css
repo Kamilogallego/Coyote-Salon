@@ -67,15 +67,6 @@
   color: var(--coyote-texto);
 }
 
-.sidebar-footer a {
-  color: var(--coyote-azul);
-  text-decoration: none;
-}
-
-.sidebar-footer a:hover {
-  text-decoration: underline;
-}
-
 .nav-item {
   width: 100%;
   background: none;
