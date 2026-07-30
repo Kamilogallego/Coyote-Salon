@@ -589,6 +589,10 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       borrarBorrador();
+      // Limpia los campos antes de ocultar el formulario: si no, al recargar
+      // la página el navegador restaura los valores que había escritos
+      // (autocompletado de recarga, no tiene que ver con el borrador).
+      form.reset();
       form.hidden = true;
       document.getElementById("pantalla-gracias").hidden = false;
       return;
