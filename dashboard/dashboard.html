@@ -17,9 +17,9 @@
         <button type="button" class="nav-item is-active" data-page="resumen">Resumen</button>
         <button type="button" class="nav-item" data-page="clientes">Clientes</button>
         <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
-        <button type="button" class="nav-item" data-page="compartir">🔗 Formulario</button>
+        <button type="button" class="nav-item" data-page="compartir">Formulario</button>
         <button type="button" class="nav-item nav-item-con-badge" data-page="papelera">
-          🗑 Papelera
+          Papelera
           <span class="nav-badge is-oculto" id="badge-papelera">0</span>
         </button>
       </nav>
@@ -85,6 +85,20 @@
                 <strong id="resumen-edad-top">—</strong>
                 <span id="resumen-edad-detalle" class="destacado-detalle"></span>
               </div>
+            </div>
+          </div>
+
+          <div class="panel-grid-2">
+            <div class="panel">
+              <h2>Distribución por género</h2>
+              <div id="resumen-genero" class="chart-slot"></div>
+            </div>
+            <div class="panel">
+              <div class="panel-header-total">
+                <h2>¿Quiénes quieren recibir novedades?</h2>
+                <span class="panel-total" id="resumen-novedades-total"></span>
+              </div>
+              <div id="resumen-novedades" class="chart-slot"></div>
             </div>
           </div>
 

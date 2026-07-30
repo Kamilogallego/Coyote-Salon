@@ -369,6 +369,28 @@ main {
 
 .page.is-active {
   display: block;
+  animation: pagina-entrada 320ms ease;
+}
+
+@keyframes pagina-entrada {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page.is-active {
+    animation: none;
+  }
+
+  .bar-row-fill {
+    transition: none;
+  }
 }
 
 /* ---- Tarjetas de resumen y paneles ---- */
@@ -438,6 +460,25 @@ main {
   letter-spacing: 0.03em;
   color: var(--coyote-azul);
   margin: 0 0 1rem;
+}
+
+.panel-header-total {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.panel-header-total h2 {
+  margin: 0;
+}
+
+.panel-total {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--coyote-rojo);
+  white-space: nowrap;
 }
 
 .compartir-link-row {
@@ -698,6 +739,47 @@ main {
   font-weight: 700;
   color: var(--coyote-texto);
   text-align: right;
+}
+
+.linea-chart {
+  display: block;
+  overflow: visible;
+}
+
+.linea-grid {
+  stroke: #ece5d8;
+  stroke-width: 1;
+}
+
+.linea-area {
+  stroke: none;
+}
+
+.linea-trazo {
+  fill: none;
+  stroke: var(--coyote-azul);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.linea-punto {
+  fill: #fff;
+  stroke: var(--coyote-azul);
+  stroke-width: 2.5;
+}
+
+.linea-valor {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  fill: var(--coyote-azul);
+}
+
+.linea-etiqueta {
+  font-family: "Lora", Georgia, "Times New Roman", serif;
+  font-size: 0.62rem;
+  fill: #6b5b52;
 }
 
 @media (max-width: 1000px) {

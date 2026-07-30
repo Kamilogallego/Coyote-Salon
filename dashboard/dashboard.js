@@ -142,6 +142,120 @@ function renderBarChart(contenedor, datos, { multicolor = false } = {}) {
   });
 }
 
+// Gráfica de línea con área (para series de tiempo, ej. crecimiento
+// mensual): usa un viewBox de ancho fijo para que funcione aunque el
+// contenedor esté oculto (display:none) al momento de dibujarla, ya que
+// clientWidth valdría 0 en ese caso.
+function renderLineChart(contenedor, datos) {
+  if (!datos.length) {
+    contenedor.innerHTML = `<span class="chart-empty">Sin datos todavía</span>`;
+    return;
+  }
+
+  const grande = contenedor.classList.contains("chart-slot-grande");
+  const alto = grande ? 240 : 140;
+  const ancho = 600;
+  const padIzq = 28;
+  const padDer = 16;
+  const padArriba = 26;
+  const padAbajo = 26;
+  const anchoUtil = ancho - padIzq - padDer;
+  const altoUtil = alto - padArriba - padAbajo;
+
+  const max = Math.max(...datos.map((d) => d.valor), 1);
+  const puntos = datos.map((d, i) => ({
+    ...d,
+    x: padIzq + (datos.length === 1 ? anchoUtil / 2 : (anchoUtil * i) / (datos.length - 1)),
+    y: padArriba + altoUtil - (d.valor / max) * altoUtil,
+  }));
+
+  const lineaD = puntos.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const base = padArriba + altoUtil;
+  const areaD = `${lineaD} L ${puntos[puntos.length - 1].x} ${base} L ${puntos[0].x} ${base} Z`;
+  const gradId = `linea-gradiente-${Math.random().toString(36).slice(2, 8)}`;
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  contenedor.innerHTML = "";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.setAttribute("viewBox", `0 0 ${ancho} ${alto}`);
+  svg.setAttribute("width", "100%");
+  svg.setAttribute("height", alto);
+  svg.classList.add("linea-chart");
+
+  const defs = document.createElementNS(svgNS, "defs");
+  defs.innerHTML = `
+    <linearGradient id="${gradId}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--coyote-azul)" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="var(--coyote-azul)" stop-opacity="0" />
+    </linearGradient>
+  `;
+  svg.appendChild(defs);
+
+  [0, 0.5, 1].forEach((frac) => {
+    const y = padArriba + altoUtil * frac;
+    const linea = document.createElementNS(svgNS, "line");
+    linea.setAttribute("x1", padIzq);
+    linea.setAttribute("x2", ancho - padDer);
+    linea.setAttribute("y1", y);
+    linea.setAttribute("y2", y);
+    linea.setAttribute("class", "linea-grid");
+    svg.appendChild(linea);
+  });
+
+  const area = document.createElementNS(svgNS, "path");
+  area.setAttribute("d", areaD);
+  area.setAttribute("fill", `url(#${gradId})`);
+  area.setAttribute("class", "linea-area");
+  svg.appendChild(area);
+
+  const linea = document.createElementNS(svgNS, "path");
+  linea.setAttribute("d", lineaD);
+  linea.setAttribute("class", "linea-trazo");
+  svg.appendChild(linea);
+
+  puntos.forEach((p) => {
+    const punto = document.createElementNS(svgNS, "circle");
+    punto.setAttribute("cx", p.x);
+    punto.setAttribute("cy", p.y);
+    punto.setAttribute("r", 4);
+    punto.setAttribute("class", "linea-punto");
+    svg.appendChild(punto);
+
+    const valor = document.createElementNS(svgNS, "text");
+    valor.setAttribute("x", p.x);
+    valor.setAttribute("y", Math.max(12, p.y - 10));
+    valor.setAttribute("text-anchor", "middle");
+    valor.setAttribute("class", "linea-valor");
+    valor.textContent = p.valor;
+    svg.appendChild(valor);
+
+    const etiqueta = document.createElementNS(svgNS, "text");
+    etiqueta.setAttribute("x", p.x);
+    etiqueta.setAttribute("y", alto - 6);
+    etiqueta.setAttribute("text-anchor", "middle");
+    etiqueta.setAttribute("class", "linea-etiqueta");
+    etiqueta.textContent = p.etiqueta;
+    svg.appendChild(etiqueta);
+  });
+
+  contenedor.appendChild(svg);
+
+  // Anima el trazo "dibujándose" de izquierda a derecha con
+  // stroke-dasharray/dashoffset, y el área apareciendo con fundido.
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const longitud = linea.getTotalLength();
+  linea.style.strokeDasharray = `${longitud}`;
+  linea.style.strokeDashoffset = `${longitud}`;
+  area.style.opacity = "0";
+  requestAnimationFrame(() => {
+    linea.style.transition = "stroke-dashoffset 700ms ease";
+    linea.style.strokeDashoffset = "0";
+    area.style.transition = "opacity 500ms ease 250ms";
+    area.style.opacity = "1";
+  });
+}
+
 // ---- Navegación entre páginas ----
 
 const TITULOS_PAGINA = {
@@ -282,11 +396,26 @@ async function cargarEstadisticas() {
     etiqueta: formatearMes(c.mes),
     valor: c.cantidad,
   }));
+  const generoDatos = stats.genero.map((g) => ({
+    etiqueta: ETIQUETAS_GENERO[g.genero] || g.genero,
+    valor: g.cantidad,
+  }));
+  const novedadesDatos = stats.novedadesPorMedio.map((n) => ({
+    etiqueta: ETIQUETAS_MEDIO[n.medio_contacto] || n.medio_contacto,
+    valor: n.cantidad,
+  }));
 
   renderBarChart(document.getElementById("resumen-medio"), medioDatos, { multicolor: true });
-  renderBarChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
+  renderLineChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
+  renderBarChart(document.getElementById("resumen-genero"), generoDatos, { multicolor: true });
+  renderBarChart(document.getElementById("resumen-novedades"), novedadesDatos, { multicolor: true });
 
-  renderBarChart(document.getElementById("chart-crecimiento"), crecimientoDatos);
+  document.getElementById("resumen-novedades-total").textContent =
+    stats.total > 0
+      ? `${stats.novedadesTotal} de ${stats.total} (${Math.round((stats.novedadesTotal / stats.total) * 100)}%)`
+      : "";
+
+  renderLineChart(document.getElementById("chart-crecimiento"), crecimientoDatos);
 
   document.getElementById("tabla-crecimiento-mensual").innerHTML = stats.crecimientoMensual
     .map((c, i) => {

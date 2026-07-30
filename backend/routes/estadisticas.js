@@ -42,6 +42,8 @@ router.get("/", requireAuth, async (req, res) => {
     ultimosClientes,
     proximosCumpleanos,
     proximosAniversarios,
+    novedadesTotal,
+    novedadesPorMedio,
   ] = await Promise.all([
     pool.query("SELECT COUNT(*)::int AS total FROM clientes WHERE eliminado_en IS NULL"),
     pool.query(
@@ -88,6 +90,14 @@ router.get("/", requireAuth, async (req, res) => {
     ),
     pool.query(sqlProximaFecha("fecha_nacimiento")),
     pool.query(sqlProximaFecha("fecha_aniversario", "AND tiene_pareja = true")),
+    pool.query(
+      "SELECT COUNT(*)::int AS total FROM clientes WHERE eliminado_en IS NULL AND recibir_novedades = true"
+    ),
+    pool.query(
+      `SELECT medio_contacto, COUNT(*)::int AS cantidad FROM clientes
+       WHERE eliminado_en IS NULL AND recibir_novedades = true
+       GROUP BY medio_contacto ORDER BY cantidad DESC`
+    ),
   ]);
 
   res.json({
@@ -102,6 +112,8 @@ router.get("/", requireAuth, async (req, res) => {
     ultimosClientes: ultimosClientes.rows,
     proximosCumpleanos: proximosCumpleanos.rows,
     proximosAniversarios: proximosAniversarios.rows,
+    novedadesTotal: novedadesTotal.rows[0].total,
+    novedadesPorMedio: novedadesPorMedio.rows,
   });
 });
 
