@@ -12,6 +12,14 @@ const btnConfirmarCancelar = document.getElementById("btn-confirmar-cancelar");
 const confirmarPasswordWrap = document.getElementById("confirmar-password-wrap");
 const confirmarPasswordInput = document.getElementById("confirmar-password");
 const confirmarPasswordError = document.getElementById("confirmar-password-error");
+const btnTogglePassword = document.getElementById("btn-toggle-password");
+
+btnTogglePassword.addEventListener("click", () => {
+  const mostrar = confirmarPasswordInput.type === "password";
+  confirmarPasswordInput.type = mostrar ? "text" : "password";
+  btnTogglePassword.setAttribute("aria-pressed", String(mostrar));
+  btnTogglePassword.setAttribute("aria-label", mostrar ? "Ocultar contraseña" : "Mostrar contraseña");
+});
 
 // Contraseña de confirmación para acciones destructivas en Clientes (no es
 // un control de acceso real -ya se necesita sesión iniciada para llegar
@@ -28,6 +36,9 @@ export function confirmarAccion(
   modalConfirmar.classList.toggle("es-peligro", peligro);
   confirmarPasswordWrap.classList.toggle("is-oculto", !requierePassword);
   confirmarPasswordInput.value = "";
+  confirmarPasswordInput.type = "password";
+  btnTogglePassword.setAttribute("aria-pressed", "false");
+  btnTogglePassword.setAttribute("aria-label", "Mostrar contraseña");
   confirmarPasswordError.textContent = "";
   modalConfirmar.showModal();
   if (requierePassword) confirmarPasswordInput.focus();
