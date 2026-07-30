@@ -18,6 +18,21 @@ const CAMPOS_REQUERIDOS = [
   "habeas_data",
 ];
 
+// Debe calzar con los VARCHAR de schema.sql: sin este chequeo, un valor más
+// largo que la columna llega hasta Postgres y responde con un 500 crudo en
+// vez de un error de validación claro.
+const LONGITUDES_MAXIMAS = {
+  nombre: 150,
+  telefono: 30,
+  tipo_documento: 30,
+  cedula: 20,
+  correo: 150,
+  pais: 5,
+  ciudad: 100,
+  genero: 20,
+  medio_contacto: 20,
+};
+
 function validar(body) {
   const errores = [];
 
@@ -25,6 +40,13 @@ function validar(body) {
     const valor = body[campo];
     if (valor === undefined || valor === null || valor === "") {
       errores.push(`El campo "${campo}" es obligatorio`);
+    }
+  }
+
+  for (const [campo, maximo] of Object.entries(LONGITUDES_MAXIMAS)) {
+    const valor = body[campo];
+    if (typeof valor === "string" && valor.length > maximo) {
+      errores.push(`El campo "${campo}" no puede superar ${maximo} caracteres`);
     }
   }
 

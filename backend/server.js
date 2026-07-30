@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const helmet = require("helmet");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 
@@ -16,6 +17,28 @@ const app = express();
 // Necesario en Render (y cualquier PaaS detrás de proxy) para que las cookies
 // "secure" funcionen: Express debe confiar en el header X-Forwarded-Proto.
 app.set("trust proxy", 1);
+
+// Cabeceras de seguridad (X-Content-Type-Options, X-Frame-Options, etc).
+// La CSP lista explícitamente los CDN que el formulario público y el
+// dashboard ya usan (intl-tel-input, qrcode-generator, xlsx vía esm.sh);
+// todo lo demás solo puede cargar desde el propio origen.
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://cdn.jsdelivr.net", "https://esm.sh"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net"],
+        fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:"],
+        imgSrc: ["'self'", "data:", "https://cdn.jsdelivr.net"],
+        connectSrc: ["'self'", "https://esm.sh"],
+        objectSrc: ["'none'"],
+        baseUri: ["'self'"],
+        frameAncestors: ["'self'"],
+      },
+    },
+  })
+);
 
 app.use(express.json());
 app.use(

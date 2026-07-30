@@ -42,3 +42,13 @@ test("validar: exige aceptar el tratamiento de datos", () => {
   const errores = validar({ ...registroValido, habeas_data: false });
   assert.ok(errores.some((e) => e.includes("tratamiento de datos")));
 });
+
+test("validar: rechaza un campo que supera la longitud máxima de su columna", () => {
+  const errores = validar({ ...registroValido, nombre: "a".repeat(151) });
+  assert.ok(errores.some((e) => e.includes("nombre") && e.includes("150")));
+});
+
+test("validar: acepta un campo justo en el límite de longitud", () => {
+  const errores = validar({ ...registroValido, nombre: "a".repeat(150) });
+  assert.ok(!errores.some((e) => e.includes("150 caracteres")));
+});

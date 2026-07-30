@@ -8,6 +8,18 @@ const asyncHandler = require("../middleware/asyncHandler");
 
 const router = express.Router();
 
+// Las rutas :id reciben el parámetro como string desde la URL; se valida
+// aquí (en vez de dejar que Postgres rechace un valor no numérico) para
+// responder 400 en vez de un error de base de datos.
+function parsearId(req, res, next) {
+  const id = Number(req.params.id);
+  if (!Number.isInteger(id)) {
+    return res.status(400).json({ errores: ["ID de cliente inválido"] });
+  }
+  req.params.id = id;
+  next();
+}
+
 // Limite generoso para no bloquear a clientes reales que compartan red
 // (wifi del restaurante), pero suficiente para frenar un flood de spam.
 const limiteRegistro = rateLimit({
@@ -129,6 +141,7 @@ router.post(
 router.delete(
   "/:id",
   requireAuth,
+  parsearId,
   asyncHandler(async (req, res) => {
     const encontrado = await clientesRepository.eliminarUno(req.params.id);
     if (!encontrado) {
@@ -142,6 +155,7 @@ router.delete(
 router.post(
   "/:id/restaurar",
   requireAuth,
+  parsearId,
   asyncHandler(async (req, res) => {
     const encontrado = await clientesRepository.restaurar(req.params.id);
     if (!encontrado) {
@@ -155,6 +169,7 @@ router.post(
 router.delete(
   "/:id/definitivo",
   requireAuth,
+  parsearId,
   asyncHandler(async (req, res) => {
     const encontrado = await clientesRepository.eliminarDefinitivo(req.params.id);
     if (!encontrado) {
