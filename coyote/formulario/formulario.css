@@ -189,6 +189,23 @@ body {
   font-size: 0.75rem;
 }
 
+.pantalla-gracias {
+  text-align: center;
+  padding: 2.5rem 1rem;
+}
+
+.gracias-titulo {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--coyote-azul);
+  margin: 0 0 0.6rem;
+}
+
+.gracias-mensaje {
+  margin: 0;
+  color: var(--coyote-texto);
+}
+
 .form-footer {
   margin-top: 1.5rem;
   padding-top: 1rem;

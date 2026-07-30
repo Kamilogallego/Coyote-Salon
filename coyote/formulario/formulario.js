@@ -81,6 +81,8 @@ const TRANSLATIONS = {
     "iti.searchPlaceholder": "Buscar país",
     "footer.direccion.etiqueta": "Dirección:",
     "footer.telefono.etiqueta": "Teléfono:",
+    "gracias.titulo": "¡Gracias por completar el formulario!",
+    "gracias.mensaje": "Tu registro se guardó correctamente.",
   },
   en: {
     "header.title": "Be part of our community",
@@ -159,6 +161,8 @@ const TRANSLATIONS = {
     "iti.searchPlaceholder": "Search country",
     "footer.direccion.etiqueta": "Address:",
     "footer.telefono.etiqueta": "Phone:",
+    "gracias.titulo": "Thank you for filling out the form!",
+    "gracias.mensaje": "Your registration was saved successfully.",
   },
 };
 
@@ -584,13 +588,10 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      status.textContent = t("status.exito");
-      status.className = "form-status success";
-      form.reset();
-      resetAniversarioCondicional();
-      if (iti) iti.setCountry("co");
-      actualizarCiudades(form.pais.value);
       borrarBorrador();
+      form.hidden = true;
+      document.getElementById("pantalla-gracias").hidden = false;
+      return;
     } catch (err) {
       status.textContent = t("status.errores");
       status.className = "form-status error";
@@ -1013,13 +1014,6 @@ function setupPaisCiudad() {
 
   seleccionarPais("CO");
   actualizarCiudades("CO");
-}
-
-function resetAniversarioCondicional() {
-  const campoAniversario = document.getElementById("campo-aniversario");
-  const inputAniversario = document.getElementById("fecha-aniversario");
-  campoAniversario.classList.add("is-collapsed");
-  inputAniversario.required = false;
 }
 
 const DOMINIOS_COMUNES = [
