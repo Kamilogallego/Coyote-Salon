@@ -114,6 +114,28 @@ router.post("/eliminar-multiple", requireAuth, async (req, res) => {
   res.json({ ok: true, eliminados, dias_retencion: clientesRepository.DIAS_RETENCION_PAPELERA });
 });
 
+// POST /api/clientes/restaurar-multiple - sacar varios de la papelera a la vez (requiere sesión)
+router.post("/restaurar-multiple", requireAuth, async (req, res) => {
+  const ids = Array.isArray(req.body.ids) ? req.body.ids.map(Number).filter(Number.isInteger) : [];
+  if (ids.length === 0) {
+    return res.status(400).json({ errores: ["No se recibieron clientes para restaurar"] });
+  }
+
+  const restaurados = await clientesRepository.restaurarMultiple(ids);
+  res.json({ ok: true, restaurados });
+});
+
+// POST /api/clientes/eliminar-definitivo-multiple - borrar varios de la papelera para siempre (requiere sesión)
+router.post("/eliminar-definitivo-multiple", requireAuth, async (req, res) => {
+  const ids = Array.isArray(req.body.ids) ? req.body.ids.map(Number).filter(Number.isInteger) : [];
+  if (ids.length === 0) {
+    return res.status(400).json({ errores: ["No se recibieron clientes para eliminar"] });
+  }
+
+  const eliminados = await clientesRepository.eliminarDefinitivoMultiple(ids);
+  res.json({ ok: true, eliminados });
+});
+
 // DELETE /api/clientes/:id - mover a la papelera (requiere sesión)
 router.delete("/:id", requireAuth, async (req, res) => {
   const encontrado = await clientesRepository.eliminarUno(req.params.id);

@@ -291,7 +291,7 @@
 
           <div class="acciones-masivas is-oculto" id="acciones-masivas">
             <span id="contador-seleccionados">0 seleccionados</span>
-            <button type="button" id="btn-eliminar-seleccionados" class="btn-secundario">🗑 Eliminar seleccionados</button>
+            <button type="button" id="btn-eliminar-seleccionados" class="btn-secundario btn-secundario-peligro">🗑 Eliminar seleccionados</button>
           </div>
           </div>
 
@@ -346,10 +346,17 @@
           </p>
           <div class="summary" id="resumen-papelera"></div>
 
+          <div class="acciones-masivas is-oculto" id="acciones-masivas-papelera">
+            <span id="contador-seleccionados-papelera">0 seleccionados</span>
+            <button type="button" id="btn-restaurar-seleccionados" class="btn-secundario">↺ Restaurar seleccionados</button>
+            <button type="button" id="btn-eliminar-definitivo-seleccionados" class="btn-secundario btn-secundario-peligro">🗑 Eliminar definitivamente</button>
+          </div>
+
           <div class="table-wrap">
             <table class="tabla-papelera-grid">
               <thead>
                 <tr>
+                  <th class="th-checkbox"><input type="checkbox" id="checkbox-todos-papelera" aria-label="Seleccionar todos" /></th>
                   <th>Nombre</th>
                   <th>Documento</th>
                   <th>Eliminado el</th>
@@ -478,6 +485,11 @@
   <dialog id="modal-confirmar">
     <h2 id="confirmar-titulo">Confirmar acción</h2>
     <p id="confirmar-mensaje"></p>
+    <div class="field is-oculto" id="confirmar-password-wrap">
+      <label for="confirmar-password">Escribe la contraseña para confirmar</label>
+      <input type="password" id="confirmar-password" autocomplete="off" />
+      <span class="error-msg" id="confirmar-password-error"></span>
+    </div>
     <div class="modal-actions">
       <button type="button" id="btn-confirmar-cancelar" class="btn-secundario">Cancelar</button>
       <button type="button" id="btn-confirmar-aceptar">Confirmar</button>

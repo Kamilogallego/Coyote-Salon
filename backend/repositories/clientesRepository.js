@@ -204,12 +204,28 @@ async function restaurar(id) {
   return result.rows.length > 0;
 }
 
+async function restaurarMultiple(ids) {
+  const result = await pool.query(
+    "UPDATE clientes SET eliminado_en = NULL WHERE id = ANY($1) AND eliminado_en IS NOT NULL RETURNING id",
+    [ids]
+  );
+  return result.rows.length;
+}
+
 async function eliminarDefinitivo(id) {
   const result = await pool.query(
     "DELETE FROM clientes WHERE id = $1 AND eliminado_en IS NOT NULL RETURNING id",
     [id]
   );
   return result.rows.length > 0;
+}
+
+async function eliminarDefinitivoMultiple(ids) {
+  const result = await pool.query(
+    "DELETE FROM clientes WHERE id = ANY($1) AND eliminado_en IS NOT NULL RETURNING id",
+    [ids]
+  );
+  return result.rows.length;
 }
 
 async function purgarVencidos() {
@@ -226,6 +242,8 @@ module.exports = {
   eliminarMultiple,
   eliminarUno,
   restaurar,
+  restaurarMultiple,
   eliminarDefinitivo,
+  eliminarDefinitivoMultiple,
   purgarVencidos,
 };

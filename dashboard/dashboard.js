@@ -1077,26 +1077,56 @@ const confirmarTitulo = document.getElementById("confirmar-titulo");
 const confirmarMensaje = document.getElementById("confirmar-mensaje");
 const btnConfirmarAceptar = document.getElementById("btn-confirmar-aceptar");
 const btnConfirmarCancelar = document.getElementById("btn-confirmar-cancelar");
+const confirmarPasswordWrap = document.getElementById("confirmar-password-wrap");
+const confirmarPasswordInput = document.getElementById("confirmar-password");
+const confirmarPasswordError = document.getElementById("confirmar-password-error");
 
-function confirmarAccion(mensaje, { titulo = "Confirmar acción", textoAceptar = "Confirmar", peligro = true } = {}) {
+// Contraseña de confirmación para acciones destructivas en Clientes (no es
+// un control de acceso real -ya se necesita sesión iniciada para llegar
+// aquí-, es solo una traba extra contra clics accidentales).
+const PASSWORD_CONFIRMACION = "coyote123";
+
+function confirmarAccion(
+  mensaje,
+  { titulo = "Confirmar acción", textoAceptar = "Confirmar", peligro = true, requierePassword = false } = {}
+) {
   confirmarTitulo.textContent = titulo;
   confirmarMensaje.textContent = mensaje;
   btnConfirmarAceptar.textContent = textoAceptar;
   modalConfirmar.classList.toggle("es-peligro", peligro);
+  confirmarPasswordWrap.classList.toggle("is-oculto", !requierePassword);
+  confirmarPasswordInput.value = "";
+  confirmarPasswordError.textContent = "";
   modalConfirmar.showModal();
+  if (requierePassword) confirmarPasswordInput.focus();
 
   return new Promise((resolve) => {
     const cerrar = (resultado) => {
       btnConfirmarAceptar.removeEventListener("click", onAceptar);
       btnConfirmarCancelar.removeEventListener("click", onCancelar);
+      confirmarPasswordInput.removeEventListener("keydown", onEnterPassword);
       modalConfirmar.removeEventListener("cancel", onCancelar);
       modalConfirmar.close();
       resolve(resultado);
     };
-    const onAceptar = () => cerrar(true);
+    const onAceptar = () => {
+      if (requierePassword && confirmarPasswordInput.value !== PASSWORD_CONFIRMACION) {
+        confirmarPasswordError.textContent = "Contraseña incorrecta";
+        confirmarPasswordInput.focus();
+        return;
+      }
+      cerrar(true);
+    };
     const onCancelar = () => cerrar(false);
+    const onEnterPassword = (evento) => {
+      if (evento.key === "Enter") {
+        evento.preventDefault();
+        onAceptar();
+      }
+    };
     btnConfirmarAceptar.addEventListener("click", onAceptar);
     btnConfirmarCancelar.addEventListener("click", onCancelar);
+    confirmarPasswordInput.addEventListener("keydown", onEnterPassword);
     modalConfirmar.addEventListener("cancel", onCancelar);
   });
 }
@@ -1366,6 +1396,21 @@ const tablaPapelera = document.getElementById("tabla-papelera");
 const resumenPapelera = document.getElementById("resumen-papelera");
 let papeleraActual = [];
 
+const seleccionadosPapelera = new Set();
+const accionesMasivasPapelera = document.getElementById("acciones-masivas-papelera");
+const contadorSeleccionadosPapelera = document.getElementById("contador-seleccionados-papelera");
+const checkboxTodosPapelera = document.getElementById("checkbox-todos-papelera");
+
+function actualizarAccionesMasivasPapelera() {
+  accionesMasivasPapelera.classList.toggle("is-oculto", seleccionadosPapelera.size === 0);
+  contadorSeleccionadosPapelera.textContent = `${seleccionadosPapelera.size} seleccionado(s)`;
+  const idsVisibles = papeleraActual.map((c) => c.id);
+  const todosSeleccionados = idsVisibles.length > 0 && idsVisibles.every((id) => seleccionadosPapelera.has(id));
+  checkboxTodosPapelera.checked = todosSeleccionados;
+  checkboxTodosPapelera.indeterminate =
+    !todosSeleccionados && idsVisibles.some((id) => seleccionadosPapelera.has(id));
+}
+
 function actualizarBadgePapelera(cantidad) {
   const badge = document.getElementById("badge-papelera");
   badge.textContent = cantidad > 99 ? "99+" : String(cantidad);
@@ -1382,6 +1427,11 @@ async function cargarPapelera() {
   papeleraActual = data.clientes;
   actualizarBadgePapelera(papeleraActual.length);
 
+  const idsVisibles = new Set(papeleraActual.map((c) => c.id));
+  for (const id of seleccionadosPapelera) {
+    if (!idsVisibles.has(id)) seleccionadosPapelera.delete(id);
+  }
+
   resumenPapelera.textContent = `${papeleraActual.length} cliente(s) en la papelera`;
 
   tablaPapelera.innerHTML = papeleraActual
@@ -1396,6 +1446,7 @@ async function cargarPapelera() {
 
       return `
     <tr>
+      <td class="th-checkbox"><input type="checkbox" class="checkbox-fila" data-id="${c.id}" aria-label="Seleccionar ${escapeHtml(c.nombre)}" ${seleccionadosPapelera.has(c.id) ? "checked" : ""} /></td>
       <td>${escapeHtml(c.nombre)}</td>
       <td>${ETIQUETAS_DOCUMENTO[c.tipo_documento] || escapeHtml(c.tipo_documento)}: ${escapeHtml(c.cedula)}</td>
       <td>${formatearFecha(c.eliminado_en)}</td>
@@ -1408,6 +1459,8 @@ async function cargarPapelera() {
   `;
     })
     .join("");
+
+  actualizarAccionesMasivasPapelera();
 }
 
 async function restaurarCliente(id) {
@@ -1467,6 +1520,99 @@ tablaPapelera.addEventListener("click", (event) => {
   } else if (event.target.classList.contains("btn-eliminar")) {
     eliminarDefinitivo(id);
   }
+});
+
+tablaPapelera.addEventListener("change", (event) => {
+  if (!event.target.classList.contains("checkbox-fila")) return;
+  const id = Number(event.target.dataset.id);
+  if (!id) return;
+  if (event.target.checked) {
+    seleccionadosPapelera.add(id);
+  } else {
+    seleccionadosPapelera.delete(id);
+  }
+  actualizarAccionesMasivasPapelera();
+});
+
+checkboxTodosPapelera.addEventListener("change", () => {
+  if (checkboxTodosPapelera.checked) {
+    papeleraActual.forEach((c) => seleccionadosPapelera.add(c.id));
+  } else {
+    papeleraActual.forEach((c) => seleccionadosPapelera.delete(c.id));
+  }
+  cargarPapelera();
+});
+
+document.getElementById("btn-restaurar-seleccionados").addEventListener("click", async () => {
+  const cantidad = seleccionadosPapelera.size;
+  if (cantidad === 0) return;
+
+  let mensaje;
+  if (cantidad === 1) {
+    const id = [...seleccionadosPapelera][0];
+    const cliente = papeleraActual.find((c) => c.id === id);
+    const nombre = cliente ? cliente.nombre : "este cliente";
+    mensaje = `¿Restaurar a "${nombre}"? Volverá a aparecer en la lista de clientes.`;
+  } else {
+    mensaje = `¿Restaurar ${cantidad} clientes seleccionados? Volverán a aparecer en la lista de clientes.`;
+  }
+
+  const confirmado = await confirmarAccion(mensaje, {
+    titulo: cantidad === 1 ? "Restaurar cliente" : "Restaurar seleccionados",
+    textoAceptar: "Restaurar",
+    peligro: false,
+  });
+  if (!confirmado) return;
+
+  const res = await fetch("/api/clientes/restaurar-multiple", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ ids: [...seleccionadosPapelera] }),
+  });
+  if (res.status === 401) {
+    window.location.href = "login.html";
+    return;
+  }
+  seleccionadosPapelera.clear();
+  cargarPapelera();
+  cargarClientes();
+  cargarEstadisticas();
+  cargarClientesDelMes();
+});
+
+document.getElementById("btn-eliminar-definitivo-seleccionados").addEventListener("click", async () => {
+  const cantidad = seleccionadosPapelera.size;
+  if (cantidad === 0) return;
+
+  let mensaje;
+  if (cantidad === 1) {
+    const id = [...seleccionadosPapelera][0];
+    const cliente = papeleraActual.find((c) => c.id === id);
+    const nombre = cliente ? cliente.nombre : "este cliente";
+    mensaje = `¿Eliminar definitivamente a "${nombre}"? Esta acción NO se puede deshacer.`;
+  } else {
+    mensaje = `¿Eliminar definitivamente ${cantidad} clientes seleccionados? Esta acción NO se puede deshacer.`;
+  }
+
+  const confirmado = await confirmarAccion(mensaje, {
+    titulo: "Eliminar definitivamente",
+    textoAceptar: "Eliminar definitivo",
+  });
+  if (!confirmado) return;
+
+  const res = await fetch("/api/clientes/eliminar-definitivo-multiple", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ ids: [...seleccionadosPapelera] }),
+  });
+  if (res.status === 401) {
+    window.location.href = "login.html";
+    return;
+  }
+  seleccionadosPapelera.clear();
+  cargarPapelera();
 });
 
 formCliente.addEventListener("submit", async (event) => {
@@ -1569,6 +1715,7 @@ document.getElementById("btn-eliminar-seleccionados").addEventListener("click", 
   const confirmado = await confirmarAccion(mensaje, {
     titulo: cantidad === 1 ? "Eliminar cliente" : "Eliminar seleccionados",
     textoAceptar: "Eliminar",
+    requierePassword: true,
   });
   if (!confirmado) return;
 

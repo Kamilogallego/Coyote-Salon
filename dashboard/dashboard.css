@@ -1175,23 +1175,24 @@ tbody tr.fila-por-eliminar {
 .tabla-clientes-grid th:nth-child(10) { width: 9%; }
 .tabla-clientes-grid th:nth-child(11) { width: 5%; }
 
-/* ---- Tabla de papelera: Nombre, Documento, Eliminado el, Días restantes, Acciones ---- */
+/* ---- Tabla de papelera: Selección, Nombre, Documento, Eliminado el, Días restantes, Acciones ---- */
 
 .tabla-papelera-grid {
   table-layout: fixed;
 }
 
-.tabla-papelera-grid td:nth-child(2),
 .tabla-papelera-grid td:nth-child(3),
-.tabla-papelera-grid td:nth-child(4) {
+.tabla-papelera-grid td:nth-child(4),
+.tabla-papelera-grid td:nth-child(5) {
   white-space: nowrap;
 }
 
-.tabla-papelera-grid th:nth-child(1) { width: 28%; }
-.tabla-papelera-grid th:nth-child(2) { width: 22%; }
-.tabla-papelera-grid th:nth-child(3) { width: 18%; }
-.tabla-papelera-grid th:nth-child(4) { width: 14%; }
-.tabla-papelera-grid th:nth-child(5) { width: 18%; }
+.tabla-papelera-grid th:nth-child(1) { width: 3%; }
+.tabla-papelera-grid th:nth-child(2) { width: 25%; }
+.tabla-papelera-grid th:nth-child(3) { width: 20%; }
+.tabla-papelera-grid th:nth-child(4) { width: 16%; }
+.tabla-papelera-grid th:nth-child(5) { width: 13%; }
+.tabla-papelera-grid th:nth-child(6) { width: 23%; }
 
 .summary {
   font-size: 0.85rem;
@@ -1204,6 +1205,7 @@ tbody tr.fila-por-eliminar {
 
 .acciones-masivas {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
   padding: 0.6rem 0.9rem;
@@ -1216,12 +1218,13 @@ tbody tr.fila-por-eliminar {
   display: none;
 }
 
-#contador-seleccionados {
+#contador-seleccionados,
+#contador-seleccionados-papelera {
   font-size: 0.85rem;
   color: var(--coyote-texto);
 }
 
-.acciones-masivas .btn-secundario {
+.acciones-masivas .btn-secundario-peligro {
   color: var(--coyote-rojo);
   border-color: var(--coyote-rojo);
 }
@@ -1419,6 +1422,18 @@ dialog#modal-confirmar {
 
 #modal-confirmar:not(.es-peligro) #btn-confirmar-aceptar:active {
   background: #24713c;
+}
+
+#confirmar-password-wrap {
+  margin-top: 1rem;
+}
+
+#confirmar-password-wrap.is-oculto {
+  display: none;
+}
+
+#confirmar-password-error {
+  min-height: 1.1em;
 }
 
 dialog#modal-lista-clientes {
