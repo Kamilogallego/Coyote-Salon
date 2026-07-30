@@ -42,6 +42,7 @@ const filtroGenero = document.getElementById("filtro-genero");
 const filtroMedio = document.getElementById("filtro-medio");
 const filtroPadre = document.getElementById("filtro-padre");
 const filtroPareja = document.getElementById("filtro-pareja");
+const filtroNovedades = document.getElementById("filtro-novedades");
 const filtroCampoAniversario = document.getElementById("filtro-campo-aniversario");
 const filtroAniversarioDesde = document.getElementById("filtro-aniversario-desde");
 const filtroAniversarioHasta = document.getElementById("filtro-aniversario-hasta");
@@ -60,6 +61,7 @@ const CAMPOS_FILTRO = [
   filtroMedio,
   filtroPadre,
   filtroPareja,
+  filtroNovedades,
   filtroAniversarioDesde,
   filtroAniversarioHasta,
   filtroEdadMin,
@@ -301,6 +303,7 @@ export async function setupModalPaisAutocomplete() {
 const FILTROS_RESUMEN = {
   pareja: filtroPareja,
   padre: filtroPadre,
+  novedades: filtroNovedades,
 };
 
 export function aplicarFiltroDesdeResumen(campo, valor) {
@@ -351,6 +354,7 @@ export async function cargarClientes() {
   if (filtroMedio.value) params.set("medio_contacto", filtroMedio.value);
   if (filtroPadre.value) params.set("es_padre", filtroPadre.value);
   if (filtroPareja.value) params.set("tiene_pareja", filtroPareja.value);
+  if (filtroNovedades.value) params.set("recibir_novedades", filtroNovedades.value);
   if (filtroPareja.value === "si" && filtroAniversarioDesde.value)
     params.set("aniversario_desde", filtroAniversarioDesde.value);
   if (filtroPareja.value === "si" && filtroAniversarioHasta.value)

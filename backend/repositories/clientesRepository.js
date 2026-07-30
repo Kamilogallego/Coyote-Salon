@@ -62,6 +62,7 @@ function construirFiltros(query) {
     medio_contacto,
     es_padre,
     tiene_pareja,
+    recibir_novedades,
     edad_min,
     edad_max,
     nombre,
@@ -132,6 +133,10 @@ function construirFiltros(query) {
   if (tiene_pareja === "si" || tiene_pareja === "no") {
     valores.push(tiene_pareja === "si");
     condiciones.push(`tiene_pareja = $${valores.length}`);
+  }
+  if (recibir_novedades === "si" || recibir_novedades === "no") {
+    valores.push(recibir_novedades === "si");
+    condiciones.push(`recibir_novedades = $${valores.length}`);
   }
   if (edad_min !== undefined && edad_min !== "" && !Number.isNaN(Number(edad_min))) {
     valores.push(Number(edad_min));

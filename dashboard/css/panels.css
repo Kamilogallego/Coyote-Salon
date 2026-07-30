@@ -53,6 +53,11 @@
   text-align: left;
 }
 
+.panel > .link-btn {
+  display: block;
+  margin-top: 1rem;
+}
+
 .panel-grid-2 {
   display: grid;
   grid-template-columns: 1.2fr 1fr;

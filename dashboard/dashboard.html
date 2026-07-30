@@ -98,10 +98,11 @@
             </div>
             <div class="panel">
               <div class="panel-header-total">
-                <h2>¿Quiénes quieren recibir novedades?</h2>
+                <h2>¿Quiénes NO quieren recibir novedades?</h2>
                 <span class="panel-total" id="resumen-novedades-total"></span>
               </div>
               <div id="resumen-novedades" class="chart-slot"></div>
+              <button type="button" class="link-btn" data-goto="clientes" data-filtro-campo="novedades" data-filtro-valor="no">Ver más</button>
             </div>
           </div>
 
@@ -270,6 +271,14 @@
                   <option value="llamada">Llamada telefónica</option>
                   <option value="whatsapp">WhatsApp / SMS</option>
                   <option value="ninguno">Me es indiferente</option>
+                </select>
+              </div>
+              <div class="filtro-campo">
+                <label for="filtro-novedades">Recibir novedades</label>
+                <select id="filtro-novedades">
+                  <option value="">Todos</option>
+                  <option value="si">Sí</option>
+                  <option value="no">No</option>
                 </select>
               </div>
               <div class="filtro-campo">

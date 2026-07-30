@@ -40,8 +40,8 @@ async function obtener() {
     ultimosClientes,
     proximosCumpleanos,
     proximosAniversarios,
-    novedadesTotal,
-    novedadesPorMedio,
+    sinNovedadesTotal,
+    sinNovedadesPorMedio,
   ] = await Promise.all([
     pool.query("SELECT COUNT(*)::int AS total FROM clientes WHERE eliminado_en IS NULL"),
     pool.query(
@@ -89,11 +89,11 @@ async function obtener() {
     pool.query(sqlProximaFecha("fecha_nacimiento")),
     pool.query(sqlProximaFecha("fecha_aniversario", "AND tiene_pareja = true")),
     pool.query(
-      "SELECT COUNT(*)::int AS total FROM clientes WHERE eliminado_en IS NULL AND recibir_novedades = true"
+      "SELECT COUNT(*)::int AS total FROM clientes WHERE eliminado_en IS NULL AND recibir_novedades = false"
     ),
     pool.query(
       `SELECT medio_contacto, COUNT(*)::int AS cantidad FROM clientes
-       WHERE eliminado_en IS NULL AND recibir_novedades = true
+       WHERE eliminado_en IS NULL AND recibir_novedades = false
        GROUP BY medio_contacto ORDER BY cantidad DESC`
     ),
   ]);
@@ -110,8 +110,8 @@ async function obtener() {
     ultimosClientes: ultimosClientes.rows,
     proximosCumpleanos: proximosCumpleanos.rows,
     proximosAniversarios: proximosAniversarios.rows,
-    novedadesTotal: novedadesTotal.rows[0].total,
-    novedadesPorMedio: novedadesPorMedio.rows,
+    sinNovedadesTotal: sinNovedadesTotal.rows[0].total,
+    sinNovedadesPorMedio: sinNovedadesPorMedio.rows,
   };
 }
 

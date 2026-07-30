@@ -37,7 +37,7 @@ export async function cargarEstadisticas() {
     etiqueta: ETIQUETAS_GENERO[g.genero] || g.genero,
     valor: g.cantidad,
   }));
-  const novedadesDatos = stats.novedadesPorMedio.map((n) => ({
+  const sinNovedadesDatos = stats.sinNovedadesPorMedio.map((n) => ({
     etiqueta: ETIQUETAS_MEDIO[n.medio_contacto] || n.medio_contacto,
     valor: n.cantidad,
   }));
@@ -46,11 +46,11 @@ export async function cargarEstadisticas() {
   renderColumnChart(document.getElementById("resumen-edad"), edadDatos);
   renderLineChart(document.getElementById("resumen-crecimiento"), crecimientoDatos);
   renderDonut(document.getElementById("resumen-genero"), generoDatos);
-  renderDonut(document.getElementById("resumen-novedades"), novedadesDatos);
+  renderDonut(document.getElementById("resumen-novedades"), sinNovedadesDatos);
 
   document.getElementById("resumen-novedades-total").textContent =
     stats.total > 0
-      ? `${stats.novedadesTotal} de ${stats.total} (${Math.round((stats.novedadesTotal / stats.total) * 100)}%)`
+      ? `${stats.sinNovedadesTotal} de ${stats.total} (${Math.round((stats.sinNovedadesTotal / stats.total) * 100)}%)`
       : "";
 
   renderLineChart(document.getElementById("chart-crecimiento"), crecimientoDatos);
