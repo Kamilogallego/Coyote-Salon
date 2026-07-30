@@ -189,13 +189,13 @@ button:active {
 }
 
 .sidebar {
-  width: 150px;
+  width: 172px;
   flex-shrink: 0;
   background: #fff;
   border-right: 1px solid var(--coyote-crema);
   display: flex;
   flex-direction: column;
-  padding: 1.25rem 0.75rem;
+  padding: 1.5rem 0.85rem;
   overflow: hidden;
   transition: width 0.2s ease, padding 0.2s ease, border 0.2s ease;
   white-space: nowrap;
@@ -225,7 +225,7 @@ button:active {
 .sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 0.2rem;
+  gap: 0.3rem;
   flex: 1;
 }
 
@@ -236,10 +236,11 @@ button:active {
   text-transform: none;
   letter-spacing: normal;
   font-weight: 500;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   text-align: left;
-  padding: 0.55rem 0.6rem;
+  padding: 0.65rem 0.75rem;
   border-radius: 8px;
+  transition: background 150ms ease, color 150ms ease;
 }
 
 .nav-item:hover:not(:disabled) {
@@ -360,7 +361,7 @@ button:active {
 }
 
 main {
-  padding: 1rem 1.25rem 2.5rem;
+  padding: 1.25rem 2rem 3rem;
 }
 
 .page {
@@ -368,7 +369,9 @@ main {
 }
 
 .page.is-active {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
   animation: pagina-entrada 320ms ease;
 }
 
@@ -394,34 +397,40 @@ main {
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+  gap: 1.1rem;
 }
 
 .stat-card {
   background: #fff;
   border: 1px solid var(--coyote-crema);
-  border-radius: 10px;
-  padding: 1.1rem 1.2rem;
+  border-radius: 12px;
+  padding: 1.25rem 1.35rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.6rem;
+  box-shadow: 0 1px 2px rgba(28, 28, 28, 0.04);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.stat-card:hover {
+  box-shadow: 0 8px 20px rgba(28, 28, 28, 0.08);
+  transform: translateY(-2px);
 }
 
 .stat-card-top {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: #6b5b52;
 }
 
 .stat-icon {
-  font-size: 1rem;
+  font-size: 1.05rem;
 }
 
 .stat-card strong {
-  font-size: 1.8rem;
+  font-size: 1.95rem;
   color: var(--coyote-azul);
 }
 
@@ -440,18 +449,25 @@ main {
 .panel-grid-2 {
   display: grid;
   grid-template-columns: 1.2fr 1fr;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .panel {
   background: #fff;
   border: 1px solid var(--coyote-crema);
-  border-radius: 10px;
-  padding: 1.2rem;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(28, 28, 28, 0.04);
+  transition: box-shadow 180ms ease, transform 180ms ease;
+}
+
+.panel:hover {
+  box-shadow: 0 8px 24px rgba(28, 28, 28, 0.07);
+  transform: translateY(-2px);
 }
 
 .panel h2 {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   color: var(--coyote-azul);
@@ -471,7 +487,7 @@ main {
 }
 
 .panel-total {
-  font-size: 0.78rem;
+  font-size: 0.86rem;
   font-weight: 700;
   color: var(--coyote-rojo);
   white-space: nowrap;
@@ -543,22 +559,31 @@ main {
 .tabla-mini {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.82rem;
-  margin-bottom: 0.75rem;
+  font-size: 0.88rem;
+  margin-bottom: 0.85rem;
 }
 
 .tabla-mini th {
   text-align: left;
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
+  letter-spacing: 0.02em;
   color: #6b5b52;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.6rem;
   border-bottom: 1px solid #f0ece4;
 }
 
 .tabla-mini td {
-  padding: 0.5rem 0;
+  padding: 0.65rem 0;
   border-bottom: 1px solid #f5f1e9;
+}
+
+.tabla-mini tbody tr {
+  transition: background 120ms ease;
+}
+
+.tabla-mini tbody tr:hover {
+  background: #faf7f1;
 }
 
 .tabla-crecimiento {
@@ -601,8 +626,8 @@ main {
 }
 
 .donut-chart-svg {
-  width: 128px;
-  height: 128px;
+  width: 148px;
+  height: 148px;
   flex-shrink: 0;
 }
 
@@ -622,14 +647,14 @@ main {
 
 .donut-centro-valor {
   font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: 1.5rem;
+  font-size: 1.85rem;
   font-weight: 700;
   fill: var(--coyote-azul);
 }
 
 .donut-centro-etiqueta {
   font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: 0.5rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   fill: #6b5b52;
@@ -649,9 +674,9 @@ main {
 .donut-legend-fila {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.4rem;
-  border-radius: 6px;
+  gap: 0.55rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 7px;
   cursor: pointer;
   transition: background 150ms ease;
 }
@@ -662,8 +687,8 @@ main {
 }
 
 .donut-legend-dot {
-  width: 0.65rem;
-  height: 0.65rem;
+  width: 0.75rem;
+  height: 0.75rem;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -671,7 +696,7 @@ main {
 .donut-legend-etiqueta {
   flex: 1;
   min-width: 0;
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   color: var(--coyote-texto);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -679,15 +704,15 @@ main {
 }
 
 .donut-legend-valor {
-  font-size: 0.8rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--coyote-texto);
 }
 
 .donut-legend-pct {
-  width: 2.4rem;
+  width: 3rem;
   flex-shrink: 0;
-  font-size: 0.72rem;
+  font-size: 0.85rem;
   color: #6b5b52;
   text-align: right;
 }
@@ -703,7 +728,7 @@ main {
 
 .columna-valor {
   font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   font-weight: 700;
   fill: var(--coyote-azul);
 }
@@ -738,7 +763,7 @@ main {
 
 .linea-etiqueta {
   font-family: "Lora", Georgia, "Times New Roman", serif;
-  font-size: 0.62rem;
+  font-size: 0.8rem;
   fill: #6b5b52;
 }
 
@@ -790,12 +815,12 @@ main {
 }
 
 .linea-tooltip-mes {
-  font-size: 0.62rem;
+  font-size: 0.78rem;
   text-transform: capitalize;
 }
 
 .linea-tooltip-valor {
-  font-size: 0.72rem;
+  font-size: 0.9rem;
   font-weight: 700;
 }
 

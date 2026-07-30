@@ -431,21 +431,21 @@ function renderLineChart(contenedor, datos) {
 
   const tooltip = document.createElementNS(svgNS, "g");
   tooltip.setAttribute("class", "linea-tooltip");
-  const tooltipAncho = 96;
-  const tooltipAlto = 34;
+  const tooltipAncho = 116;
+  const tooltipAlto = 42;
   const tooltipFondo = document.createElementNS(svgNS, "rect");
   tooltipFondo.setAttribute("width", tooltipAncho);
   tooltipFondo.setAttribute("height", tooltipAlto);
-  tooltipFondo.setAttribute("rx", 6);
+  tooltipFondo.setAttribute("rx", 7);
   tooltipFondo.setAttribute("class", "linea-tooltip-fondo");
   const tooltipMes = document.createElementNS(svgNS, "text");
   tooltipMes.setAttribute("x", tooltipAncho / 2);
-  tooltipMes.setAttribute("y", 14);
+  tooltipMes.setAttribute("y", 17);
   tooltipMes.setAttribute("text-anchor", "middle");
   tooltipMes.setAttribute("class", "linea-tooltip-mes");
   const tooltipValor = document.createElementNS(svgNS, "text");
   tooltipValor.setAttribute("x", tooltipAncho / 2);
-  tooltipValor.setAttribute("y", 27);
+  tooltipValor.setAttribute("y", 33);
   tooltipValor.setAttribute("text-anchor", "middle");
   tooltipValor.setAttribute("class", "linea-tooltip-valor");
   tooltip.append(tooltipFondo, tooltipMes, tooltipValor);
