@@ -47,6 +47,31 @@
   flex: 1;
 }
 
+.sidebar-footer {
+  padding-top: 1rem;
+  border-top: 1px solid var(--coyote-crema);
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: #8a8a8a;
+}
+
+.sidebar-footer p {
+  margin: 0 0 0.25rem;
+}
+
+.sidebar-usuario {
+  color: var(--coyote-texto);
+}
+
+.sidebar-footer a {
+  color: var(--coyote-azul);
+  text-decoration: none;
+}
+
+.sidebar-footer a:hover {
+  text-decoration: underline;
+}
+
 .nav-item {
   width: 100%;
   background: none;
@@ -231,6 +256,10 @@ main {
     flex-direction: row;
     align-items: center;
     overflow-x: auto;
+  }
+
+  .sidebar-footer {
+    display: none;
   }
 
   .sidebar-nav {

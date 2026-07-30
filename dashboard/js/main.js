@@ -13,7 +13,8 @@ async function verificarSesion() {
     window.location.href = "login.html";
     return;
   }
-  await res.json();
+  const { username } = await res.json();
+  document.getElementById("sidebar-usuario").textContent = username;
 }
 
 function mostrarFechaHoy() {
