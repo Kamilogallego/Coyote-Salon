@@ -1,19 +1,23 @@
-require("dotenv").config();
 const { Pool } = require("pg");
+const env = require("./config/env");
 
 // En Render/Neon se usa DATABASE_URL (requiere SSL). En local (Docker) se usan
 // las variables sueltas DB_HOST/DB_PORT/etc, sin SSL.
-const pool = process.env.DATABASE_URL
+if (!env.databaseUrl) {
+  env.requerir("DB_HOST", "DB_PORT", "DB_USER", "DB_PASSWORD", "DB_NAME");
+}
+
+const pool = env.databaseUrl
   ? new Pool({
-      connectionString: process.env.DATABASE_URL,
+      connectionString: env.databaseUrl,
       ssl: { rejectUnauthorized: false },
     })
   : new Pool({
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT),
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_NAME,
+      host: env.dbHost,
+      port: env.dbPort,
+      user: env.dbUser,
+      password: env.dbPassword,
+      database: env.dbName,
     });
 
 module.exports = pool;

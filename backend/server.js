@@ -1,8 +1,10 @@
-require("dotenv").config();
 const path = require("path");
 const express = require("express");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
+
+const env = require("./config/env");
+env.requerir("SESSION_SECRET");
 
 const pool = require("./db");
 const authRoutes = require("./routes/auth");
@@ -10,7 +12,6 @@ const clientesRoutes = require("./routes/clientes");
 const estadisticasRoutes = require("./routes/estadisticas");
 
 const app = express();
-const isProduction = process.env.NODE_ENV === "production";
 
 // Necesario en Render (y cualquier PaaS detrás de proxy) para que las cookies
 // "secure" funcionen: Express debe confiar en el header X-Forwarded-Proto.
@@ -20,12 +21,12 @@ app.use(express.json());
 app.use(
   session({
     store: new pgSession({ pool, tableName: "session", createTableIfMissing: true }),
-    secret: process.env.SESSION_SECRET,
+    secret: env.sessionSecret,
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: isProduction,
+      secure: env.esProduccion,
       sameSite: "lax",
       maxAge: 1000 * 60 * 60 * 8, // 8 horas
     },
@@ -44,9 +45,18 @@ app.use("/coyote", express.static(path.join(__dirname, "..", "coyote")));
 // Dashboard (la protección real es a nivel de API; estos archivos son solo la UI)
 app.use("/dashboard", express.static(path.join(__dirname, "..", "dashboard")));
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+// Manejador de errores central: cualquier error que llegue hasta aquí (los
+// route handlers async usan asyncHandler para reenviar sus rechazos con
+// next(err)) se loguea del lado del servidor y responde con un 500 limpio,
+// en vez de dejar el request colgado o tumbar el proceso.
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (res.headersSent) return next(err);
+  res.status(500).json({ errores: ["Ocurrió un error inesperado. Intenta de nuevo."] });
+});
+
+app.listen(env.puerto, () => {
+  console.log(`Servidor corriendo en http://localhost:${env.puerto}`);
 });
 
 // Purga automática de la papelera (clientes eliminados hace más de 30 días)

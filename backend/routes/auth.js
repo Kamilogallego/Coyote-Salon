@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const rateLimit = require("express-rate-limit");
 const authRepository = require("../repositories/authRepository");
+const asyncHandler = require("../middleware/asyncHandler");
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ const limiteLogin = rateLimit({
   message: { error: "Demasiados intentos. Espera unos minutos e intenta de nuevo." },
 });
 
-router.post("/login", limiteLogin, async (req, res) => {
+router.post("/login", limiteLogin, asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -34,7 +35,7 @@ router.post("/login", limiteLogin, async (req, res) => {
   req.session.userId = user.id;
   req.session.username = user.username;
   res.json({ username: user.username });
-});
+}));
 
 router.post("/logout", (req, res) => {
   req.session.destroy(() => {

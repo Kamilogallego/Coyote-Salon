@@ -19,4 +19,4 @@ function seEnvioMuyRapido(body) {
   return Date.now() - iniciadoEn < TIEMPO_MINIMO_MS;
 }
 
-module.exports = { tieneCampoTrampaLleno, seEnvioMuyRapido };
+module.exports = { tieneCampoTrampaLleno, seEnvioMuyRapido, TIEMPO_MINIMO_MS };
