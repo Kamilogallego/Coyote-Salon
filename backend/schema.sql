@@ -19,8 +19,38 @@ CREATE TABLE IF NOT EXISTS clientes (
     puntos INTEGER NOT NULL DEFAULT 0,
     fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
     eliminado_en TIMESTAMP,
-    UNIQUE (tipo_documento, cedula)
+    -- El número de documento es único por sí solo (antes solo se exigía
+    -- único junto con tipo_documento, lo que dejaba reusar el mismo número
+    -- con un tipo distinto). Correo y teléfono también son únicos: no dos
+    -- clientes distintos pueden compartir el mismo dato de contacto.
+    UNIQUE (cedula),
+    UNIQUE (correo),
+    UNIQUE (telefono)
 );
+
+-- Migra bases de datos que ya existían con la restricción compuesta
+-- anterior (tipo_documento, cedula): la reemplaza por las restricciones
+-- individuales de arriba. Seguro de correr varias veces.
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT 1 FROM pg_constraint WHERE conname = 'clientes_tipo_documento_cedula_key'
+    ) THEN
+        ALTER TABLE clientes DROP CONSTRAINT clientes_tipo_documento_cedula_key;
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'clientes_cedula_key') THEN
+        ALTER TABLE clientes ADD CONSTRAINT clientes_cedula_key UNIQUE (cedula);
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'clientes_correo_key') THEN
+        ALTER TABLE clientes ADD CONSTRAINT clientes_correo_key UNIQUE (correo);
+    END IF;
+
+    IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'clientes_telefono_key') THEN
+        ALTER TABLE clientes ADD CONSTRAINT clientes_telefono_key UNIQUE (telefono);
+    END IF;
+END $$;
 
 CREATE INDEX IF NOT EXISTS idx_clientes_genero ON clientes (genero);
 CREATE INDEX IF NOT EXISTS idx_clientes_pais ON clientes (pais);

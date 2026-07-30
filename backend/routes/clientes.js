@@ -8,6 +8,15 @@ const asyncHandler = require("../middleware/asyncHandler");
 
 const router = express.Router();
 
+// Mensaje específico según qué restricción única de clientes (ver
+// schema.sql) violó el registro, en vez de un mensaje genérico que no le
+// dice al usuario cuál dato repitió.
+const MENSAJES_DUPLICADO = {
+  clientes_cedula_key: "Ya existe un registro con ese número de documento",
+  clientes_correo_key: "Ya existe un registro con ese correo electrónico",
+  clientes_telefono_key: "Ya existe un registro con ese número de teléfono",
+};
+
 // Las rutas :id reciben el parámetro como string desde la URL; se valida
 // aquí (en vez de dejar que Postgres rechace un valor no numérico) para
 // responder 400 en vez de un error de base de datos.
@@ -64,7 +73,8 @@ router.post(
       res.status(201).json({ id });
     } catch (err) {
       if (err.code === "23505") {
-        return res.status(409).json({ errores: ["Ya existe un registro con ese tipo y número de documento"] });
+        const mensaje = MENSAJES_DUPLICADO[err.constraint] || "Ya existe un registro con esos datos";
+        return res.status(409).json({ errores: [mensaje] });
       }
       throw err;
     }
