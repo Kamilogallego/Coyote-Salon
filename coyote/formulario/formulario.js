@@ -452,6 +452,16 @@ let intentarConfirmarPaisEscrito = () => false;
 
 const CLAVE_BORRADOR = "coyote-formulario-borrador";
 
+// Marca que el formulario ya se envió en esta pestaña/sesión. Ocultar el
+// formulario solo con JS (form.hidden) no sobrevive a un recargar de
+// página -el HTML vuelve a cargarse desde cero-, así que esta marca es lo
+// que evita que se pueda volver a llenar sin cerrar la pestaña.
+const CLAVE_ENVIADO = "coyote-formulario-enviado";
+
+function formularioYaEnviado() {
+  return sessionStorage.getItem(CLAVE_ENVIADO) === "1";
+}
+
 function leerBorrador() {
   try {
     const crudo = sessionStorage.getItem(CLAVE_BORRADOR);
@@ -533,6 +543,12 @@ document.addEventListener("DOMContentLoaded", () => {
   setupModalesLegales();
   setupIdioma();
 
+  if (formularioYaEnviado()) {
+    form.hidden = true;
+    document.getElementById("pantalla-gracias").hidden = false;
+    return;
+  }
+
   const borrador = leerBorrador();
   if (borrador) {
     restaurarBorrador(form, borrador);
@@ -589,9 +605,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       borrarBorrador();
-      // Limpia los campos antes de ocultar el formulario: si no, al recargar
-      // la página el navegador restaura los valores que había escritos
-      // (autocompletado de recarga, no tiene que ver con el borrador).
+      sessionStorage.setItem(CLAVE_ENVIADO, "1");
       form.reset();
       form.hidden = true;
       document.getElementById("pantalla-gracias").hidden = false;
