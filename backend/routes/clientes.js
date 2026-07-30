@@ -58,16 +58,22 @@ const limiteRegistro = rateLimit({
   message: { errores: ["Demasiados registros desde esta red. Intenta de nuevo en unos minutos."] },
 });
 
-// POST /api/clientes - registro público desde el formulario
+// POST /api/clientes - registro público desde el formulario (también lo usa
+// el botón "Agregar cliente" del dashboard, ya autenticado). Los chequeos
+// anti-bot solo aplican a quien NO tiene sesión de admin iniciada: un
+// admin logueado no es un bot y su formulario no manda campo trampa ni
+// marca de tiempo.
 router.post("/", limiteRegistro, async (req, res) => {
-  if (tieneCampoTrampaLleno(req.body)) {
+  const esAdmin = Boolean(req.session.userId);
+
+  if (!esAdmin && tieneCampoTrampaLleno(req.body)) {
     // Bot detectado por el campo trampa: se responde como si hubiera ido
     // bien (sin tocar la base de datos) para no delatar el filtro.
     console.warn("Registro bloqueado por campo trampa", { ip: req.ip });
     return res.status(201).json({ id: null });
   }
 
-  if (seEnvioMuyRapido(req.body)) {
+  if (!esAdmin && seEnvioMuyRapido(req.body)) {
     return res.status(400).json({
       errores: ["El formulario se envió demasiado rápido. Espera unos segundos e intenta de nuevo."],
     });
