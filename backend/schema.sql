@@ -19,18 +19,11 @@ CREATE TABLE IF NOT EXISTS clientes (
     puntos INTEGER NOT NULL DEFAULT 0,
     fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
     eliminado_en TIMESTAMP,
-    -- El número de documento es único por sí solo (antes solo se exigía
-    -- único junto con tipo_documento, lo que dejaba reusar el mismo número
-    -- con un tipo distinto). Correo y teléfono también son únicos: no dos
-    -- clientes distintos pueden compartir el mismo dato de contacto.
     UNIQUE (cedula),
     UNIQUE (correo),
     UNIQUE (telefono)
 );
 
--- Migra bases de datos que ya existían con la restricción compuesta
--- anterior (tipo_documento, cedula): la reemplaza por las restricciones
--- individuales de arriba. Seguro de correr varias veces.
 DO $$
 BEGIN
     IF EXISTS (

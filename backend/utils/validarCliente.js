@@ -1,6 +1,3 @@
-// Validación del registro público de clientes. Módulo puro (sin DB, sin
-// Express) para poder probarlo directo y para que routes/clientes.js no
-// mezcle validación con manejo de la petición HTTP.
 const CAMPOS_REQUERIDOS = [
   "nombre",
   "telefono",
@@ -18,9 +15,6 @@ const CAMPOS_REQUERIDOS = [
   "habeas_data",
 ];
 
-// Debe calzar con los VARCHAR de schema.sql: sin este chequeo, un valor más
-// largo que la columna llega hasta Postgres y responde con un 500 crudo en
-// vez de un error de validación claro.
 const LONGITUDES_MAXIMAS = {
   nombre: 150,
   telefono: 30,

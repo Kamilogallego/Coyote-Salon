@@ -1,6 +1,3 @@
-// Repository: unico lugar que sabe como se guardan/consultan los clientes en
-// Postgres. Las rutas (routes/clientes.js) no arman SQL directamente, le
-// piden datos a estas funciones.
 const pool = require("../db");
 
 const DIAS_RETENCION_PAPELERA = 30;

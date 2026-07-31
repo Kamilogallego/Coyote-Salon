@@ -1,6 +1,3 @@
-/* Tarjetas de estadísticas (Resumen) y el panel genérico que envuelve cada
-   bloque de contenido (gráfica, tabla mini, etc.) en cualquier pestaña. */
-
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

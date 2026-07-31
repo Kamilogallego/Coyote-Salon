@@ -1,7 +1,3 @@
-// Funciones puras de formato/escape y constantes de etiquetas, sin tocar el
-// DOM ni depender de ningún otro módulo. Todo lo demás en dashboard/js/
-// importa de aquí.
-
 export const COLORES = ["#05559c", "#e91f1b", "#5aa0d6", "#a89578", "#8a8a8a", "#c9782f"];
 
 export const ETIQUETAS_GENERO = {

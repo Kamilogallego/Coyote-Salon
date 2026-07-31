@@ -1,10 +1,3 @@
-// Aplica backend/schema.sql a la base de datos configurada en .env (local o
-// Neon vía DATABASE_URL). CREATE TABLE/INDEX usan IF NOT EXISTS y las
-// restricciones se agregan dentro de un bloque DO idempotente, así que
-// correr esto varias veces es seguro. Si ya existen datos duplicados en
-// cedula/correo/telefono, la migración falla con un error claro de
-// Postgres en vez de aplicarse a medias (todo corre dentro de una
-// transacción).
 const fs = require("fs");
 const path = require("path");
 const pool = require("./db");

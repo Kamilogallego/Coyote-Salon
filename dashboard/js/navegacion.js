@@ -1,6 +1,3 @@
-// Menú lateral: cambio de pestaña, colapsar/expandir, y los botones "Ver
-// clientes"/"Ver detalle" del Resumen que saltan a Clientes con un filtro
-// ya aplicado (data-goto).
 import { cargarPapelera } from "./papelera.js";
 import { cargarCompartir } from "./compartir.js";
 import { aplicarFiltroDesdeResumen } from "./clientes.js";

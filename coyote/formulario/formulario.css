@@ -487,9 +487,7 @@ body.modal-abierto {
 }
 
 dialog.modal-legal {
-  /* Posición fija y centrada explícita: no depender del centrado automático
-     del navegador (falla si el <dialog> no se abre por showModal, o en
-     algunos navegadores móviles con el teclado abierto). */
+
   position: fixed;
   top: 50%;
   left: 50%;
@@ -599,8 +597,6 @@ dialog.modal-legal h2 {
   }
 }
 
-/* Campo trampa anti-bot: fuera de pantalla, no display:none, para que los
-   bots que no revisan la posición real del elemento lo llenen igual. */
 .campo-trampa {
   position: absolute;
   left: -9999px;

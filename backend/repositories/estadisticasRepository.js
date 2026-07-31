@@ -1,9 +1,5 @@
-// Repository: agrupa todas las consultas agregadas que alimentan el
-// dashboard (Resumen, Crecimiento). La ruta solo pide el objeto ya armado.
 const pool = require("../db");
 
-// Calcula la próxima ocurrencia (este año o el siguiente) de una fecha guardada
-// sin año relevante (cumpleaños, aniversario), a partir de mes/día.
 function sqlProximaFecha(columnaFecha, condicionExtra = "") {
   return `
     WITH base AS (

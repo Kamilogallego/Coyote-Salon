@@ -1,6 +1,3 @@
-/* Todos los <dialog>: agregar/editar cliente, detalle, confirmación (con
-   contraseña) y "ver todos los clientes". */
-
 dialog#modal-cliente,
 dialog#modal-detalle,
 dialog#modal-confirmar {

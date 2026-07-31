@@ -1,5 +1,3 @@
-// Pestaña Resumen: tarjetas, gráficas y el navegador de "clientes
-// registrados este mes" (usado también desde la pestaña Crecimiento).
 import { renderDonut, renderColumnChart, renderLineChart, renderizarTablaFechas } from "./graficas.js";
 import { aplicarFiltroDesdeResumen, aplicarFiltroEdadDesdeResumen } from "./clientes.js";
 import {
@@ -12,8 +10,6 @@ import {
   formatearFechaISO,
 } from "./utils.js";
 
-// Lleva a la pestaña Clientes ya filtrada (reutiliza el click del propio
-// menú lateral, que es quien sabe cómo cambiar de pestaña).
 function irAClientesFiltrado(aplicarFiltro) {
   aplicarFiltro();
   document.querySelector('.nav-item[data-page="clientes"]').click();
@@ -113,8 +109,6 @@ export async function cargarEstadisticas() {
   renderizarTablaFechas("tabla-cumpleanos", stats.proximosCumpleanos);
   renderizarTablaFechas("tabla-aniversarios", stats.proximosAniversarios);
 }
-
-// ---- Navegador de meses (ver clientes registrados mes a mes) ----
 
 let mesActual = new Date();
 mesActual.setDate(1);

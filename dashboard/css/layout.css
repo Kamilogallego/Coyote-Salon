@@ -1,6 +1,3 @@
-/* Estructura general del dashboard: sidebar, encabezado, y la transición
-   entre pestañas. Solo lo usa dashboard.html (login.html no tiene sidebar). */
-
 .app {
   display: flex;
   min-height: 100vh;

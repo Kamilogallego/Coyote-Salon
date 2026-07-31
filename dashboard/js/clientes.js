@@ -1,5 +1,3 @@
-// Pestaña Clientes: tabla, filtros/búsqueda, alta de cliente, detalle,
-// selección múltiple y borrado (con contraseña de confirmación).
 import { confirmarAccion } from "./modales.js";
 import { cargarEstadisticas, cargarClientesDelMes } from "./resumen.js";
 import { cargarPapelera } from "./papelera.js";
@@ -13,8 +11,6 @@ import {
   calcularEdad,
 } from "./utils.js";
 
-// ---- Filtros colapsables ----
-
 const toggleFiltros = document.getElementById("toggle-filtros");
 const filtrosCuerpo = document.getElementById("filtros-cuerpo");
 const filtersPanel = document.getElementById("filters-panel");
@@ -25,8 +21,6 @@ toggleFiltros.addEventListener("click", () => {
   filtrosCuerpo.classList.toggle("is-collapsed", expandido);
   filtersPanel.classList.toggle("is-collapsed", expandido);
 });
-
-// ---- Tabla y CRUD de clientes ----
 
 const tabla = document.getElementById("tabla-clientes");
 const resumen = document.getElementById("resumen");
@@ -150,7 +144,7 @@ export async function setupFiltroPaisCiudad() {
   });
   filtroPais.addEventListener("focus", mostrarSugerenciasPais);
   filtroPais.addEventListener("blur", () => {
-    // Retraso: en tactil el blur puede llegar antes que el click de la sugerencia.
+
     setTimeout(() => {
       ocultarSugerenciasPais();
       if (!filtroPaisCodigo.value && filtroPais.value.trim()) {
@@ -318,8 +312,6 @@ export function aplicarFiltroDesdeResumen(campo, valor) {
   cargarClientes();
 }
 
-// El rango de edad no es un único campo con valor fijo (como pareja/genero):
-// llega como texto "18-24" o "65+" y hay que traducirlo a edad_min/edad_max.
 export function aplicarFiltroEdadDesdeResumen(rango) {
   CAMPOS_FILTRO.forEach((elemento) => (elemento.value = ""));
   buscadorClientes.value = "";
@@ -396,7 +388,7 @@ export async function cargarClientes() {
   renderizarTablaClientes();
 }
 
-let ordenEdad = null; // null | "asc" | "desc"
+let ordenEdad = null;
 
 function ordenarClientesParaTabla() {
   if (!ordenEdad) return clientesActuales;

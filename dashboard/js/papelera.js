@@ -1,5 +1,3 @@
-// Pestaña Papelera: clientes eliminados (soft-delete de 30 días),
-// restaurar/eliminar definitivo, individual o en selección múltiple.
 import { confirmarAccion } from "./modales.js";
 import { cargarClientes } from "./clientes.js";
 import { cargarEstadisticas, cargarClientesDelMes } from "./resumen.js";

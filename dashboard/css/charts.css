@@ -1,6 +1,3 @@
-/* Las tres gráficas hechas a mano en dashboard/js/graficas.js: donut,
-   barras verticales y línea con área. */
-
 .chart-slot {
   min-height: 140px;
   display: flex;

@@ -1,6 +1,3 @@
-// Hora de carga de la página, para el chequeo anti-bot del backend (un bot
-// suele enviar el formulario casi instantáneamente; una persona real tarda
-// al menos unos segundos en llenarlo).
 const INICIO_FORMULARIO = Date.now();
 
 const TRANSLATIONS = {
@@ -448,14 +445,8 @@ let actualizarCiudades = () => {};
 let actualizarIdiomaPaisCiudad = () => {};
 let intentarConfirmarPaisEscrito = () => false;
 
-// ---- Borrador del formulario (para no perder lo escrito al abrir la política de privacidad) ----
-
 const CLAVE_BORRADOR = "coyote-formulario-borrador";
 
-// Marca que el formulario ya se envió en esta pestaña/sesión. Ocultar el
-// formulario solo con JS (form.hidden) no sobrevive a un recargar de
-// página -el HTML vuelve a cargarse desde cero-, así que esta marca es lo
-// que evita que se pueda volver a llenar sin cerrar la pestaña.
 const CLAVE_ENVIADO = "coyote-formulario-enviado";
 
 function formularioYaEnviado() {
@@ -575,9 +566,6 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
     clearErrors(form);
 
-    // Red de seguridad: si el usuario escribió un país válido pero nunca llegó a
-    // tocar la sugerencia (típico en móvil, donde ese toque puede no registrarse),
-    // lo confirmamos aquí en vez de rechazar el envío con un mensaje confuso.
     intentarConfirmarPaisEscrito();
 
     const errors = validarFormulario(form);
@@ -674,7 +662,7 @@ function setupModalesLegales() {
   renderizarContenidoLegal();
 
   Object.values(modales).forEach((dialogo) => {
-    // Se dispara también al cerrar con la tecla Esc, no solo con el botón "Cerrar".
+
     dialogo.addEventListener("close", () => document.body.classList.remove("modal-abierto"));
   });
 
@@ -723,9 +711,7 @@ function setupTelefono() {
 }
 
 function setupAccordion() {
-  // Las secciones "Sobre ti" y "Preferencias de contacto" usan
-  // .accordion-toggle-fijo: siempre están abiertas y no se pueden ocultar,
-  // así que se excluyen de la lógica de expandir/colapsar.
+
   const toggles = document.querySelectorAll(".accordion-toggle:not(.accordion-toggle-fijo)");
 
   toggles.forEach((toggle) => {
@@ -776,9 +762,6 @@ function setupAniversarioCondicional() {
   });
 }
 
-// Lista fija de códigos ISO 3166-1 alpha-2. Se resuelve en el momento (sin red);
-// los nombres se traducen con Intl.DisplayNames, que ya trae el navegador.
-// Así el selector de país nunca depende de que una CDN externa responda a tiempo.
 const CODIGOS_PAISES_ISO = [
   "AD","AE","AF","AG","AI","AL","AM","AO","AQ","AR","AS","AT","AU","AW","AX","AZ",
   "BA","BB","BD","BE","BF","BG","BH","BI","BJ","BL","BM","BN","BO","BQ","BR","BS",
@@ -798,10 +781,6 @@ const CODIGOS_PAISES_ISO = [
   "VN","VU","WF","WS","YE","YT","ZA","ZM","ZW",
 ];
 
-// Ciudades principales de Colombia (la mayoría de quienes llenan este formulario),
-// embebidas directamente: nada de descargar una base de datos mundial de ciudades
-// (llegaba a pesar más de 2 MB comprimidos) solo para sugerir un puñado de nombres.
-// Para cualquier otro país, el campo de ciudad sigue funcionando como texto libre.
 const CIUDADES_COLOMBIA = [
   ["Leticia", "Amazonas"], ["Puerto Nariño", "Amazonas"],
   ["Medellín", "Antioquia"], ["Bello", "Antioquia"], ["Itagüí", "Antioquia"],
@@ -882,9 +861,6 @@ function setupPaisCiudad() {
     inputPais.classList.remove("invalid");
   }
 
-  // Si ya hay un código elegido, o el campo está vacío, no hay nada que hacer.
-  // Si no, busca una coincidencia exacta (sin distinguir mayúsculas/acentos) entre
-  // lo que el usuario escribió y algún país de la lista, y lo confirma solo.
   function normalizarTextoPais(texto) {
     return texto
       .normalize("NFD")
@@ -929,9 +905,6 @@ function setupPaisCiudad() {
     inputPais.setAttribute("aria-expanded", "true");
   }
 
-  // "click" (no "mousedown") porque es el evento que de forma más confiable llega
-  // después de un toque en móvil. El blur del input se retrasa un poco (ver abajo)
-  // para darle tiempo a este click de ejecutarse antes de que se borre la selección.
   listaPaisSugerencias.addEventListener("click", (event) => {
     const li = event.target.closest("li");
     if (!li) return;
@@ -947,9 +920,7 @@ function setupPaisCiudad() {
   });
   inputPais.addEventListener("focus", mostrarSugerenciasPais);
   inputPais.addEventListener("blur", () => {
-    // Retraso corto: en móvil, el toque sobre una sugerencia dispara el blur del
-    // input ANTES de que su propio "click" termine de procesarse. Si limpiáramos
-    // aquí de inmediato, se perdería la selección que el usuario acaba de hacer.
+
     setTimeout(() => {
       ocultarSugerenciasPais();
       if (!intentarConfirmarPaisEscrito()) {

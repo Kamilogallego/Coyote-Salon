@@ -8,18 +8,12 @@ const asyncHandler = require("../middleware/asyncHandler");
 
 const router = express.Router();
 
-// Mensaje específico según qué restricción única de clientes (ver
-// schema.sql) violó el registro, en vez de un mensaje genérico que no le
-// dice al usuario cuál dato repitió.
 const MENSAJES_DUPLICADO = {
   clientes_cedula_key: "Ya existe un registro con ese número de documento",
   clientes_correo_key: "Ya existe un registro con ese correo electrónico",
   clientes_telefono_key: "Ya existe un registro con ese número de teléfono",
 };
 
-// Las rutas :id reciben el parámetro como string desde la URL; se valida
-// aquí (en vez de dejar que Postgres rechace un valor no numérico) para
-// responder 400 en vez de un error de base de datos.
 function parsearId(req, res, next) {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
@@ -29,8 +23,6 @@ function parsearId(req, res, next) {
   next();
 }
 
-// Limite generoso para no bloquear a clientes reales que compartan red
-// (wifi del restaurante), pero suficiente para frenar un flood de spam.
 const limiteRegistro = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 20,
@@ -39,11 +31,6 @@ const limiteRegistro = rateLimit({
   message: { errores: ["Demasiados registros desde esta red. Intenta de nuevo en unos minutos."] },
 });
 
-// POST /api/clientes - registro público desde el formulario (también lo usa
-// el botón "Agregar cliente" del dashboard, ya autenticado). Los chequeos
-// anti-bot solo aplican a quien NO tiene sesión de admin iniciada: un
-// admin logueado no es un bot y su formulario no manda campo trampa ni
-// marca de tiempo.
 router.post(
   "/",
   limiteRegistro,
@@ -51,8 +38,7 @@ router.post(
     const esAdmin = Boolean(req.session.userId);
 
     if (!esAdmin && tieneCampoTrampaLleno(req.body)) {
-      // Bot detectado por el campo trampa: se responde como si hubiera ido
-      // bien (sin tocar la base de datos) para no delatar el filtro.
+
       console.warn("Registro bloqueado por campo trampa", { ip: req.ip });
       return res.status(201).json({ id: null });
     }
@@ -81,7 +67,6 @@ router.post(
   })
 );
 
-// GET /api/clientes - listado para el dashboard (requiere sesión)
 router.get(
   "/",
   requireAuth,
@@ -91,7 +76,6 @@ router.get(
   })
 );
 
-// GET /api/clientes/papelera - clientes eliminados, pendientes de purga (requiere sesión)
 router.get(
   "/papelera",
   requireAuth,
@@ -102,7 +86,6 @@ router.get(
   })
 );
 
-// POST /api/clientes/eliminar-multiple - mover varios a la papelera a la vez (requiere sesión)
 router.post(
   "/eliminar-multiple",
   requireAuth,
@@ -117,7 +100,6 @@ router.post(
   })
 );
 
-// POST /api/clientes/restaurar-multiple - sacar varios de la papelera a la vez (requiere sesión)
 router.post(
   "/restaurar-multiple",
   requireAuth,
@@ -132,7 +114,6 @@ router.post(
   })
 );
 
-// POST /api/clientes/eliminar-definitivo-multiple - borrar varios de la papelera para siempre (requiere sesión)
 router.post(
   "/eliminar-definitivo-multiple",
   requireAuth,
@@ -147,7 +128,6 @@ router.post(
   })
 );
 
-// DELETE /api/clientes/:id - mover a la papelera (requiere sesión)
 router.delete(
   "/:id",
   requireAuth,
@@ -161,7 +141,6 @@ router.delete(
   })
 );
 
-// POST /api/clientes/:id/restaurar - sacar de la papelera (requiere sesión)
 router.post(
   "/:id/restaurar",
   requireAuth,
@@ -175,7 +154,6 @@ router.post(
   })
 );
 
-// DELETE /api/clientes/:id/definitivo - eliminar permanentemente desde la papelera (requiere sesión)
 router.delete(
   "/:id/definitivo",
   requireAuth,

@@ -1,7 +1,3 @@
-// Modales genéricos que usan varias pestañas: el diálogo de
-// confirmación/contraseña (confirmarAccion) y el listado completo de
-// clientes ("Ver todos" en Resumen). No dependen de ningún otro módulo de
-// features (clientes.js, papelera.js, etc. importan de aquí, no al revés).
 import { escapeHtml, ETIQUETAS_MEDIO, formatearFecha } from "./utils.js";
 
 const modalConfirmar = document.getElementById("modal-confirmar");
@@ -21,9 +17,6 @@ btnTogglePassword.addEventListener("click", () => {
   btnTogglePassword.setAttribute("aria-label", mostrar ? "Ocultar contraseña" : "Mostrar contraseña");
 });
 
-// Contraseña de confirmación para acciones destructivas en Clientes (no es
-// un control de acceso real -ya se necesita sesión iniciada para llegar
-// aquí-, es solo una traba extra contra clics accidentales).
 const PASSWORD_CONFIRMACION = "coyote123";
 
 export function confirmarAccion(

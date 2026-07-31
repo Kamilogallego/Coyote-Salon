@@ -1,6 +1,3 @@
-/* Pestaña Clientes (buscador, filtros, tabla) y Papelera: todo lo que
-   solo existe para sostener esas dos listas. */
-
 .clientes-controles {
   display: flex;
   flex-direction: column;
@@ -267,8 +264,6 @@ tbody tr.fila-por-eliminar {
   outline-offset: -2px;
 }
 
-/* ---- Tabla de clientes: Selección, Nombre, Teléfono, Documento, País, Ciudad, Edad, Padre, Pareja, Medio contacto, Acciones ---- */
-
 .tabla-clientes-grid {
   table-layout: fixed;
 }
@@ -297,8 +292,6 @@ tbody tr.fila-por-eliminar {
 .tabla-clientes-grid th:nth-child(9) { width: 6%; }
 .tabla-clientes-grid th:nth-child(10) { width: 9%; }
 .tabla-clientes-grid th:nth-child(11) { width: 5%; }
-
-/* ---- Tabla de papelera: Selección, Nombre, Documento, Eliminado el, Días restantes, Acciones ---- */
 
 .tabla-papelera-grid {
   table-layout: fixed;

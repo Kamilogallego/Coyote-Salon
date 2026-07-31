@@ -1,8 +1,6 @@
 const { Pool } = require("pg");
 const env = require("./config/env");
 
-// En Render/Neon se usa DATABASE_URL (requiere SSL). En local (Docker) se usan
-// las variables sueltas DB_HOST/DB_PORT/etc, sin SSL.
 if (!env.databaseUrl) {
   env.requerir("DB_HOST", "DB_PORT", "DB_USER", "DB_PASSWORD", "DB_NAME");
 }

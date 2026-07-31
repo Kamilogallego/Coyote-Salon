@@ -1,12 +1,5 @@
-// Gráficas hechas a mano con SVG (sin librerías externas): donut
-// interactivo, barras verticales y línea con área. Todas reciben un
-// contenedor DOM y una lista de { etiqueta, valor }.
 import { escapeHtml, COLORES, interpolarColor, formatearDiasFaltantes } from "./utils.js";
 
-// Donut interactivo (anillo hecho con circles apilados vía
-// stroke-dasharray/dashoffset): al pasar el mouse por un segmento o su fila
-// en la leyenda, el centro muestra el valor de esa categoría y el resto de
-// segmentos se atenúa.
 export function renderDonut(contenedor, datos, { alClicSegmento } = {}) {
   const visibles = datos.filter((d) => d.valor > 0);
   const total = visibles.reduce((suma, d) => suma + d.valor, 0);
@@ -164,10 +157,6 @@ export function renderDonut(contenedor, datos, { alClicSegmento } = {}) {
   });
 }
 
-// Gráfica de barras verticales (para datos ordinales con pocas categorías,
-// ej. rango de edad): columnas de ancho fijo repartidas en bandas iguales,
-// con una rampa de color secuencial (claro → oscuro) en vez de colores
-// categóricos, ya que los rangos tienen un orden natural.
 export function renderColumnChart(contenedor, datos, { alClicBarra } = {}) {
   const visibles = datos.filter((d) => d.valor > 0);
   if (!visibles.length) {
@@ -280,10 +269,6 @@ export function renderColumnChart(contenedor, datos, { alClicBarra } = {}) {
   });
 }
 
-// Gráfica de línea con área (para series de tiempo, ej. crecimiento
-// mensual): usa un viewBox de ancho fijo para que funcione aunque el
-// contenedor esté oculto (display:none) al momento de dibujarla, ya que
-// clientWidth valdría 0 en ese caso.
 export function renderLineChart(contenedor, datos) {
   if (!datos.length) {
     contenedor.innerHTML = `<span class="chart-empty">Sin datos todavía</span>`;
@@ -368,9 +353,6 @@ export function renderLineChart(contenedor, datos) {
     svg.appendChild(etiqueta);
   });
 
-  // Guía vertical + punto agrandado + tooltip que siguen al mouse (el rect
-  // transparente al final es el que captura el mousemove sobre todo el
-  // ancho útil, para no depender de acertarle justo a un punto pequeño).
   const guia = document.createElementNS(svgNS, "line");
   guia.setAttribute("y1", padArriba);
   guia.setAttribute("y2", base);
@@ -449,8 +431,6 @@ export function renderLineChart(contenedor, datos) {
 
   contenedor.appendChild(svg);
 
-  // Anima el trazo "dibujándose" de izquierda a derecha con
-  // stroke-dasharray/dashoffset, y el área apareciendo con fundido.
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   const longitud = linea.getTotalLength();

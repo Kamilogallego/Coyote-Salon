@@ -1,6 +1,3 @@
-// Pestaña "Formulario": link público + código QR para compartir el
-// registro. Usa el global `qrcode` que carga el <script> clásico del CDN en
-// dashboard.html (no es un módulo ES, por eso no se importa aquí).
 let qrDataUrl = null;
 
 export function cargarCompartir() {

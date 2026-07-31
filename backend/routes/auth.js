@@ -6,7 +6,6 @@ const asyncHandler = require("../middleware/asyncHandler");
 
 const router = express.Router();
 
-// Protege contra fuerza bruta: 10 intentos de login por IP cada 15 minutos.
 const limiteLogin = rateLimit({
   windowMs: 15 * 60 * 1000,
   limit: 10,
