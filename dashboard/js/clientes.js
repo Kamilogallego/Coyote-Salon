@@ -13,7 +13,6 @@ import {
 
 const tabla = document.getElementById("tabla-clientes");
 const resumen = document.getElementById("resumen");
-const buscadorClientes = document.getElementById("buscador-clientes");
 const filtroNombre = document.getElementById("filtro-nombre");
 const filtroTelefono = document.getElementById("filtro-telefono");
 const filtroTipoDocumento = document.getElementById("filtro-tipo-documento");
@@ -296,14 +295,12 @@ export function aplicarFiltroDesdeResumen(campo, valor) {
   if (!campoFiltro) return;
 
   CAMPOS_FILTRO.forEach((elemento) => (elemento.value = ""));
-  buscadorClientes.value = "";
   campoFiltro.value = valor;
   cargarClientes();
 }
 
 export function aplicarFiltroEdadDesdeResumen(rango) {
   CAMPOS_FILTRO.forEach((elemento) => (elemento.value = ""));
-  buscadorClientes.value = "";
 
   if (rango.endsWith("+")) {
     filtroEdadMin.value = rango.slice(0, -1);
@@ -344,7 +341,6 @@ function actualizarAccionesMasivas() {
 
 export async function cargarClientes() {
   const params = new URLSearchParams();
-  if (buscadorClientes.value.trim()) params.set("busqueda", buscadorClientes.value.trim());
   if (filtroNombre.value.trim()) params.set("nombre", filtroNombre.value.trim());
   if (filtroTelefono.value.trim()) params.set("telefono", filtroTelefono.value.trim());
   if (filtroTipoDocumento.value) params.set("tipo_documento", filtroTipoDocumento.value);
@@ -704,16 +700,9 @@ filtroEdadMax.addEventListener("change", cargarClientes);
 
 document.getElementById("btn-limpiar-filtros").addEventListener("click", () => {
   CAMPOS_FILTRO.forEach((campo) => (campo.value = ""));
-  buscadorClientes.value = "";
   actualizarCiudadesFiltro("");
   actualizarVisibilidadAniversario();
   cargarClientes();
-});
-
-let temporizadorBusqueda = null;
-buscadorClientes.addEventListener("input", () => {
-  clearTimeout(temporizadorBusqueda);
-  temporizadorBusqueda = setTimeout(cargarClientes, 300);
 });
 
 document.getElementById("btn-exportar").addEventListener("click", exportarClientesExcel);
