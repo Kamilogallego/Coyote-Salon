@@ -1,5 +1,5 @@
 import { renderDonut, renderColumnChart, renderLineChart, renderizarTablaFechas } from "./graficas.js";
-import { aplicarFiltroDesdeResumen, aplicarFiltroEdadDesdeResumen } from "./clientes.js";
+import { aplicarFiltroDesdeResumen, aplicarFiltroEdadDesdeResumen, verDetalleCliente } from "./clientes.js";
 import {
   ETIQUETAS_MEDIO,
   ETIQUETAS_GENERO,
@@ -106,8 +106,8 @@ export async function cargarEstadisticas() {
     )
     .join("");
 
-  renderizarTablaFechas("tabla-cumpleanos", stats.proximosCumpleanos);
-  renderizarTablaFechas("tabla-aniversarios", stats.proximosAniversarios);
+  renderizarTablaFechas("tabla-cumpleanos", stats.proximosCumpleanos, { alClicVer: verDetalleCliente });
+  renderizarTablaFechas("tabla-aniversarios", stats.proximosAniversarios, { alClicVer: verDetalleCliente });
 }
 
 let mesActual = new Date();

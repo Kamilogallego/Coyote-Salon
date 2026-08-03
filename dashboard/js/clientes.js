@@ -504,7 +504,7 @@ function abrirModalNuevo() {
   modal.showModal();
 }
 
-function verDetalleCliente(id) {
+export function verDetalleCliente(id) {
   const c = clientesActuales.find((cliente) => cliente.id === id);
   if (!c) return;
 

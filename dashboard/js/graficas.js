@@ -445,10 +445,10 @@ export function renderLineChart(contenedor, datos) {
   });
 }
 
-export function renderizarTablaFechas(contenedorId, filas) {
+export function renderizarTablaFechas(contenedorId, filas, { alClicVer } = {}) {
   const tbody = document.getElementById(contenedorId);
   if (filas.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="3" class="chart-empty">Sin fechas registradas</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="4" class="chart-empty">Sin fechas registradas</td></tr>`;
     return;
   }
   tbody.innerHTML = filas
@@ -459,7 +459,15 @@ export function renderizarTablaFechas(contenedorId, filas) {
         <td>${escapeHtml(f.nombre)}</td>
         <td>${new Date(f.fecha).toLocaleDateString("es-CO", { day: "2-digit", month: "long" })}</td>
         <td class="${urgente ? "dias-restantes-urgente" : ""}">${formatearDiasFaltantes(f.dias_faltantes)}</td>
+        <td class="fila-acciones">
+          <button type="button" class="btn-ver" data-id="${f.id}" title="Ver detalle">👁</button>
+        </td>
       </tr>`;
     })
     .join("");
+
+  if (!alClicVer) return;
+  tbody.querySelectorAll(".btn-ver").forEach((boton) => {
+    boton.addEventListener("click", () => alClicVer(Number(boton.dataset.id)));
+  });
 }
