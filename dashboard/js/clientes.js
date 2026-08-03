@@ -11,17 +11,6 @@ import {
   calcularEdad,
 } from "./utils.js";
 
-const toggleFiltros = document.getElementById("toggle-filtros");
-const filtrosCuerpo = document.getElementById("filtros-cuerpo");
-const filtersPanel = document.getElementById("filters-panel");
-
-toggleFiltros.addEventListener("click", () => {
-  const expandido = toggleFiltros.getAttribute("aria-expanded") === "true";
-  toggleFiltros.setAttribute("aria-expanded", String(!expandido));
-  filtrosCuerpo.classList.toggle("is-collapsed", expandido);
-  filtersPanel.classList.toggle("is-collapsed", expandido);
-});
-
 const tabla = document.getElementById("tabla-clientes");
 const resumen = document.getElementById("resumen");
 const buscadorClientes = document.getElementById("buscador-clientes");
