@@ -58,9 +58,18 @@ if (carrusel) {
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 if (lightbox && lightboxImg) {
-  const abrirLightbox = (foto) => {
+  const fotos = Array.from(document.querySelectorAll(".carrusel-item"));
+  let indiceActual = 0;
+
+  const mostrarFoto = (indice) => {
+    indiceActual = (indice + fotos.length) % fotos.length;
+    const foto = fotos[indiceActual];
     lightboxImg.src = foto.dataset.full;
     lightboxImg.alt = foto.querySelector("img").alt;
+  };
+
+  const abrirLightbox = (foto) => {
+    mostrarFoto(fotos.indexOf(foto));
     lightbox.hidden = false;
     document.body.classList.add("lightbox-abierto");
   };
@@ -70,7 +79,7 @@ if (lightbox && lightboxImg) {
     document.body.classList.remove("lightbox-abierto");
   };
 
-  document.querySelectorAll(".carrusel-item").forEach((foto) => {
+  fotos.forEach((foto) => {
     foto.addEventListener("click", () => abrirLightbox(foto));
   });
 
@@ -78,8 +87,14 @@ if (lightbox && lightboxImg) {
     el.addEventListener("click", cerrarLightbox);
   });
 
+  document.querySelector(".lightbox-anterior")?.addEventListener("click", () => mostrarFoto(indiceActual - 1));
+  document.querySelector(".lightbox-siguiente")?.addEventListener("click", () => mostrarFoto(indiceActual + 1));
+
   document.addEventListener("keydown", (evento) => {
-    if (evento.key === "Escape" && !lightbox.hidden) cerrarLightbox();
+    if (lightbox.hidden) return;
+    if (evento.key === "Escape") cerrarLightbox();
+    if (evento.key === "ArrowLeft") mostrarFoto(indiceActual - 1);
+    if (evento.key === "ArrowRight") mostrarFoto(indiceActual + 1);
   });
 }
 

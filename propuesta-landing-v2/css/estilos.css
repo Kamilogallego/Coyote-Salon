@@ -692,6 +692,48 @@ body.lightbox-abierto {
   height: 1.2rem;
 }
 
+.lightbox-flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+}
+
+.lightbox-flecha svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.lightbox-flecha:hover {
+  background: #fff;
+}
+
+.lightbox-anterior {
+  left: 0.75rem;
+}
+
+.lightbox-siguiente {
+  right: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .lightbox-flecha {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
 .lightbox-ig {
   display: inline-flex;
   align-items: center;
