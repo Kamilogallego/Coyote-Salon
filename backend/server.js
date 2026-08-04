@@ -11,6 +11,7 @@ const pool = require("./db");
 const authRoutes = require("./routes/auth");
 const clientesRoutes = require("./routes/clientes");
 const estadisticasRoutes = require("./routes/estadisticas");
+const solicitudesRoutes = require("./routes/solicitudes");
 
 const app = express();
 
@@ -53,12 +54,15 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/clientes", clientesRoutes);
 app.use("/api/estadisticas", estadisticasRoutes);
+app.use("/api/solicitudes", solicitudesRoutes);
 
 app.get("/", (req, res) => res.redirect("/coyote/formulario/formulario.html"));
 
 app.use("/coyote", express.static(path.join(__dirname, "..", "coyote")));
 
 app.use("/dashboard", express.static(path.join(__dirname, "..", "dashboard")));
+
+app.use("/propuesta-landing-v2", express.static(path.join(__dirname, "..", "propuesta-landing-v2")));
 
 app.use((err, req, res, next) => {
   console.error(err);

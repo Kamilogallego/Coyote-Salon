@@ -57,3 +57,18 @@ CREATE TABLE IF NOT EXISTS admin_users (
     password_hash TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
+
+CREATE TABLE IF NOT EXISTS solicitudes (
+    id SERIAL PRIMARY KEY,
+    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('artista', 'empleo', 'proveedor')),
+    nombre VARCHAR(150) NOT NULL,
+    contacto VARCHAR(150),
+    telefono VARCHAR(30) NOT NULL,
+    correo VARCHAR(150),
+    categoria VARCHAR(50) NOT NULL,
+    portafolio VARCHAR(300),
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_solicitudes_tipo ON solicitudes (tipo);
+CREATE INDEX IF NOT EXISTS idx_solicitudes_fecha_registro ON solicitudes (fecha_registro);

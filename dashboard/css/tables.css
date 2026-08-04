@@ -1,7 +1,34 @@
-.clientes-controles {
+.clientes-controles,
+.solicitudes-controles {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+.toggle-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.toggle-btn {
+  width: auto;
+  background: #fff;
+  color: var(--coyote-texto);
+  border: 1px solid var(--coyote-crema);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  font-size: 0.8rem;
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.toggle-btn.is-active {
+  background: var(--coyote-azul);
+  color: #fff;
+  border-color: var(--coyote-azul);
 }
 
 .filters-panel {
@@ -325,6 +352,22 @@ tbody tr.fila-por-eliminar {
 .btn-restaurar {
   background: #2f8f4e;
 }
+
+.btn-eliminar-solicitud {
+  background: var(--coyote-rojo);
+}
+
+.tabla-solicitudes-grid {
+  table-layout: fixed;
+}
+
+.tabla-solicitudes-grid th:nth-child(1) { width: 16%; }
+.tabla-solicitudes-grid th:nth-child(2) { width: 12%; }
+.tabla-solicitudes-grid th:nth-child(3) { width: 18%; }
+.tabla-solicitudes-grid th:nth-child(4) { width: 14%; }
+.tabla-solicitudes-grid th:nth-child(5) { width: 20%; }
+.tabla-solicitudes-grid th:nth-child(6) { width: 12%; }
+.tabla-solicitudes-grid th:nth-child(7) { width: 8%; }
 
 .dias-restantes-urgente {
   color: var(--coyote-rojo);

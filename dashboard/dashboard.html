@@ -21,6 +21,7 @@
       <nav class="sidebar-nav">
         <button type="button" class="nav-item is-active" data-page="resumen">Resumen</button>
         <button type="button" class="nav-item" data-page="clientes">Clientes</button>
+        <button type="button" class="nav-item" data-page="solicitudes">Solicitudes</button>
         <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
         <button type="button" class="nav-item" data-page="compartir">Formulario</button>
         <button type="button" class="nav-item nav-item-con-badge" data-page="papelera">
@@ -325,6 +326,41 @@
                 </tr>
               </thead>
               <tbody id="tabla-clientes"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="page-solicitudes" class="page">
+          <div class="solicitudes-controles">
+            <div class="toggle-group" id="filtro-tipo-solicitud" role="group" aria-label="Filtrar por tipo de solicitud">
+              <button type="button" class="toggle-btn is-active" data-tipo="artista">¿Eres artista?</button>
+              <button type="button" class="toggle-btn" data-tipo="empleo">Trabaja con nosotros</button>
+              <button type="button" class="toggle-btn" data-tipo="proveedor">Sé nuestro proveedor</button>
+            </div>
+
+            <p class="summary" id="resumen-solicitudes"></p>
+
+            <div class="filters-actions">
+              <div class="filters-actions-derecha">
+                <button type="button" id="btn-exportar-solicitudes" class="btn-secundario">⬇ Exportar a Excel</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table class="tabla-solicitudes-grid">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Teléfono</th>
+                  <th>Correo</th>
+                  <th>Categoría</th>
+                  <th>Detalle</th>
+                  <th>Fecha</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="tabla-solicitudes"></tbody>
             </table>
           </div>
         </section>
