@@ -2,6 +2,7 @@ import "./navegacion.js";
 import { cargarClientes, setupFiltroPaisCiudad, setupModalPaisAutocomplete } from "./clientes.js";
 import { cargarEstadisticas, cargarClientesDelMes } from "./resumen.js";
 import { cargarPapelera } from "./papelera.js";
+import { cargarConteoSolicitudes } from "./solicitudes.js";
 import { confirmarAccion } from "./modales.js";
 
 async function verificarSesion() {
@@ -42,4 +43,5 @@ verificarSesion().then(() => {
   cargarEstadisticas();
   cargarClientesDelMes();
   cargarPapelera();
+  cargarConteoSolicitudes();
 });

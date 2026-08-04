@@ -1,7 +1,22 @@
 import { confirmarAccion } from "./modales.js";
 import { cargarClientes } from "./clientes.js";
 import { cargarEstadisticas, cargarClientesDelMes } from "./resumen.js";
+import { cargarPapeleraSolicitudes } from "./solicitudes.js";
 import { escapeHtml, ETIQUETAS_DOCUMENTO, formatearFecha } from "./utils.js";
+
+const toggleBtnsPapelera = document.querySelectorAll("#filtro-papelera-tipo .toggle-btn");
+const panelPapeleraClientes = document.getElementById("papelera-clientes-panel");
+const panelPapeleraSolicitudes = document.getElementById("papelera-solicitudes-panel");
+
+toggleBtnsPapelera.forEach((btn) => {
+  btn.addEventListener("click", () => {
+    toggleBtnsPapelera.forEach((b) => b.classList.toggle("is-active", b === btn));
+    const esSolicitudes = btn.dataset.papelera === "solicitudes";
+    panelPapeleraClientes.classList.toggle("is-oculto", esSolicitudes);
+    panelPapeleraSolicitudes.classList.toggle("is-oculto", !esSolicitudes);
+    if (esSolicitudes) cargarPapeleraSolicitudes();
+  });
+});
 
 const tablaPapelera = document.getElementById("tabla-papelera");
 const resumenPapelera = document.getElementById("resumen-papelera");

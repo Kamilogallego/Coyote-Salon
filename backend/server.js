@@ -75,6 +75,8 @@ app.listen(env.puerto, () => {
 });
 
 clientesRoutes.purgarPapeleraVencida().catch((err) => console.error("Error al purgar la papelera:", err));
+solicitudesRoutes.purgarPapeleraVencida().catch((err) => console.error("Error al purgar la papelera de solicitudes:", err));
 setInterval(() => {
   clientesRoutes.purgarPapeleraVencida().catch((err) => console.error("Error al purgar la papelera:", err));
+  solicitudesRoutes.purgarPapeleraVencida().catch((err) => console.error("Error al purgar la papelera de solicitudes:", err));
 }, 1000 * 60 * 60);

@@ -21,9 +21,12 @@
       <nav class="sidebar-nav">
         <button type="button" class="nav-item is-active" data-page="resumen">Resumen</button>
         <button type="button" class="nav-item" data-page="clientes">Clientes</button>
-        <button type="button" class="nav-item" data-page="solicitudes">Solicitudes</button>
         <button type="button" class="nav-item" data-page="crecimiento">Crecimiento</button>
         <button type="button" class="nav-item" data-page="compartir">Formulario</button>
+        <button type="button" class="nav-item nav-item-con-badge" data-page="solicitudes">
+          Solicitudes
+          <span class="nav-badge is-oculto" id="badge-solicitudes">0</span>
+        </button>
         <button type="button" class="nav-item nav-item-con-badge" data-page="papelera">
           Papelera
           <span class="nav-badge is-oculto" id="badge-papelera">0</span>
@@ -384,32 +387,63 @@
         </section>
 
         <section id="page-papelera" class="page">
-          <p class="summary">
-            Los clientes eliminados se guardan aquí durante <strong>30 días</strong>. Puedes restaurarlos o
-            eliminarlos definitivamente antes de que se borren solos.
-          </p>
-          <div class="summary" id="resumen-papelera"></div>
-
-          <div class="acciones-masivas is-oculto" id="acciones-masivas-papelera">
-            <span id="contador-seleccionados-papelera">0 seleccionados</span>
-            <button type="button" id="btn-restaurar-seleccionados" class="btn-secundario">↺ Restaurar seleccionados</button>
-            <button type="button" id="btn-eliminar-definitivo-seleccionados" class="btn-secundario btn-secundario-peligro">🗑 Eliminar definitivamente</button>
+          <div class="toggle-group" id="filtro-papelera-tipo" role="group" aria-label="Tipo de papelera">
+            <button type="button" class="toggle-btn is-active" data-papelera="clientes">Clientes</button>
+            <button type="button" class="toggle-btn" data-papelera="solicitudes">Solicitudes</button>
           </div>
 
-          <div class="table-wrap">
-            <table class="tabla-papelera-grid">
-              <thead>
-                <tr>
-                  <th class="th-checkbox"><input type="checkbox" id="checkbox-todos-papelera" aria-label="Seleccionar todos" /></th>
-                  <th>Nombre</th>
-                  <th>Documento</th>
-                  <th>Eliminado el</th>
-                  <th>Días restantes</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="tabla-papelera"></tbody>
-            </table>
+          <div id="papelera-clientes-panel">
+            <p class="summary">
+              Los clientes eliminados se guardan aquí durante <strong>30 días</strong>. Puedes restaurarlos o
+              eliminarlos definitivamente antes de que se borren solos.
+            </p>
+            <div class="summary" id="resumen-papelera"></div>
+
+            <div class="acciones-masivas is-oculto" id="acciones-masivas-papelera">
+              <span id="contador-seleccionados-papelera">0 seleccionados</span>
+              <button type="button" id="btn-restaurar-seleccionados" class="btn-secundario">↺ Restaurar seleccionados</button>
+              <button type="button" id="btn-eliminar-definitivo-seleccionados" class="btn-secundario btn-secundario-peligro">🗑 Eliminar definitivamente</button>
+            </div>
+
+            <div class="table-wrap">
+              <table class="tabla-papelera-grid">
+                <thead>
+                  <tr>
+                    <th class="th-checkbox"><input type="checkbox" id="checkbox-todos-papelera" aria-label="Seleccionar todos" /></th>
+                    <th>Nombre</th>
+                    <th>Documento</th>
+                    <th>Eliminado el</th>
+                    <th>Días restantes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-papelera"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div id="papelera-solicitudes-panel" class="is-oculto">
+            <p class="summary">
+              Las solicitudes eliminadas se guardan aquí durante <strong>30 días</strong>. Puedes restaurarlas o
+              eliminarlas definitivamente antes de que se borren solas.
+            </p>
+            <div class="summary" id="resumen-papelera-solicitudes"></div>
+
+            <div class="table-wrap">
+              <table class="tabla-papelera-solicitudes-grid">
+                <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>Nombre</th>
+                    <th>Detalle</th>
+                    <th>Eliminado el</th>
+                    <th>Días restantes</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-papelera-solicitudes"></tbody>
+              </table>
+            </div>
           </div>
         </section>
       </main>

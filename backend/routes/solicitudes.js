@@ -14,6 +14,8 @@ const { validar: validarProveedor } = require("../utils/validarProveedor");
 
 const router = express.Router();
 
+const DIAS_RETENCION_PAPELERA = solicitudesArtistasRepository.DIAS_RETENCION_PAPELERA;
+
 function parsearId(req, res, next) {
   const id = Number(req.params.id);
   if (!Number.isInteger(id)) {
@@ -69,6 +71,26 @@ function eliminarSolicitud(repositorio, mensajeNoEncontrado) {
     if (!encontrado) {
       return res.status(404).json({ errores: [mensajeNoEncontrado] });
     }
+    res.json({ ok: true, dias_retencion: DIAS_RETENCION_PAPELERA });
+  });
+}
+
+function restaurarSolicitud(repositorio, mensajeNoEncontrado) {
+  return asyncHandler(async (req, res) => {
+    const encontrado = await repositorio.restaurar(req.params.id);
+    if (!encontrado) {
+      return res.status(404).json({ errores: [mensajeNoEncontrado] });
+    }
+    res.json({ ok: true });
+  });
+}
+
+function eliminarSolicitudDefinitivo(repositorio, mensajeNoEncontrado) {
+  return asyncHandler(async (req, res) => {
+    const encontrado = await repositorio.eliminarDefinitivo(req.params.id);
+    if (!encontrado) {
+      return res.status(404).json({ errores: [mensajeNoEncontrado] });
+    }
     res.json({ ok: true });
   });
 }
@@ -82,6 +104,18 @@ router.delete(
   parsearId,
   eliminarSolicitud(solicitudesArtistasRepository, "Solicitud de artista no encontrada")
 );
+router.post(
+  "/artistas/:id/restaurar",
+  requireAuth,
+  parsearId,
+  restaurarSolicitud(solicitudesArtistasRepository, "Solicitud de artista no encontrada en la papelera")
+);
+router.delete(
+  "/artistas/:id/definitivo",
+  requireAuth,
+  parsearId,
+  eliminarSolicitudDefinitivo(solicitudesArtistasRepository, "Solicitud de artista no encontrada en la papelera")
+);
 
 // --- Empleo ---
 router.post("/empleo", limiteRegistro, registrarSolicitud(solicitudesEmpleoRepository, validarEmpleo));
@@ -91,6 +125,18 @@ router.delete(
   requireAuth,
   parsearId,
   eliminarSolicitud(solicitudesEmpleoRepository, "Solicitud de empleo no encontrada")
+);
+router.post(
+  "/empleo/:id/restaurar",
+  requireAuth,
+  parsearId,
+  restaurarSolicitud(solicitudesEmpleoRepository, "Solicitud de empleo no encontrada en la papelera")
+);
+router.delete(
+  "/empleo/:id/definitivo",
+  requireAuth,
+  parsearId,
+  eliminarSolicitudDefinitivo(solicitudesEmpleoRepository, "Solicitud de empleo no encontrada en la papelera")
 );
 
 // --- Proveedores ---
@@ -102,5 +148,53 @@ router.delete(
   parsearId,
   eliminarSolicitud(solicitudesProveedoresRepository, "Solicitud de proveedor no encontrada")
 );
+router.post(
+  "/proveedores/:id/restaurar",
+  requireAuth,
+  parsearId,
+  restaurarSolicitud(solicitudesProveedoresRepository, "Solicitud de proveedor no encontrada en la papelera")
+);
+router.delete(
+  "/proveedores/:id/definitivo",
+  requireAuth,
+  parsearId,
+  eliminarSolicitudDefinitivo(solicitudesProveedoresRepository, "Solicitud de proveedor no encontrada en la papelera")
+);
+
+// --- Papelera combinada ---
+router.get(
+  "/papelera",
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    await Promise.all([
+      solicitudesArtistasRepository.purgarVencidos(),
+      solicitudesEmpleoRepository.purgarVencidos(),
+      solicitudesProveedoresRepository.purgarVencidos(),
+    ]);
+
+    const [artistas, empleo, proveedores] = await Promise.all([
+      solicitudesArtistasRepository.obtenerPapelera(),
+      solicitudesEmpleoRepository.obtenerPapelera(),
+      solicitudesProveedoresRepository.obtenerPapelera(),
+    ]);
+
+    const solicitudes = [
+      ...artistas.map((s) => ({ tipo: "artistas", id: s.id, nombre: s.nombre, detalle: s.tipo_servicio, eliminado_en: s.eliminado_en })),
+      ...empleo.map((s) => ({ tipo: "empleo", id: s.id, nombre: s.nombre, detalle: s.cargo, eliminado_en: s.eliminado_en })),
+      ...proveedores.map((s) => ({ tipo: "proveedores", id: s.id, nombre: s.nombre_empresa, detalle: s.que_suministra, eliminado_en: s.eliminado_en })),
+    ].sort((a, b) => new Date(b.eliminado_en) - new Date(a.eliminado_en));
+
+    res.json({ dias_retencion: DIAS_RETENCION_PAPELERA, solicitudes });
+  })
+);
+
+async function purgarPapeleraVencida() {
+  await Promise.all([
+    solicitudesArtistasRepository.purgarVencidos(),
+    solicitudesEmpleoRepository.purgarVencidos(),
+    solicitudesProveedoresRepository.purgarVencidos(),
+  ]);
+}
 
 module.exports = router;
+module.exports.purgarPapeleraVencida = purgarPapeleraVencida;

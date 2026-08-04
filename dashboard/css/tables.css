@@ -287,6 +287,22 @@ tbody tr.fila-por-eliminar {
 .tabla-papelera-grid th:nth-child(5) { width: 13%; }
 .tabla-papelera-grid th:nth-child(6) { width: 23%; }
 
+.tabla-papelera-solicitudes-grid {
+  table-layout: fixed;
+}
+
+.tabla-papelera-solicitudes-grid td:nth-child(4),
+.tabla-papelera-solicitudes-grid td:nth-child(5) {
+  white-space: nowrap;
+}
+
+.tabla-papelera-solicitudes-grid th:nth-child(1) { width: 12%; }
+.tabla-papelera-solicitudes-grid th:nth-child(2) { width: 22%; }
+.tabla-papelera-solicitudes-grid th:nth-child(3) { width: 24%; }
+.tabla-papelera-solicitudes-grid th:nth-child(4) { width: 16%; }
+.tabla-papelera-solicitudes-grid th:nth-child(5) { width: 13%; }
+.tabla-papelera-solicitudes-grid th:nth-child(6) { width: 13%; }
+
 .summary {
   font-size: 0.85rem;
   color: #6b5b52;
