@@ -1,37 +1,21 @@
-const TIPOS_VALIDOS = ["artista", "empleo", "proveedor"];
-
-const CAMPOS_REQUERIDOS = ["nombre", "telefono", "categoria"];
+const CAMPOS_REQUERIDOS = ["nombre_empresa", "contacto", "telefono", "que_suministra"];
 
 const LONGITUDES_MAXIMAS = {
-  nombre: 150,
+  nombre_empresa: 150,
   contacto: 150,
   telefono: 30,
   correo: 150,
-  categoria: 50,
-  portafolio: 300,
+  que_suministra: 50,
 };
 
 function validar(body) {
   const errores = [];
-
-  if (!TIPOS_VALIDOS.includes(body.tipo)) {
-    errores.push('El campo "tipo" debe ser "artista", "empleo" o "proveedor"');
-    return errores;
-  }
 
   for (const campo of CAMPOS_REQUERIDOS) {
     const valor = body[campo];
     if (valor === undefined || valor === null || valor === "") {
       errores.push(`El campo "${campo}" es obligatorio`);
     }
-  }
-
-  if (body.tipo === "artista" && !body.portafolio) {
-    errores.push('El campo "portafolio" es obligatorio');
-  }
-
-  if (body.tipo === "proveedor" && !body.contacto) {
-    errores.push('El campo "contacto" es obligatorio');
   }
 
   for (const [campo, maximo] of Object.entries(LONGITUDES_MAXIMAS)) {
@@ -48,4 +32,4 @@ function validar(body) {
   return errores;
 }
 
-module.exports = { validar, TIPOS_VALIDOS };
+module.exports = { validar, CAMPOS_REQUERIDOS };

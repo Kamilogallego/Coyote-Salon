@@ -58,17 +58,39 @@ CREATE TABLE IF NOT EXISTS admin_users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS solicitudes (
+DROP TABLE IF EXISTS solicitudes;
+
+CREATE TABLE IF NOT EXISTS solicitudes_artistas (
     id SERIAL PRIMARY KEY,
-    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('artista', 'empleo', 'proveedor')),
     nombre VARCHAR(150) NOT NULL,
-    contacto VARCHAR(150),
     telefono VARCHAR(30) NOT NULL,
     correo VARCHAR(150),
-    categoria VARCHAR(50) NOT NULL,
-    portafolio VARCHAR(300),
+    tipo_servicio VARCHAR(50) NOT NULL,
+    portafolio VARCHAR(300) NOT NULL,
     fecha_registro TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE INDEX IF NOT EXISTS idx_solicitudes_tipo ON solicitudes (tipo);
-CREATE INDEX IF NOT EXISTS idx_solicitudes_fecha_registro ON solicitudes (fecha_registro);
+CREATE INDEX IF NOT EXISTS idx_solicitudes_artistas_fecha_registro ON solicitudes_artistas (fecha_registro);
+
+CREATE TABLE IF NOT EXISTS solicitudes_empleo (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    telefono VARCHAR(30) NOT NULL,
+    correo VARCHAR(150),
+    cargo VARCHAR(50) NOT NULL,
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_solicitudes_empleo_fecha_registro ON solicitudes_empleo (fecha_registro);
+
+CREATE TABLE IF NOT EXISTS solicitudes_proveedores (
+    id SERIAL PRIMARY KEY,
+    nombre_empresa VARCHAR(150) NOT NULL,
+    contacto VARCHAR(150) NOT NULL,
+    telefono VARCHAR(30) NOT NULL,
+    correo VARCHAR(150),
+    que_suministra VARCHAR(50) NOT NULL,
+    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_solicitudes_proveedores_fecha_registro ON solicitudes_proveedores (fecha_registro);

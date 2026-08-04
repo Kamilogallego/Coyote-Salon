@@ -333,9 +333,9 @@
         <section id="page-solicitudes" class="page">
           <div class="solicitudes-controles">
             <div class="toggle-group" id="filtro-tipo-solicitud" role="group" aria-label="Filtrar por tipo de solicitud">
-              <button type="button" class="toggle-btn is-active" data-tipo="artista">¿Eres artista?</button>
+              <button type="button" class="toggle-btn is-active" data-tipo="artistas">¿Eres artista?</button>
               <button type="button" class="toggle-btn" data-tipo="empleo">Trabaja con nosotros</button>
-              <button type="button" class="toggle-btn" data-tipo="proveedor">Sé nuestro proveedor</button>
+              <button type="button" class="toggle-btn" data-tipo="proveedores">Sé nuestro proveedor</button>
             </div>
 
             <p class="summary" id="resumen-solicitudes"></p>
@@ -351,11 +351,11 @@
             <table class="tabla-solicitudes-grid">
               <thead>
                 <tr>
-                  <th>Nombre</th>
+                  <th id="th-solicitudes-nombre">Nombre</th>
                   <th>Teléfono</th>
                   <th>Correo</th>
-                  <th>Categoría</th>
-                  <th>Detalle</th>
+                  <th id="th-solicitudes-categoria">Categoría</th>
+                  <th id="th-solicitudes-detalle">Detalle</th>
                   <th>Fecha</th>
                   <th></th>
                 </tr>

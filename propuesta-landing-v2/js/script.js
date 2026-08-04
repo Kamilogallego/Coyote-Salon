@@ -104,33 +104,33 @@ const INICIADO_EN = Date.now();
 
 const CAMPOS_POR_TIPO = {
   "panel-empleo": {
-    tipo: "empleo",
+    endpoint: "empleo",
     honeypot: "e-sitio-web",
     error: "e-error",
-    campos: { nombre: "e-nombre", telefono: "e-telefono", correo: "e-correo", categoria: "e-cargo" },
+    campos: { nombre: "e-nombre", telefono: "e-telefono", correo: "e-correo", cargo: "e-cargo" },
   },
   "panel-servicios": {
-    tipo: "artista",
+    endpoint: "artistas",
     honeypot: "s-sitio-web",
     error: "s-error",
     campos: {
       nombre: "s-nombre",
       telefono: "s-telefono",
       correo: "s-correo",
-      categoria: "s-tipo",
+      tipo_servicio: "s-tipo",
       portafolio: "s-portafolio",
     },
   },
   "panel-proveedores": {
-    tipo: "proveedor",
+    endpoint: "proveedores",
     honeypot: "p-sitio-web",
     error: "p-error",
     campos: {
-      nombre: "p-empresa",
+      nombre_empresa: "p-empresa",
       contacto: "p-contacto",
       telefono: "p-telefono",
       correo: "p-correo",
-      categoria: "p-que",
+      que_suministra: "p-que",
     },
   },
 };
@@ -153,14 +153,14 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
     evento.preventDefault();
     if (errorEl) errorEl.textContent = "";
 
-    const payload = { tipo: config.tipo, sitio_web: document.getElementById(config.honeypot)?.value || "", iniciado_en: INICIADO_EN };
+    const payload = { sitio_web: document.getElementById(config.honeypot)?.value || "", iniciado_en: INICIADO_EN };
     for (const [campo, id] of Object.entries(config.campos)) {
       payload[campo] = document.getElementById(id).value.trim();
     }
 
     botonEnviar.disabled = true;
     try {
-      const respuesta = await fetch("/api/solicitudes", {
+      const respuesta = await fetch(`/api/solicitudes/${config.endpoint}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
