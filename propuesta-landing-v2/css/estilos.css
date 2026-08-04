@@ -1011,9 +1011,21 @@ footer .enlaces {
 }
 
 footer .enlaces a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   text-decoration: none;
   color: var(--azul);
   font-weight: 600;
+}
+
+footer .enlaces a svg {
+  width: 1.05rem;
+  height: 1.05rem;
+}
+
+footer .enlaces a:hover {
+  color: var(--azul-deep);
 }
 
 /* ---- WhatsApp flotante ---- */
