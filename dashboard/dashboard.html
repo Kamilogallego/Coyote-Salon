@@ -336,9 +336,18 @@
         <section id="page-solicitudes" class="page">
           <div class="solicitudes-controles">
             <div class="toggle-group" id="filtro-tipo-solicitud" role="group" aria-label="Filtrar por tipo de solicitud">
-              <button type="button" class="toggle-btn is-active" data-tipo="artistas">¿Eres artista?</button>
-              <button type="button" class="toggle-btn" data-tipo="empleo">Trabaja con nosotros</button>
-              <button type="button" class="toggle-btn" data-tipo="proveedores">Sé nuestro proveedor</button>
+              <button type="button" class="toggle-btn is-active" data-tipo="artistas">
+                ¿Eres artista?
+                <span class="toggle-badge is-oculto" data-badge="artistas">0</span>
+              </button>
+              <button type="button" class="toggle-btn" data-tipo="empleo">
+                Trabaja con nosotros
+                <span class="toggle-badge is-oculto" data-badge="empleo">0</span>
+              </button>
+              <button type="button" class="toggle-btn" data-tipo="proveedores">
+                Sé nuestro proveedor
+                <span class="toggle-badge is-oculto" data-badge="proveedores">0</span>
+              </button>
             </div>
 
             <p class="summary" id="resumen-solicitudes"></p>

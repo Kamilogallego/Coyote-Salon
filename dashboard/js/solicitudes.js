@@ -59,6 +59,28 @@ function actualizarBadgeSolicitudes(cantidad) {
   badge.classList.toggle("is-oculto", cantidad === 0);
 }
 
+function formatearRelativo(fecha) {
+  const minutos = Math.floor((Date.now() - new Date(fecha).getTime()) / 60000);
+  if (minutos < 1) return "hace un momento";
+  if (minutos < 60) return `hace ${minutos} min`;
+  const horas = Math.floor(minutos / 60);
+  if (horas < 24) return `hace ${horas} h`;
+  return `hace ${Math.floor(horas / 24)} día(s)`;
+}
+
+function actualizarBadgesPorTipo(conteosPorTipo, tipoMasReciente, fechaMasReciente) {
+  TIPOS.forEach((tipo) => {
+    const badge = document.querySelector(`.toggle-badge[data-badge="${tipo}"]`);
+    const cantidad = conteosPorTipo[tipo];
+    badge.textContent = cantidad > 99 ? "99+" : String(cantidad);
+    badge.classList.toggle("is-oculto", cantidad === 0);
+
+    const esReciente = tipo === tipoMasReciente;
+    badge.classList.toggle("es-reciente", esReciente);
+    badge.title = esReciente ? `Más reciente: ${formatearRelativo(fechaMasReciente)}` : "";
+  });
+}
+
 export async function cargarConteoSolicitudes() {
   const respuestas = await Promise.all(TIPOS.map((tipo) => fetch(`/api/solicitudes/${tipo}`, { credentials: "include" })));
   if (respuestas.some((res) => res.status === 401)) {
@@ -66,7 +88,24 @@ export async function cargarConteoSolicitudes() {
     return;
   }
   const listas = await Promise.all(respuestas.map((res) => res.json()));
+
+  const conteosPorTipo = {};
+  let tipoMasReciente = null;
+  let fechaMasReciente = null;
+
+  TIPOS.forEach((tipo, i) => {
+    const lista = listas[i];
+    conteosPorTipo[tipo] = lista.length;
+    for (const s of lista) {
+      if (!fechaMasReciente || new Date(s.fecha_registro) > new Date(fechaMasReciente)) {
+        fechaMasReciente = s.fecha_registro;
+        tipoMasReciente = tipo;
+      }
+    }
+  });
+
   actualizarBadgeSolicitudes(listas.reduce((total, lista) => total + lista.length, 0));
+  actualizarBadgesPorTipo(conteosPorTipo, tipoMasReciente, fechaMasReciente);
 }
 
 export async function cargarSolicitudes() {
