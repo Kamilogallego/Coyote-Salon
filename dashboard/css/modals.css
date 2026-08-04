@@ -167,31 +167,3 @@ dialog#modal-confirmar {
   min-height: 1.1em;
 }
 
-dialog#modal-lista-clientes {
-  border: 1px solid var(--coyote-crema);
-  border-radius: 12px;
-  padding: 1.5rem;
-  width: min(600px, 92vw);
-  max-height: 88vh;
-  overflow-y: auto;
-  background: #fff;
-  color: var(--coyote-texto);
-  font-family: "Lora", Georgia, "Times New Roman", serif;
-  box-shadow: 0 20px 45px rgba(28, 28, 28, 0.22);
-}
-
-dialog#modal-lista-clientes h2 {
-  font-size: 1.05rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--coyote-azul);
-  margin: 0 0 1rem;
-  padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--coyote-crema);
-}
-
-dialog#modal-lista-clientes .table-wrap {
-  max-height: 60vh;
-  overflow-y: auto;
-}

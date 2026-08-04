@@ -33,7 +33,6 @@ async function obtener() {
     medioContacto,
     rangoEdad,
     crecimientoMensual,
-    ultimosClientes,
     proximosCumpleanos,
     proximosAniversarios,
     sinNovedadesTotal,
@@ -75,13 +74,6 @@ async function obtener() {
        GROUP BY mes
        ORDER BY mes`
     ),
-    pool.query(
-      `SELECT id, nombre, medio_contacto, fecha_registro
-       FROM clientes
-       WHERE eliminado_en IS NULL
-       ORDER BY fecha_registro DESC
-       LIMIT 5`
-    ),
     pool.query(sqlProximaFecha("fecha_nacimiento")),
     pool.query(sqlProximaFecha("fecha_aniversario", "AND tiene_pareja = true")),
     pool.query(
@@ -103,7 +95,6 @@ async function obtener() {
     medioContacto: medioContacto.rows,
     rangoEdad: rangoEdad.rows,
     crecimientoMensual: crecimientoMensual.rows,
-    ultimosClientes: ultimosClientes.rows,
     proximosCumpleanos: proximosCumpleanos.rows,
     proximosAniversarios: proximosAniversarios.rows,
     sinNovedadesTotal: sinNovedadesTotal.rows[0].total,

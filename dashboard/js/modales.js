@@ -1,5 +1,3 @@
-import { escapeHtml, ETIQUETAS_MEDIO, formatearFecha } from "./utils.js";
-
 const modalConfirmar = document.getElementById("modal-confirmar");
 const confirmarTitulo = document.getElementById("confirmar-titulo");
 const confirmarMensaje = document.getElementById("confirmar-mensaje");
@@ -66,31 +64,3 @@ export function confirmarAccion(
     modalConfirmar.addEventListener("cancel", onCancelar);
   });
 }
-
-const modalListaClientes = document.getElementById("modal-lista-clientes");
-const listaClientesCuerpo = document.getElementById("lista-clientes-cuerpo");
-
-export async function abrirListaClientes() {
-  const res = await fetch("/api/clientes", { credentials: "include" });
-  if (res.status === 401) {
-    window.location.href = "login.html";
-    return;
-  }
-  const clientes = await res.json();
-  listaClientesCuerpo.innerHTML = clientes
-    .map(
-      (c) => `
-      <tr>
-        <td>${escapeHtml(c.nombre)}</td>
-        <td>${ETIQUETAS_MEDIO[c.medio_contacto] || escapeHtml(c.medio_contacto)}</td>
-        <td>${formatearFecha(c.fecha_registro)}</td>
-      </tr>`
-    )
-    .join("");
-  modalListaClientes.showModal();
-}
-
-document.getElementById("btn-ver-todos-clientes").addEventListener("click", abrirListaClientes);
-document
-  .getElementById("btn-cerrar-lista-clientes")
-  .addEventListener("click", () => modalListaClientes.close());

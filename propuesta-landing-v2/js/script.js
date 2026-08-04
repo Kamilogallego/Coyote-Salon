@@ -41,7 +41,19 @@ const observador = new IntersectionObserver(
   { threshold: 0.15 }
 );
 
-document.querySelectorAll(".reveal").forEach((el) => observador.observe(el));
+document.querySelectorAll(".reveal, .video-revela").forEach((el) => observador.observe(el));
+
+document.querySelectorAll(".carrusel-item").forEach((el, indice) => {
+  el.style.setProperty("--i", indice);
+  observador.observe(el);
+});
+
+document.querySelectorAll(".sobre-video, .comunidad-video").forEach((video) => {
+  if (reduceMotion) {
+    video.removeAttribute("autoplay");
+    video.pause();
+  }
+});
 
 const carrusel = document.getElementById("carrusel-galeria");
 if (carrusel) {
@@ -101,17 +113,21 @@ if (lightbox && lightboxImg) {
 document.querySelectorAll(".puerta-toggle").forEach((boton) => {
   boton.addEventListener("click", () => {
     const puerta = boton.closest(".puerta");
+    const grupo = puerta.closest(".puertas-grid");
     const abierta = puerta.classList.contains("abierta");
+    const vaAAbrir = !abierta;
 
-    document.querySelectorAll(".puerta.abierta").forEach((otra) => {
+    grupo.querySelectorAll(".puerta").forEach((otra) => {
       if (otra !== puerta) {
         otra.classList.remove("abierta");
+        otra.classList.toggle("minimizada", vaAAbrir);
         otra.querySelector(".puerta-toggle").setAttribute("aria-expanded", "false");
       }
     });
 
-    puerta.classList.toggle("abierta", !abierta);
-    boton.setAttribute("aria-expanded", String(!abierta));
+    puerta.classList.toggle("abierta", vaAAbrir);
+    puerta.classList.remove("minimizada");
+    boton.setAttribute("aria-expanded", String(vaAAbrir));
   });
 });
 

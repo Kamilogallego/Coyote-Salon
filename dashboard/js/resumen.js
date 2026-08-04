@@ -94,18 +94,6 @@ export async function cargarEstadisticas() {
     })
     .join("");
 
-  document.getElementById("resumen-ultimos").innerHTML = stats.ultimosClientes
-    .map(
-      (c) => `
-      <tr>
-        <td>${escapeHtml(c.nombre)}</td>
-        <td>${ETIQUETAS_MEDIO[c.medio_contacto] || escapeHtml(c.medio_contacto)}</td>
-        <td>${new Date(c.fecha_registro).toLocaleDateString("es-CO")}</td>
-      </tr>
-    `
-    )
-    .join("");
-
   renderizarTablaFechas("tabla-cumpleanos", stats.proximosCumpleanos, { alClicVer: verDetalleCliente });
   renderizarTablaFechas("tabla-aniversarios", stats.proximosAniversarios, { alClicVer: verDetalleCliente });
 }

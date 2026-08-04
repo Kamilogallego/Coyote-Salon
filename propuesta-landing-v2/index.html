@@ -46,7 +46,7 @@
     <p>El lugar de Armenia donde los tacos salen calientes, la casa se llena rápido y la noche se estira hasta que alguien apague la música.</p>
     <div class="hero-acciones">
       <a class="boton" href="#puertas">Únete a Coyote</a>
-      <a class="boton blanco" href="#galeria">Ver los platos</a>
+      <a class="boton blanco" href="#galeria">Ver más</a>
     </div>
   </div>
   <span class="scroll-cue" aria-hidden="true"></span>
@@ -54,10 +54,18 @@
 
 <section class="sobre" id="sobre">
   <div class="wrap sobre-grid">
-    <div class="sobre-foto reveal">
-      <img src="images/foto-interior.jpg" alt="Interior de Coyote Salón Social con mesas rojas" />
+    <div class="sobre-video-wrap video-revela">
+      <div class="sobre-media">
+        <video class="sobre-video-fondo" autoplay muted loop playsinline preload="metadata" aria-hidden="true">
+          <source src="videos/sobre-coyote.mp4" type="video/mp4" />
+        </video>
+        <video class="sobre-video" autoplay muted loop playsinline preload="metadata" poster="images/foto-interior.jpg">
+          <source src="videos/sobre-coyote.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <div class="sobre-cortina" aria-hidden="true"></div>
     </div>
-    <div class="sobre-texto reveal">
+    <div class="sobre-contenido reveal">
       <p class="eyebrow">Sobre Coyote</p>
       <h2>La casa de los tacos sin pretensiones</h2>
       <p>
@@ -90,7 +98,7 @@
       <h2>Una noche cualquiera en Coyote</h2>
       <p>Desliza para ver más, clic en cualquier foto para ir a Instagram.</p>
     </div>
-    <div class="carrusel-wrap reveal">
+    <div class="carrusel-wrap">
       <button type="button" class="carrusel-flecha carrusel-anterior" aria-label="Foto anterior">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
       </button>
@@ -127,6 +135,30 @@
         </button>
         <button type="button" class="carrusel-item" data-full="images/foto-interior.jpg">
           <img src="images/foto-interior.jpg" alt="Interior de Coyote con mesas rojas" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-sillas-tacos.jpg">
+          <img src="images/ig-sillas-tacos.jpg" alt="Sillas plegables bajo el letrero de neón Tacos Tacos Tacos" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-nachos.jpg">
+          <img src="images/ig-nachos.jpg" alt="Nachos con guacamole, pico de gallo y queso" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-taco-cerca.jpg">
+          <img src="images/ig-taco-cerca.jpg" alt="Cliente mostrando un taco recién servido" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-mesa-neon.jpg">
+          <img src="images/ig-mesa-neon.jpg" alt="Cliente comiendo tacos junto al mostrador de Coyote" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-camiseta-logo.jpg">
+          <img src="images/ig-camiseta-logo.jpg" alt="Camiseta con el logo de Coyote Salón Social" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-plato-bokeh.jpg">
+          <img src="images/ig-plato-bokeh.jpg" alt="Plato de comida con luces desenfocadas de fondo" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-collage.jpg">
+          <img src="images/ig-collage.jpg" alt="Collage de la noche en Coyote: mesas, tacos y cerveza" loading="lazy" />
+        </button>
+        <button type="button" class="carrusel-item" data-full="images/ig-mesa-cerveza.jpg">
+          <img src="images/ig-mesa-cerveza.jpg" alt="Sirviendo cerveza junto a tacos sobre la mesa roja" loading="lazy" />
         </button>
       </div>
       <button type="button" class="carrusel-flecha carrusel-siguiente" aria-label="Foto siguiente">
@@ -353,7 +385,15 @@
   </div>
 </section>
 
-<section class="comunidad">
+<section class="comunidad video-revela" id="comunidad">
+  <div class="comunidad-media">
+    <video class="comunidad-video" autoplay muted loop playsinline preload="metadata" poster="images/foto-fachada.jpg">
+      <source src="videos/coyote-exceso.mp4" type="video/mp4" />
+    </video>
+  </div>
+  <div class="comunidad-cortina" aria-hidden="true"></div>
+  <div class="comunidad-desvanece-arriba" aria-hidden="true"></div>
+  <div class="comunidad-desvanece" aria-hidden="true"></div>
   <div class="wrap comunidad-tarjeta reveal">
     <span class="comunidad-icono">
       <img src="images/coyote-corredor.png" alt="" />
