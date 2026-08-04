@@ -27,6 +27,7 @@ app.use(
         fontSrc: ["'self'", "https://cdn.jsdelivr.net", "data:"],
         imgSrc: ["'self'", "data:", "https://cdn.jsdelivr.net"],
         connectSrc: ["'self'", "https://esm.sh"],
+        frameSrc: ["'self'", "https://www.google.com"],
         objectSrc: ["'none'"],
         baseUri: ["'self'"],
         frameAncestors: ["'self'"],

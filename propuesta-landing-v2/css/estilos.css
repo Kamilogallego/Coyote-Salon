@@ -752,24 +752,6 @@ body.lightbox-abierto {
   margin-bottom: 1.5rem;
 }
 
-/* ---- Puente ---- */
-
-.puente {
-  text-align: center;
-}
-
-.puente h2 {
-  font-size: clamp(1.8rem, 3.6vw, 2.6rem);
-  color: var(--azul-deep);
-  margin-bottom: 0.9rem;
-}
-
-.puente p {
-  max-width: 42ch;
-  margin: 0 auto;
-  color: var(--ink-soft);
-}
-
 /* ---- Puertas (acordeon) ---- */
 
 .puertas {
