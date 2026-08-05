@@ -59,11 +59,31 @@ const carrusel = document.getElementById("carrusel-galeria");
 if (carrusel) {
   carrusel.scrollLeft = 0;
   const desplazar = () => carrusel.querySelector(".carrusel-item").getBoundingClientRect().width + 16;
+  const scrollMaximo = () => carrusel.scrollWidth - carrusel.clientWidth;
+
   document.querySelector(".carrusel-anterior")?.addEventListener("click", () => {
-    carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
+    if (carrusel.scrollLeft <= 4) {
+      carrusel.scrollTo({ left: scrollMaximo(), behavior: "smooth" });
+    } else {
+      carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
+    }
   });
   document.querySelector(".carrusel-siguiente")?.addEventListener("click", () => {
-    carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
+    if (carrusel.scrollLeft >= scrollMaximo() - 4) {
+      carrusel.scrollTo({ left: 0, behavior: "smooth" });
+    } else {
+      carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
+    }
+  });
+
+  let temporizadorFinCarrusel;
+  carrusel.addEventListener("scroll", () => {
+    clearTimeout(temporizadorFinCarrusel);
+    temporizadorFinCarrusel = setTimeout(() => {
+      if (carrusel.scrollLeft >= scrollMaximo() - 4) {
+        carrusel.scrollTo({ left: 0, behavior: "smooth" });
+      }
+    }, 150);
   });
 }
 

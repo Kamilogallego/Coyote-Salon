@@ -615,6 +615,11 @@ section {
   font-weight: 600;
   font-size: 0.95rem;
   color: var(--azul-deep);
+  text-decoration: none;
+}
+
+a.dato:hover {
+  color: var(--rojo);
 }
 
 .dato svg {
@@ -641,8 +646,6 @@ section {
   scroll-behavior: smooth;
   padding-bottom: 0.5rem;
   scrollbar-width: none;
-  touch-action: pan-x;
-  overscroll-behavior-y: contain;
 }
 
 .carrusel::-webkit-scrollbar {
