@@ -24,6 +24,24 @@ if (!intro || reduceMotion) {
   setTimeout(terminarIntro, 2000);
 }
 
+const telefonosConPais = {};
+["e-telefono", "r-telefono", "p-telefono"].forEach((id) => {
+  const input = document.getElementById(id);
+  if (!input || !window.intlTelInput) return;
+  telefonosConPais[id] = window.intlTelInput(input, {
+    initialCountry: "co",
+    separateDialCode: true,
+    preferredCountries: ["co", "mx", "ar", "cl", "pe", "es", "us"],
+  });
+});
+
+function obtenerTelefono(id) {
+  const iti = telefonosConPais[id];
+  const valorCrudo = document.getElementById(id).value.trim();
+  if (!iti) return valorCrudo;
+  return valorCrudo ? iti.getNumber() || valorCrudo : "";
+}
+
 const nav = document.getElementById("nav");
 window.addEventListener("scroll", () => {
   nav.classList.toggle("con-scroll", window.scrollY > 40);
@@ -223,7 +241,7 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
     form.addEventListener("submit", (evento) => {
       evento.preventDefault();
       const nombre = document.getElementById("r-nombre").value.trim();
-      const telefono = document.getElementById("r-telefono").value.trim();
+      const telefono = obtenerTelefono("r-telefono");
       const documentoTipo = ETIQUETAS_DOCUMENTO_WA[document.getElementById("r-documento-tipo").value] || "";
       const documentoNumero = document.getElementById("r-documento-numero").value.trim();
       const fecha = document.getElementById("r-fecha").value;
@@ -255,7 +273,7 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
 
     const payload = { sitio_web: document.getElementById(config.honeypot)?.value || "", iniciado_en: INICIADO_EN };
     for (const [campo, id] of Object.entries(config.campos)) {
-      payload[campo] = document.getElementById(id).value.trim();
+      payload[campo] = campo === "telefono" ? obtenerTelefono(id) : document.getElementById(id).value.trim();
     }
     if (form.id === "panel-proveedores" && payload.que_suministra === "Otro") {
       payload.que_suministra = document.getElementById("p-que-otro").value.trim();
