@@ -56,41 +56,58 @@ document.querySelectorAll(".sobre-video, .comunidad-video").forEach((video) => {
 });
 
 const carrusel = document.getElementById("carrusel-galeria");
+const mapaClones = new Map();
 if (carrusel) {
-  carrusel.scrollLeft = 0;
-  const desplazar = () => carrusel.querySelector(".carrusel-item").getBoundingClientRect().width + 16;
-  const scrollMaximo = () => carrusel.scrollWidth - carrusel.clientWidth;
+  const originales = Array.from(carrusel.querySelectorAll(".carrusel-item"));
+  const NUM_CLONES = Math.min(3, originales.length);
+
+  const crearClon = (item, indiceOriginal) => {
+    const clon = item.cloneNode(true);
+    clon.classList.add("carrusel-clon");
+    clon.setAttribute("aria-hidden", "true");
+    clon.tabIndex = -1;
+    mapaClones.set(clon, indiceOriginal);
+    return clon;
+  };
+
+  originales.slice(-NUM_CLONES).forEach((item) => {
+    carrusel.insertBefore(crearClon(item, originales.indexOf(item)), carrusel.firstChild);
+  });
+  originales.slice(0, NUM_CLONES).forEach((item) => {
+    carrusel.appendChild(crearClon(item, originales.indexOf(item)));
+  });
+
+  const desplazar = () => originales[0].getBoundingClientRect().width + 16;
+  const anchoTotalOriginales = () => desplazar() * originales.length;
+
+  carrusel.scrollLeft = originales[0].offsetLeft;
 
   document.querySelector(".carrusel-anterior")?.addEventListener("click", () => {
-    if (carrusel.scrollLeft <= 4) {
-      carrusel.scrollTo({ left: scrollMaximo(), behavior: "auto" });
-    } else {
-      carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
-    }
+    carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
   });
   document.querySelector(".carrusel-siguiente")?.addEventListener("click", () => {
-    if (carrusel.scrollLeft >= scrollMaximo() - 4) {
-      carrusel.scrollTo({ left: 0, behavior: "auto" });
-    } else {
-      carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
-    }
+    carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
   });
 
-  let temporizadorFinCarrusel;
+  let temporizadorLoop;
   carrusel.addEventListener("scroll", () => {
-    clearTimeout(temporizadorFinCarrusel);
-    temporizadorFinCarrusel = setTimeout(() => {
-      if (carrusel.scrollLeft >= scrollMaximo() - 4) {
-        carrusel.scrollTo({ left: 0, behavior: "auto" });
+    clearTimeout(temporizadorLoop);
+    temporizadorLoop = setTimeout(() => {
+      const inicioReal = originales[0].offsetLeft;
+      const finReal = originales[originales.length - 1].offsetLeft + desplazar();
+      if (carrusel.scrollLeft >= finReal) {
+        carrusel.scrollLeft -= anchoTotalOriginales();
+      } else if (carrusel.scrollLeft < inicioReal - 1) {
+        carrusel.scrollLeft += anchoTotalOriginales();
       }
-    }, 150);
+    }, 120);
   });
 }
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 if (lightbox && lightboxImg) {
-  const fotos = Array.from(document.querySelectorAll(".carrusel-item"));
+  const fotos = Array.from(document.querySelectorAll(".carrusel-item:not(.carrusel-clon)"));
   let indiceActual = 0;
 
   const mostrarFoto = (indice) => {
@@ -111,8 +128,11 @@ if (lightbox && lightboxImg) {
     document.body.classList.remove("lightbox-abierto");
   };
 
-  fotos.forEach((foto) => {
-    foto.addEventListener("click", () => abrirLightbox(foto));
+  document.querySelectorAll(".carrusel-item").forEach((foto) => {
+    foto.addEventListener("click", () => {
+      const indiceOriginal = mapaClones.get(foto);
+      abrirLightbox(indiceOriginal === undefined ? foto : fotos[indiceOriginal]);
+    });
   });
 
   lightbox.querySelectorAll("[data-cerrar-lightbox]").forEach((el) => {

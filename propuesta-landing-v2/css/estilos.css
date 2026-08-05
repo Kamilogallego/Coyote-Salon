@@ -689,6 +689,11 @@ a.dato:hover {
   transform: scale(1.06);
 }
 
+.carrusel-item.carrusel-clon {
+  opacity: 1;
+  transform: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .carrusel-item {
     opacity: 1;
