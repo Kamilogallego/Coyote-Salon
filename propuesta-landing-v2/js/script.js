@@ -219,22 +219,6 @@ queOtroSelect?.addEventListener("change", () => {
 });
 
 document.querySelectorAll(".puerta-form").forEach((form) => {
-  if (form.id === "panel-eventos") {
-    form.addEventListener("submit", (evento) => {
-      evento.preventDefault();
-      const nombre = document.getElementById("v-nombre").value.trim();
-      const telefono = document.getElementById("v-telefono").value.trim();
-      const documentoTipo = ETIQUETAS_DOCUMENTO_WA[document.getElementById("v-documento-tipo").value] || "";
-      const documentoNumero = document.getElementById("v-documento-numero").value.trim();
-      const tipo = document.getElementById("v-tipo").value;
-      const invitados = document.getElementById("v-invitados").value.trim();
-      const mensaje = `Hola, soy ${nombre}, ${documentoTipo} ${documentoNumero}, mi teléfono es ${telefono}. Quiero cotizar un evento (${tipo}) para aprox. ${invitados} invitados.`;
-      window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
-      form.closest(".puerta").classList.add("enviada");
-    });
-    return;
-  }
-
   if (form.id === "panel-reserva") {
     form.addEventListener("submit", (evento) => {
       evento.preventDefault();
