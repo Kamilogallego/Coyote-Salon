@@ -70,8 +70,9 @@ if (carrusel) {
     return clon;
   };
 
+  const primerItemOriginal = carrusel.firstChild;
   originales.slice(-NUM_CLONES).forEach((item) => {
-    carrusel.insertBefore(crearClon(item, originales.indexOf(item)), carrusel.firstChild);
+    carrusel.insertBefore(crearClon(item, originales.indexOf(item)), primerItemOriginal);
   });
   originales.slice(0, NUM_CLONES).forEach((item) => {
     carrusel.appendChild(crearClon(item, originales.indexOf(item)));

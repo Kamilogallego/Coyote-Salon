@@ -1,7 +1,7 @@
 let qrDataUrl = null;
 
 export function cargarCompartir() {
-  const url = `${window.location.origin}/coyote/formulario/formulario.html`;
+  const url = "https://coyote-salon.onrender.com/coyote/formulario/formulario.html";
   const input = document.getElementById("compartir-link");
   input.value = url;
 
