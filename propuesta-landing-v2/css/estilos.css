@@ -474,7 +474,7 @@ section {
 
 .encabezado h2 {
   font-family: "Snyder", "Lora", Georgia, serif;
-  font-size: clamp(2.2rem, 4vw, 3.1rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   letter-spacing: 0.02em;
   color: var(--azul-deep);
 }
@@ -592,7 +592,7 @@ section {
 .sobre-contenido h2 {
   font-family: "Snyder", "Lora", Georgia, serif;
   color: var(--azul-deep);
-  font-size: clamp(2.1rem, 3.8vw, 3rem);
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
   letter-spacing: 0.02em;
   margin-bottom: 1.25rem;
 }
@@ -927,7 +927,7 @@ body.lightbox-abierto {
 
 .ubicacion-info h3 {
   font-family: "Snyder", "Lora", Georgia, serif;
-  font-size: 1.9rem;
+  font-size: 1.4rem;
   letter-spacing: 0.02em;
   color: var(--azul-deep);
   margin-bottom: 0.75rem;
@@ -1262,7 +1262,7 @@ body.lightbox-abierto {
 
 .comunidad h2 {
   font-family: "Snyder", "Lora", Georgia, serif;
-  font-size: clamp(2.2rem, 4vw, 3rem);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
   letter-spacing: 0.02em;
   margin-bottom: 0.9rem;
 }
