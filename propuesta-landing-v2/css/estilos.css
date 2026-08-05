@@ -746,16 +746,9 @@ section {
   .carrusel-item {
     width: 250px;
     scroll-snap-align: center;
-  }
-}
-
-@media (max-width: 640px) and (prefers-reduced-motion: no-preference) {
-  .carrusel-item {
-    transform: scale(0.94);
-  }
-
-  .carrusel-item.en-vista {
-    transform: scale(1);
+    opacity: 1;
+    transform: none;
+    transition: box-shadow 300ms ease;
   }
 }
 
