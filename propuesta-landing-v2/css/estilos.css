@@ -651,6 +651,8 @@ section {
   scroll-behavior: smooth;
   padding-bottom: 0.5rem;
   scrollbar-width: none;
+  touch-action: pan-x;
+  overscroll-behavior-y: contain;
 }
 
 .carrusel::-webkit-scrollbar {
