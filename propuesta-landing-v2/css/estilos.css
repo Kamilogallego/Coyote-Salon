@@ -510,20 +510,26 @@ section {
   flex-direction: column;
   align-items: center;
   gap: 2.5rem;
-  max-width: 980px;
+  max-width: 1040px;
   margin: 0 auto;
 }
 
 .sobre-video-wrap {
   position: relative;
   width: 100%;
-  max-width: 960px;
-  aspect-ratio: 16 / 10;
+  max-width: 1020px;
+  aspect-ratio: 16 / 14;
   border-radius: 28px;
   overflow: hidden;
   box-shadow: var(--shadow);
   margin: 0 auto;
   background: #050505;
+}
+
+@media (max-width: 640px) {
+  .sobre-video-wrap {
+    aspect-ratio: 16 / 11;
+  }
 }
 
 .sobre-media {
@@ -729,8 +735,25 @@ section {
     display: none;
   }
 
+  .carrusel {
+    scroll-snap-type: x mandatory;
+    padding-left: calc((100% - 250px) / 2);
+    padding-right: calc((100% - 250px) / 2);
+  }
+
   .carrusel-item {
     width: 250px;
+    scroll-snap-align: center;
+  }
+}
+
+@media (max-width: 640px) and (prefers-reduced-motion: no-preference) {
+  .carrusel-item {
+    transform: scale(0.94);
+  }
+
+  .carrusel-item.en-vista {
+    transform: scale(1);
   }
 }
 
