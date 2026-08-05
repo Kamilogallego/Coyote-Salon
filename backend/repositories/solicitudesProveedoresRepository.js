@@ -3,20 +3,20 @@ const pool = require("../db");
 const DIAS_RETENCION_PAPELERA = 30;
 
 async function crear(datos) {
-  const { nombre_empresa, contacto, telefono, correo, que_suministra } = datos;
+  const { nombre_empresa, contacto, telefono, correo, que_suministra, documento_tipo, documento_numero } = datos;
 
   const result = await pool.query(
-    `INSERT INTO solicitudes_proveedores (nombre_empresa, contacto, telefono, correo, que_suministra)
-     VALUES ($1,$2,$3,$4,$5)
+    `INSERT INTO solicitudes_proveedores (nombre_empresa, contacto, telefono, correo, que_suministra, documento_tipo, documento_numero)
+     VALUES ($1,$2,$3,$4,$5,$6,$7)
      RETURNING id`,
-    [nombre_empresa, contacto, telefono, correo || null, que_suministra]
+    [nombre_empresa, contacto, telefono, correo || null, que_suministra, documento_tipo, documento_numero]
   );
   return result.rows[0].id;
 }
 
 async function listar() {
   const result = await pool.query(
-    `SELECT id, nombre_empresa, contacto, telefono, correo, que_suministra, fecha_registro
+    `SELECT id, nombre_empresa, contacto, telefono, correo, que_suministra, documento_tipo, documento_numero, fecha_registro
      FROM solicitudes_proveedores
      WHERE eliminado_en IS NULL
      ORDER BY fecha_registro DESC`
@@ -26,7 +26,7 @@ async function listar() {
 
 async function obtenerPapelera() {
   const result = await pool.query(
-    `SELECT id, nombre_empresa, contacto, telefono, correo, que_suministra, fecha_registro, eliminado_en
+    `SELECT id, nombre_empresa, contacto, telefono, correo, que_suministra, documento_tipo, documento_numero, fecha_registro, eliminado_en
      FROM solicitudes_proveedores
      WHERE eliminado_en IS NOT NULL
      ORDER BY eliminado_en DESC`

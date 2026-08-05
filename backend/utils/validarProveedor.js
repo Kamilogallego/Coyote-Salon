@@ -1,4 +1,6 @@
-const CAMPOS_REQUERIDOS = ["nombre_empresa", "contacto", "telefono", "que_suministra"];
+const CAMPOS_REQUERIDOS = ["nombre_empresa", "contacto", "telefono", "que_suministra", "documento_tipo", "documento_numero"];
+
+const TIPOS_DOCUMENTO_VALIDOS = ["cedula", "cedula_extranjeria", "pasaporte"];
 
 const LONGITUDES_MAXIMAS = {
   nombre_empresa: 150,
@@ -6,6 +8,8 @@ const LONGITUDES_MAXIMAS = {
   telefono: 30,
   correo: 150,
   que_suministra: 50,
+  documento_tipo: 30,
+  documento_numero: 30,
 };
 
 function validar(body) {
@@ -27,6 +31,10 @@ function validar(body) {
 
   if (body.correo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(body.correo)) {
     errores.push("Correo electrónico inválido");
+  }
+
+  if (body.documento_tipo && !TIPOS_DOCUMENTO_VALIDOS.includes(body.documento_tipo)) {
+    errores.push("Tipo de documento inválido");
   }
 
   return errores;

@@ -179,18 +179,14 @@ const CAMPOS_POR_TIPO = {
     endpoint: "empleo",
     honeypot: "e-sitio-web",
     error: "e-error",
-    campos: { nombre: "e-nombre", telefono: "e-telefono", correo: "e-correo", cargo: "e-cargo" },
-  },
-  "panel-servicios": {
-    endpoint: "artistas",
-    honeypot: "s-sitio-web",
-    error: "s-error",
     campos: {
-      nombre: "s-nombre",
-      telefono: "s-telefono",
-      correo: "s-correo",
-      tipo_servicio: "s-tipo",
-      portafolio: "s-portafolio",
+      nombre: "e-nombre",
+      telefono: "e-telefono",
+      correo: "e-correo",
+      documento_tipo: "e-documento-tipo",
+      documento_numero: "e-documento-numero",
+      cargo: "e-cargo",
+      experiencia: "e-experiencia",
     },
   },
   "panel-proveedores": {
@@ -202,6 +198,8 @@ const CAMPOS_POR_TIPO = {
       contacto: "p-contacto",
       telefono: "p-telefono",
       correo: "p-correo",
+      documento_tipo: "p-documento-tipo",
+      documento_numero: "p-documento-numero",
       que_suministra: "p-que",
     },
   },
@@ -209,15 +207,45 @@ const CAMPOS_POR_TIPO = {
 
 const NUMERO_WHATSAPP = "573007828594";
 
+const ETIQUETAS_DOCUMENTO_WA = { cedula: "Cédula de ciudadanía", cedula_extranjeria: "Cédula de extranjería", pasaporte: "Pasaporte" };
+
+const queOtroSelect = document.getElementById("p-que");
+const queOtroCampo = document.getElementById("p-que-otro-campo");
+const queOtroInput = document.getElementById("p-que-otro");
+queOtroSelect?.addEventListener("change", () => {
+  const esOtro = queOtroSelect.value === "Otro";
+  queOtroCampo.classList.toggle("is-oculto", !esOtro);
+  queOtroInput.required = esOtro;
+});
+
 document.querySelectorAll(".puerta-form").forEach((form) => {
   if (form.id === "panel-eventos") {
     form.addEventListener("submit", (evento) => {
       evento.preventDefault();
       const nombre = document.getElementById("v-nombre").value.trim();
       const telefono = document.getElementById("v-telefono").value.trim();
+      const documentoTipo = ETIQUETAS_DOCUMENTO_WA[document.getElementById("v-documento-tipo").value] || "";
+      const documentoNumero = document.getElementById("v-documento-numero").value.trim();
       const tipo = document.getElementById("v-tipo").value;
       const invitados = document.getElementById("v-invitados").value.trim();
-      const mensaje = `Hola, soy ${nombre}, mi teléfono es ${telefono}. Quiero cotizar un evento (${tipo}) para aprox. ${invitados} invitados.`;
+      const mensaje = `Hola, soy ${nombre}, ${documentoTipo} ${documentoNumero}, mi teléfono es ${telefono}. Quiero cotizar un evento (${tipo}) para aprox. ${invitados} invitados.`;
+      window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
+      form.closest(".puerta").classList.add("enviada");
+    });
+    return;
+  }
+
+  if (form.id === "panel-reserva") {
+    form.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+      const nombre = document.getElementById("r-nombre").value.trim();
+      const telefono = document.getElementById("r-telefono").value.trim();
+      const documentoTipo = ETIQUETAS_DOCUMENTO_WA[document.getElementById("r-documento-tipo").value] || "";
+      const documentoNumero = document.getElementById("r-documento-numero").value.trim();
+      const fecha = document.getElementById("r-fecha").value;
+      const hora = document.getElementById("r-hora").value;
+      const personas = document.getElementById("r-personas").value.trim();
+      const mensaje = `Hola, soy ${nombre}, ${documentoTipo} ${documentoNumero}, mi teléfono es ${telefono}. Quiero reservar mesa para ${personas} personas el ${fecha} a las ${hora}.`;
       window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
       form.closest(".puerta").classList.add("enviada");
     });
@@ -244,6 +272,9 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
     const payload = { sitio_web: document.getElementById(config.honeypot)?.value || "", iniciado_en: INICIADO_EN };
     for (const [campo, id] of Object.entries(config.campos)) {
       payload[campo] = document.getElementById(id).value.trim();
+    }
+    if (form.id === "panel-proveedores" && payload.que_suministra === "Otro") {
+      payload.que_suministra = document.getElementById("p-que-otro").value.trim();
     }
 
     botonEnviar.disabled = true;

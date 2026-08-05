@@ -87,6 +87,9 @@ CREATE TABLE IF NOT EXISTS solicitudes_empleo (
 );
 
 ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS eliminado_en TIMESTAMP;
+ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS documento_tipo VARCHAR(30);
+ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS documento_numero VARCHAR(30);
+ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS experiencia TEXT;
 
 CREATE INDEX IF NOT EXISTS idx_solicitudes_empleo_fecha_registro ON solicitudes_empleo (fecha_registro);
 CREATE INDEX IF NOT EXISTS idx_solicitudes_empleo_eliminado_en ON solicitudes_empleo (eliminado_en);
@@ -103,6 +106,8 @@ CREATE TABLE IF NOT EXISTS solicitudes_proveedores (
 );
 
 ALTER TABLE solicitudes_proveedores ADD COLUMN IF NOT EXISTS eliminado_en TIMESTAMP;
+ALTER TABLE solicitudes_proveedores ADD COLUMN IF NOT EXISTS documento_tipo VARCHAR(30);
+ALTER TABLE solicitudes_proveedores ADD COLUMN IF NOT EXISTS documento_numero VARCHAR(30);
 
 CREATE INDEX IF NOT EXISTS idx_solicitudes_proveedores_fecha_registro ON solicitudes_proveedores (fecha_registro);
 CREATE INDEX IF NOT EXISTS idx_solicitudes_proveedores_eliminado_en ON solicitudes_proveedores (eliminado_en);

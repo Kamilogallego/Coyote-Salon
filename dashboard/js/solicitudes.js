@@ -1,5 +1,10 @@
 import { confirmarAccion } from "./modales.js";
-import { escapeHtml, formatearFecha } from "./utils.js";
+import { escapeHtml, formatearFecha, ETIQUETAS_DOCUMENTO } from "./utils.js";
+
+function formatearDocumento(s) {
+  if (!s.documento_tipo || !s.documento_numero) return "";
+  return `${ETIQUETAS_DOCUMENTO[s.documento_tipo] || s.documento_tipo}: ${s.documento_numero}`;
+}
 
 const tabla = document.getElementById("tabla-solicitudes");
 const resumen = document.getElementById("resumen-solicitudes");
@@ -32,20 +37,20 @@ const CONFIG_POR_TIPO = {
   empleo: {
     tituloNombre: "Nombre",
     tituloCategoria: "Cargo",
-    tituloDetalle: "",
+    tituloDetalle: "Documento / Experiencia",
     nombre: (s) => s.nombre,
     categoria: (s) => s.cargo,
-    detalle: () => "",
-    detalleTexto: () => "",
+    detalle: (s) => escapeHtml([formatearDocumento(s), s.experiencia].filter(Boolean).join(" — ")),
+    detalleTexto: (s) => [formatearDocumento(s), s.experiencia].filter(Boolean).join(" — "),
   },
   proveedores: {
     tituloNombre: "Empresa",
     tituloCategoria: "Qué suministra",
-    tituloDetalle: "Contacto",
+    tituloDetalle: "Contacto / Documento",
     nombre: (s) => s.nombre_empresa,
     categoria: (s) => s.que_suministra,
-    detalle: (s) => escapeHtml(s.contacto || ""),
-    detalleTexto: (s) => s.contacto || "",
+    detalle: (s) => escapeHtml([s.contacto, formatearDocumento(s)].filter(Boolean).join(" · ")),
+    detalleTexto: (s) => [s.contacto, formatearDocumento(s)].filter(Boolean).join(" · "),
   },
 };
 

@@ -201,7 +201,7 @@
           </span>
           <span class="puerta-texto">
             <h3>Trabaja con nosotros</h3>
-            <p>Meseros, bartenders, cocina, seguridad — súmate al equipo que hace que la casa funcione.</p>
+            <p>Meseros, cocina, seguridad — súmate al equipo que hace que la casa funcione.</p>
             <span class="puerta-cta">Postúlate
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
             </span>
@@ -213,16 +213,25 @@
             <div class="campo"><label for="e-telefono">Teléfono</label><input id="e-telefono" type="tel" required /></div>
             <div class="campo"><label for="e-correo">Correo <span class="opcional">(opcional)</span></label><input id="e-correo" type="email" /></div>
             <div class="campo">
+              <label for="e-documento-tipo">Tipo de documento</label>
+              <select id="e-documento-tipo" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria">Cédula de extranjería</option>
+                <option value="pasaporte">Pasaporte</option>
+              </select>
+            </div>
+            <div class="campo"><label for="e-documento-numero">Número de documento</label><input id="e-documento-numero" required /></div>
+            <div class="campo">
               <label for="e-cargo">Cargo al que aplicas</label>
               <select id="e-cargo" required>
                 <option value="" disabled selected>Selecciona una opción</option>
                 <option>Mesero/a</option>
-                <option>Bartender</option>
                 <option>Cocina</option>
                 <option>Seguridad</option>
-                <option>Otro</option>
               </select>
             </div>
+            <div class="campo"><label for="e-experiencia">Cuéntanos tu experiencia</label><textarea id="e-experiencia" rows="3"></textarea></div>
             <input class="campo-trampa" id="e-sitio-web" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" />
             <p class="puerta-error" id="e-error" role="alert"></p>
             <button class="boton enviar" type="submit">Enviar postulación</button>
@@ -230,46 +239,6 @@
           <div class="gracias">
             <span class="gracias-sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span>
             <p><strong>¡Listo!</strong><br>Recibimos tu postulación. Si encajas con una vacante te contactamos por teléfono.</p>
-          </div>
-        </div></div>
-      </article>
-
-      <article class="puerta reveal" data-puerta="servicios">
-        <button class="puerta-toggle" aria-expanded="false" aria-controls="panel-servicios">
-          <span class="puerta-icono">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.2"/></svg>
-          </span>
-          <span class="puerta-texto">
-            <h3>¿Eres artista?</h3>
-            <p>DJ, música en vivo, foto y video — si tienes algo que sube el ambiente, queremos escucharte.</p>
-            <span class="puerta-cta">Cuéntanos qué haces
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
-            </span>
-          </span>
-        </button>
-        <div class="puerta-panel-wrap"><div class="puerta-panel-inner">
-          <form class="puerta-form" id="panel-servicios">
-            <div class="campo"><label for="s-nombre">Nombre o nombre artístico</label><input id="s-nombre" required /></div>
-            <div class="campo"><label for="s-telefono">Teléfono</label><input id="s-telefono" type="tel" required /></div>
-            <div class="campo"><label for="s-correo">Correo <span class="opcional">(opcional)</span></label><input id="s-correo" type="email" /></div>
-            <div class="campo">
-              <label for="s-tipo">Tipo de servicio</label>
-              <select id="s-tipo" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option>DJ</option>
-                <option>Música en vivo</option>
-                <option>Fotografía / video</option>
-                <option>Otro</option>
-              </select>
-            </div>
-            <div class="campo"><label for="s-portafolio">Portafolio o redes sociales</label><input id="s-portafolio" placeholder="Instagram, Youtube, sitio web..." required /></div>
-            <input class="campo-trampa" id="s-sitio-web" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" />
-            <p class="puerta-error" id="s-error" role="alert"></p>
-            <button class="boton enviar" type="submit">Enviar propuesta</button>
-          </form>
-          <div class="gracias">
-            <span class="gracias-sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span>
-            <p><strong>¡Recibido!</strong><br>Vamos a revisar tu portafolio. Si tu propuesta encaja con la casa, te escribimos.</p>
           </div>
         </div></div>
       </article>
@@ -293,6 +262,16 @@
             <div class="campo"><label for="v-telefono">Teléfono</label><input id="v-telefono" type="tel" required /></div>
             <div class="campo"><label for="v-correo">Correo <span class="opcional">(opcional)</span></label><input id="v-correo" type="email" /></div>
             <div class="campo">
+              <label for="v-documento-tipo">Tipo de documento</label>
+              <select id="v-documento-tipo" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria">Cédula de extranjería</option>
+                <option value="pasaporte">Pasaporte</option>
+              </select>
+            </div>
+            <div class="campo"><label for="v-documento-numero">Número de documento</label><input id="v-documento-numero" required /></div>
+            <div class="campo">
               <label for="v-tipo">Tipo de evento</label>
               <select id="v-tipo" required>
                 <option value="" disabled selected>Selecciona una opción</option>
@@ -312,6 +291,45 @@
         </div></div>
       </article>
 
+      <article class="puerta reveal" data-puerta="reserva">
+        <button class="puerta-toggle" aria-expanded="false" aria-controls="panel-reserva">
+          <span class="puerta-icono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="2.5" rx="1"/><path d="M5 12.5V18M19 12.5V18"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
+          </span>
+          <span class="puerta-texto">
+            <h3>Reserva tu mesa</h3>
+            <p>Dinos cuándo llegas y cuántos son, y te la dejamos lista.</p>
+            <span class="puerta-cta">Reserva ahora
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
+            </span>
+          </span>
+        </button>
+        <div class="puerta-panel-wrap"><div class="puerta-panel-inner">
+          <form class="puerta-form" id="panel-reserva">
+            <div class="campo"><label for="r-nombre">Nombre completo</label><input id="r-nombre" required /></div>
+            <div class="campo"><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" required /></div>
+            <div class="campo">
+              <label for="r-documento-tipo">Tipo de documento</label>
+              <select id="r-documento-tipo" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria">Cédula de extranjería</option>
+                <option value="pasaporte">Pasaporte</option>
+              </select>
+            </div>
+            <div class="campo"><label for="r-documento-numero">Número de documento</label><input id="r-documento-numero" required /></div>
+            <div class="campo"><label for="r-fecha">Fecha</label><input id="r-fecha" type="date" required /></div>
+            <div class="campo"><label for="r-hora">Hora</label><input id="r-hora" type="time" required /></div>
+            <div class="campo"><label for="r-personas">Número de personas</label><input id="r-personas" type="number" min="1" required /></div>
+            <button class="boton enviar" type="submit">Enviar por WhatsApp</button>
+          </form>
+          <div class="gracias">
+            <span class="gracias-sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span>
+            <p><strong>¡Listo!</strong><br>Se abrió WhatsApp con tu mensaje escrito — solo dale enviar.</p>
+          </div>
+        </div></div>
+      </article>
+
       <article class="puerta reveal" data-puerta="proveedores">
         <button class="puerta-toggle" aria-expanded="false" aria-controls="panel-proveedores">
           <span class="puerta-icono">
@@ -319,7 +337,7 @@
           </span>
           <span class="puerta-texto">
             <h3>Sé nuestro proveedor</h3>
-            <p>Licores, alimentos, insumos — preséntanos lo que ofreces y tus condiciones.</p>
+            <p>Licores, insumos, menaje — preséntanos lo que ofreces y tus condiciones.</p>
             <span class="puerta-cta">Preséntate
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
             </span>
@@ -332,15 +350,26 @@
             <div class="campo"><label for="p-telefono">Teléfono</label><input id="p-telefono" type="tel" required /></div>
             <div class="campo"><label for="p-correo">Correo <span class="opcional">(opcional)</span></label><input id="p-correo" type="email" /></div>
             <div class="campo">
+              <label for="p-documento-tipo">Tipo de documento</label>
+              <select id="p-documento-tipo" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria">Cédula de extranjería</option>
+                <option value="pasaporte">Pasaporte</option>
+              </select>
+            </div>
+            <div class="campo"><label for="p-documento-numero">Número de documento</label><input id="p-documento-numero" required /></div>
+            <div class="campo">
               <label for="p-que">Qué suministras</label>
               <select id="p-que" required>
                 <option value="" disabled selected>Selecciona una opción</option>
-                <option>Licores</option>
-                <option>Alimentos</option>
-                <option>Insumos de aseo</option>
+                <option>Licores y bebidas</option>
+                <option>Insumos</option>
+                <option>Menaje</option>
                 <option>Otro</option>
               </select>
             </div>
+            <div class="campo campo-otro is-oculto" id="p-que-otro-campo"><label for="p-que-otro">¿Qué suministras?</label><input id="p-que-otro" placeholder="Especifica cuál" /></div>
             <input class="campo-trampa" id="p-sitio-web" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" />
             <p class="puerta-error" id="p-error" role="alert"></p>
             <button class="boton enviar" type="submit">Enviar presentación</button>

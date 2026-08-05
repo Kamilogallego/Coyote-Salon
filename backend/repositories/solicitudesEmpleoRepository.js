@@ -3,20 +3,20 @@ const pool = require("../db");
 const DIAS_RETENCION_PAPELERA = 30;
 
 async function crear(datos) {
-  const { nombre, telefono, correo, cargo } = datos;
+  const { nombre, telefono, correo, cargo, documento_tipo, documento_numero, experiencia } = datos;
 
   const result = await pool.query(
-    `INSERT INTO solicitudes_empleo (nombre, telefono, correo, cargo)
-     VALUES ($1,$2,$3,$4)
+    `INSERT INTO solicitudes_empleo (nombre, telefono, correo, cargo, documento_tipo, documento_numero, experiencia)
+     VALUES ($1,$2,$3,$4,$5,$6,$7)
      RETURNING id`,
-    [nombre, telefono, correo || null, cargo]
+    [nombre, telefono, correo || null, cargo, documento_tipo, documento_numero, experiencia || null]
   );
   return result.rows[0].id;
 }
 
 async function listar() {
   const result = await pool.query(
-    `SELECT id, nombre, telefono, correo, cargo, fecha_registro
+    `SELECT id, nombre, telefono, correo, cargo, documento_tipo, documento_numero, experiencia, fecha_registro
      FROM solicitudes_empleo
      WHERE eliminado_en IS NULL
      ORDER BY fecha_registro DESC`
@@ -26,7 +26,7 @@ async function listar() {
 
 async function obtenerPapelera() {
   const result = await pool.query(
-    `SELECT id, nombre, telefono, correo, cargo, fecha_registro, eliminado_en
+    `SELECT id, nombre, telefono, correo, cargo, documento_tipo, documento_numero, experiencia, fecha_registro, eliminado_en
      FROM solicitudes_empleo
      WHERE eliminado_en IS NOT NULL
      ORDER BY eliminado_en DESC`
