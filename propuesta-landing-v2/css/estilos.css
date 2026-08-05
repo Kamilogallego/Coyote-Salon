@@ -23,11 +23,11 @@
 }
 
 @font-face {
-  font-family: "Bebas Neue";
+  font-family: "Snyder";
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url("../fonts/BebasNeue-Regular.woff2") format("woff2");
+  src: url("../fonts/Snyder-Regular.ttf") format("truetype");
 }
 
 :root {
@@ -473,7 +473,7 @@ section {
 }
 
 .encabezado h2 {
-  font-family: "Bebas Neue", "Lora", Georgia, serif;
+  font-family: "Snyder", "Lora", Georgia, serif;
   font-size: clamp(2.2rem, 4vw, 3.1rem);
   letter-spacing: 0.02em;
   color: var(--azul-deep);
@@ -590,7 +590,7 @@ section {
 }
 
 .sobre-contenido h2 {
-  font-family: "Bebas Neue", "Lora", Georgia, serif;
+  font-family: "Snyder", "Lora", Georgia, serif;
   color: var(--azul-deep);
   font-size: clamp(2.1rem, 3.8vw, 3rem);
   letter-spacing: 0.02em;
@@ -926,7 +926,7 @@ body.lightbox-abierto {
 }
 
 .ubicacion-info h3 {
-  font-family: "Bebas Neue", "Lora", Georgia, serif;
+  font-family: "Snyder", "Lora", Georgia, serif;
   font-size: 1.9rem;
   letter-spacing: 0.02em;
   color: var(--azul-deep);
