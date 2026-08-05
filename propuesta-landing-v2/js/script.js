@@ -63,14 +63,14 @@ if (carrusel) {
 
   document.querySelector(".carrusel-anterior")?.addEventListener("click", () => {
     if (carrusel.scrollLeft <= 4) {
-      carrusel.scrollTo({ left: scrollMaximo(), behavior: "smooth" });
+      carrusel.scrollTo({ left: scrollMaximo(), behavior: "auto" });
     } else {
       carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
     }
   });
   document.querySelector(".carrusel-siguiente")?.addEventListener("click", () => {
     if (carrusel.scrollLeft >= scrollMaximo() - 4) {
-      carrusel.scrollTo({ left: 0, behavior: "smooth" });
+      carrusel.scrollTo({ left: 0, behavior: "auto" });
     } else {
       carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
     }
@@ -81,7 +81,7 @@ if (carrusel) {
     clearTimeout(temporizadorFinCarrusel);
     temporizadorFinCarrusel = setTimeout(() => {
       if (carrusel.scrollLeft >= scrollMaximo() - 4) {
-        carrusel.scrollTo({ left: 0, behavior: "smooth" });
+        carrusel.scrollTo({ left: 0, behavior: "auto" });
       }
     }, 150);
   });
