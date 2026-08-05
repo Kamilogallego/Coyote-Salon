@@ -5,6 +5,11 @@
   gap: 0.75rem;
 }
 
+#papelera-solicitudes-panel.is-oculto,
+#papelera-clientes-panel.is-oculto {
+  display: none;
+}
+
 .toggle-group {
   display: flex;
   flex-wrap: wrap;
