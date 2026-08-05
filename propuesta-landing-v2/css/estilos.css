@@ -528,7 +528,7 @@ section {
 
 @media (max-width: 640px) {
   .sobre-video-wrap {
-    aspect-ratio: 16 / 11;
+    aspect-ratio: 9 / 16;
   }
 }
 
@@ -537,22 +537,12 @@ section {
   inset: 0;
 }
 
-.sobre-video-fondo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: blur(24px) brightness(0.95) saturate(1.6);
-  transform: scale(1.4);
-}
-
 .sobre-video {
   position: relative;
   z-index: 1;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   object-position: center;
 }
 
