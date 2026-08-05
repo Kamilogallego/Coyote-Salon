@@ -166,7 +166,23 @@ const CAMPOS_POR_TIPO = {
   },
 };
 
+const NUMERO_WHATSAPP = "573007828594";
+
 document.querySelectorAll(".puerta-form").forEach((form) => {
+  if (form.id === "panel-eventos") {
+    form.addEventListener("submit", (evento) => {
+      evento.preventDefault();
+      const nombre = document.getElementById("v-nombre").value.trim();
+      const telefono = document.getElementById("v-telefono").value.trim();
+      const tipo = document.getElementById("v-tipo").value;
+      const invitados = document.getElementById("v-invitados").value.trim();
+      const mensaje = `Hola, soy ${nombre}, mi teléfono es ${telefono}. Quiero cotizar un evento (${tipo}) para aprox. ${invitados} invitados.`;
+      window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
+      form.closest(".puerta").classList.add("enviada");
+    });
+    return;
+  }
+
   const config = CAMPOS_POR_TIPO[form.id];
 
   if (!config) {
