@@ -538,71 +538,121 @@ document.querySelectorAll(".sobre-video, .comunidad-video").forEach((video) => {
 });
 
 const carrusel = document.getElementById("carrusel-galeria");
-const mapaClones = new Map();
-if (carrusel) {
-  const originales = Array.from(carrusel.querySelectorAll(".carrusel-item"));
-  const NUM_CLONES = Math.min(3, originales.length);
-
-  const crearClon = (item, indiceOriginal) => {
-    const clon = item.cloneNode(true);
-    clon.classList.add("carrusel-clon");
-    clon.setAttribute("aria-hidden", "true");
-    clon.tabIndex = -1;
-    mapaClones.set(clon, indiceOriginal);
-    return clon;
-  };
-
-  const primerItemOriginal = carrusel.firstChild;
-  originales.slice(-NUM_CLONES).forEach((item) => {
-    carrusel.insertBefore(crearClon(item, originales.indexOf(item)), primerItemOriginal);
-  });
-  originales.slice(0, NUM_CLONES).forEach((item) => {
-    carrusel.appendChild(crearClon(item, originales.indexOf(item)));
-  });
-
-  carrusel.scrollLeft = originales[0].offsetLeft;
-
-  const desplazar = () => originales[0].getBoundingClientRect().width + 16;
-
-  document.querySelector(".carrusel-anterior")?.addEventListener("click", () => {
-    carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
-  });
-  document.querySelector(".carrusel-siguiente")?.addEventListener("click", () => {
-    carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
-  });
-
-  const reposicionarSiEsClon = () => {
-    const centro = carrusel.scrollLeft + carrusel.clientWidth / 2;
-    let masCercano = null;
-    let distanciaMin = Infinity;
-    carrusel.querySelectorAll(".carrusel-item").forEach((el) => {
-      const centroEl = el.offsetLeft + el.getBoundingClientRect().width / 2;
-      const distancia = Math.abs(centroEl - centro);
-      if (distancia < distanciaMin) {
-        distanciaMin = distancia;
-        masCercano = el;
-      }
-    });
-    if (masCercano && mapaClones.has(masCercano)) {
-      carrusel.scrollLeft = originales[mapaClones.get(masCercano)].offsetLeft;
-    }
-  };
-
-  if ("onscrollend" in window) {
-    carrusel.addEventListener("scrollend", reposicionarSiEsClon);
-  } else {
-    let temporizadorLoop;
-    carrusel.addEventListener("scroll", () => {
-      clearTimeout(temporizadorLoop);
-      temporizadorLoop = setTimeout(reposicionarSiEsClon, 120);
-    });
+let arrastroSignificativoEnCarrusel = false;
+if (carrusel && carrusel.children.length > 1) {
+  // El transform tiene que ir en una pista interna, separada del marco que recorta
+  // (overflow: hidden). Si se moviera el mismo elemento que recorta, se desplazaria el
+  // marco entero junto con las fotos y visualmente no cambiaria nada.
+  const pista = document.createElement("div");
+  pista.className = "carrusel-pista";
+  while (carrusel.firstElementChild) {
+    pista.appendChild(carrusel.firstElementChild);
   }
+  carrusel.appendChild(pista);
+
+  const anchoItem = () => pista.firstElementChild.getBoundingClientRect().width + 16;
+
+  // Se mantiene siempre exactamente una foto "de respaldo" pegada al frente (la ultima de
+  // la fila, movida ahi al inicio) para poder revelar el "anterior" sin dejar un hueco en
+  // blanco. Con eso, tanto avanzar como retroceder terminan en el mismo estado en reposo
+  // (desplazamiento == anchoItem()), asi que nunca hace falta "regresar" nada: siempre se
+  // sigue de largo hacia el mismo lado.
+  pista.insertBefore(pista.lastElementChild, pista.firstElementChild);
+
+  let desplazamiento = anchoItem();
+  let animando = false;
+
+  const posicionar = (animado) => {
+    pista.style.transition = animado ? "transform 380ms cubic-bezier(0.22, 0.9, 0.32, 1.1)" : "none";
+    pista.style.transform = `translateX(${-desplazamiento}px)`;
+  };
+  posicionar(false);
+
+  const reciclarFrente = () => {
+    pista.appendChild(pista.firstElementChild);
+    desplazamiento -= anchoItem();
+    posicionar(false);
+  };
+  const reciclarFondo = () => {
+    pista.insertBefore(pista.lastElementChild, pista.firstElementChild);
+    desplazamiento += anchoItem();
+    posicionar(false);
+  };
+
+  pista.addEventListener("transitionend", (evento) => {
+    if (evento.propertyName !== "transform") return;
+    const w = anchoItem();
+    if (desplazamiento > w * 1.5) reciclarFrente();
+    else if (desplazamiento < w * 0.5) reciclarFondo();
+    animando = false;
+  });
+
+  document.querySelector(".carrusel-siguiente")?.addEventListener("click", () => {
+    if (animando) return;
+    animando = true;
+    desplazamiento += anchoItem();
+    posicionar(true);
+  });
+  document.querySelector(".carrusel-anterior")?.addEventListener("click", () => {
+    if (animando) return;
+    animando = true;
+    desplazamiento -= anchoItem();
+    posicionar(true);
+  });
+
+  let arrastrando = false;
+  let xAnterior = 0;
+  let arrastreTotal = 0;
+
+  carrusel.addEventListener("pointerdown", (evento) => {
+    if (animando) return;
+    arrastrando = true;
+    arrastreTotal = 0;
+    xAnterior = evento.clientX;
+    carrusel.setPointerCapture(evento.pointerId);
+  });
+
+  carrusel.addEventListener("pointermove", (evento) => {
+    if (!arrastrando) return;
+    const delta = evento.clientX - xAnterior;
+    xAnterior = evento.clientX;
+    arrastreTotal += Math.abs(delta);
+    desplazamiento -= delta;
+
+    const w = anchoItem();
+    while (desplazamiento >= 2 * w) reciclarFrente();
+    while (desplazamiento <= 0) reciclarFondo();
+
+    posicionar(false);
+  });
+
+  const soltar = () => {
+    if (!arrastrando) return;
+    arrastrando = false;
+    arrastroSignificativoEnCarrusel = arrastreTotal > 6;
+
+    const w = anchoItem();
+    let objetivo = w;
+    if (desplazamiento > w * 1.2) objetivo = 2 * w;
+    else if (desplazamiento < w * 0.8) objetivo = 0;
+
+    if (objetivo === desplazamiento) {
+      posicionar(false);
+      return;
+    }
+    desplazamiento = objetivo;
+    animando = true;
+    posicionar(true);
+  };
+
+  carrusel.addEventListener("pointerup", soltar);
+  carrusel.addEventListener("pointercancel", soltar);
 }
 
 const lightbox = document.getElementById("lightbox");
 const lightboxImg = document.getElementById("lightbox-img");
 if (lightbox && lightboxImg) {
-  const fotos = Array.from(document.querySelectorAll(".carrusel-item:not(.carrusel-clon)"));
+  const fotos = Array.from(document.querySelectorAll(".carrusel-item"));
   let indiceActual = 0;
 
   const mostrarFoto = (indice) => {
@@ -625,8 +675,11 @@ if (lightbox && lightboxImg) {
 
   document.querySelectorAll(".carrusel-item").forEach((foto) => {
     foto.addEventListener("click", () => {
-      const indiceOriginal = mapaClones.get(foto);
-      abrirLightbox(indiceOriginal === undefined ? foto : fotos[indiceOriginal]);
+      if (arrastroSignificativoEnCarrusel) {
+        arrastroSignificativoEnCarrusel = false;
+        return;
+      }
+      abrirLightbox(foto);
     });
   });
 

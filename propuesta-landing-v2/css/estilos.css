@@ -720,22 +720,23 @@ a.dato:hover {
 }
 
 .carrusel {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
+  overflow: hidden;
   padding-bottom: 0.5rem;
-  scrollbar-width: none;
+  touch-action: pan-y;
+  cursor: grab;
 }
 
-.carrusel::-webkit-scrollbar {
-  display: none;
+.carrusel:active {
+  cursor: grabbing;
+}
+
+.carrusel-pista {
+  display: flex;
+  gap: 1rem;
 }
 
 .carrusel-item {
   flex: 0 0 auto;
-  scroll-snap-align: start;
   width: 340px;
   aspect-ratio: 4 / 5;
   border-radius: 16px;
@@ -768,11 +769,6 @@ a.dato:hover {
 
 .carrusel-item:hover img {
   transform: scale(1.06);
-}
-
-.carrusel-item.carrusel-clon {
-  opacity: 1;
-  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -817,14 +813,12 @@ a.dato:hover {
   }
 
   .carrusel {
-    scroll-snap-type: x mandatory;
     padding-left: 1.25rem;
     padding-right: 1.25rem;
   }
 
   .carrusel-item {
     width: 250px;
-    scroll-snap-align: start;
     opacity: 1;
     transform: none;
     transition: box-shadow 300ms ease;
