@@ -31,11 +31,12 @@ const CONFIG_POR_TIPO = {
   empleo: {
     tituloNombre: "Nombre",
     tituloCategoria: "Cargo",
-    tituloDetalle: "Documento / Disponibilidad / Experiencia",
+    tituloDetalle: "Disponibilidad",
     nombre: (s) => s.nombre,
     categoria: (s) => s.cargo,
-    detalle: (s) => escapeHtml([formatearDocumento(s), s.disponibilidad, s.experiencia].filter(Boolean).join(" — ")),
-    detalleTexto: (s) => [formatearDocumento(s), s.disponibilidad, s.experiencia].filter(Boolean).join(" — "),
+    documento: (s) => formatearDocumento(s),
+    detalle: (s) => escapeHtml(s.disponibilidad || ""),
+    detalleTexto: (s) => s.disponibilidad || "",
     camposDetalle: (s) => [
       ["Teléfono", s.telefono],
       ["Correo", s.correo],
@@ -49,11 +50,12 @@ const CONFIG_POR_TIPO = {
   proveedores: {
     tituloNombre: "Empresa",
     tituloCategoria: "Qué suministra",
-    tituloDetalle: "Contacto / Documento",
+    tituloDetalle: "Contacto",
     nombre: (s) => s.nombre_empresa,
     categoria: (s) => s.que_suministra,
-    detalle: (s) => escapeHtml([s.contacto, formatearDocumento(s)].filter(Boolean).join(" · ")),
-    detalleTexto: (s) => [s.contacto, formatearDocumento(s)].filter(Boolean).join(" · "),
+    documento: (s) => formatearDocumento(s),
+    detalle: (s) => escapeHtml(s.contacto || ""),
+    detalleTexto: (s) => s.contacto || "",
     camposDetalle: (s) => [
       ["Contacto", s.contacto],
       ["Teléfono", s.telefono],
@@ -153,6 +155,7 @@ function renderizarTablaSolicitudes() {
       <td>${escapeHtml(s.telefono)}</td>
       <td>${escapeHtml(s.correo || "")}</td>
       <td>${escapeHtml(config.categoria(s))}</td>
+      <td>${escapeHtml(config.documento(s))}</td>
       <td>${config.detalle(s)}</td>
       <td>${formatearFecha(s.fecha_registro)}</td>
       <td class="fila-acciones">
@@ -239,10 +242,12 @@ async function exportarSolicitudesExcel() {
   }
 
   const config = CONFIG_POR_TIPO[tipoActual];
-  const encabezados = [config.tituloNombre, "Teléfono", "Correo", config.tituloCategoria, config.tituloDetalle, "Fecha"].filter(Boolean);
+  const encabezados = [config.tituloNombre, "Teléfono", "Correo", config.tituloCategoria, "Documento", config.tituloDetalle, "Fecha"].filter(
+    Boolean
+  );
 
   const filas = solicitudesActuales.map((s) => {
-    const fila = [config.nombre(s), s.telefono, s.correo || "", config.categoria(s)];
+    const fila = [config.nombre(s), s.telefono, s.correo || "", config.categoria(s), config.documento(s)];
     if (config.tituloDetalle) fila.push(config.detalleTexto(s));
     fila.push(formatearFecha(s.fecha_registro));
     return fila;
