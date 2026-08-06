@@ -1,7 +1,7 @@
 import { cargarPapelera } from "./papelera.js";
 import { cargarCompartir } from "./compartir.js";
 import { aplicarFiltroDesdeResumen } from "./clientes.js";
-import { cargarSolicitudes } from "./solicitudes.js";
+import { cargarSolicitudes, marcarSolicitudesVistas } from "./solicitudes.js";
 
 const TITULOS_PAGINA = {
   resumen: "Resumen",
@@ -27,7 +27,10 @@ document.querySelectorAll(".nav-item[data-page]").forEach((btn) => {
     irAPagina(btn.dataset.page);
     if (btn.dataset.page === "papelera") cargarPapelera();
     if (btn.dataset.page === "compartir") cargarCompartir();
-    if (btn.dataset.page === "solicitudes") cargarSolicitudes();
+    if (btn.dataset.page === "solicitudes") {
+      marcarSolicitudesVistas();
+      cargarSolicitudes();
+    }
   });
 });
 

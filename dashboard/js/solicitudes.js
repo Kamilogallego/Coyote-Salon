@@ -71,6 +71,30 @@ let tipoActual = "empleo";
 let solicitudesActuales = [];
 let papeleraSolicitudesActual = [];
 
+const CLAVE_VISTO_HASTA = "coyote-solicitudes-visto-hasta";
+
+function obtenerVistoHasta() {
+  return new Date(localStorage.getItem(CLAVE_VISTO_HASTA) || 0);
+}
+
+export async function marcarSolicitudesVistas() {
+  // Se guarda la fecha_registro mas reciente entre las solicitudes que existen ahora mismo
+  // (no la hora del navegador) para que la comparacion sea inmune a cualquier diferencia de
+  // huso horario entre el navegador y el servidor.
+  const respuestas = await Promise.all(TIPOS.map((tipo) => fetch(`/api/solicitudes/${tipo}`, { credentials: "include" })));
+  if (respuestas.some((res) => res.status === 401)) return;
+  const listas = await Promise.all(respuestas.map((res) => res.json()));
+
+  let masReciente = obtenerVistoHasta();
+  listas.flat().forEach((s) => {
+    const fecha = new Date(s.fecha_registro);
+    if (fecha > masReciente) masReciente = fecha;
+  });
+
+  localStorage.setItem(CLAVE_VISTO_HASTA, masReciente.toISOString());
+  cargarConteoSolicitudes();
+}
+
 function actualizarBadgeSolicitudes(cantidad) {
   const badge = document.getElementById("badge-solicitudes");
   badge.textContent = cantidad > 99 ? "99+" : String(cantidad);
@@ -107,13 +131,14 @@ export async function cargarConteoSolicitudes() {
   }
   const listas = await Promise.all(respuestas.map((res) => res.json()));
 
+  const vistoHasta = obtenerVistoHasta();
   const conteosPorTipo = {};
   let tipoMasReciente = null;
   let fechaMasReciente = null;
 
   TIPOS.forEach((tipo, i) => {
     const lista = listas[i];
-    conteosPorTipo[tipo] = lista.length;
+    conteosPorTipo[tipo] = lista.filter((s) => new Date(s.fecha_registro) > vistoHasta).length;
     for (const s of lista) {
       if (!fechaMasReciente || new Date(s.fecha_registro) > new Date(fechaMasReciente)) {
         fechaMasReciente = s.fecha_registro;
@@ -122,7 +147,7 @@ export async function cargarConteoSolicitudes() {
     }
   });
 
-  actualizarBadgeSolicitudes(listas.reduce((total, lista) => total + lista.length, 0));
+  actualizarBadgeSolicitudes(Object.values(conteosPorTipo).reduce((total, cantidad) => total + cantidad, 0));
   actualizarBadgesPorTipo(conteosPorTipo, tipoMasReciente, fechaMasReciente);
 }
 
