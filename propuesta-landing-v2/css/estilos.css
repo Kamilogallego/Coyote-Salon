@@ -1124,6 +1124,8 @@ body.lightbox-abierto {
 
 .puerta-panel-inner {
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .puerta-form,
@@ -1136,8 +1138,10 @@ body.lightbox-abierto {
 
 .gracias {
   display: none;
+  flex: 1;
   text-align: center;
   align-items: center;
+  justify-content: center;
   padding-top: 0.5rem;
 }
 

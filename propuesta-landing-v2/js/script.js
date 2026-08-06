@@ -785,6 +785,21 @@ queOtroSelect?.addEventListener("change", () => {
   queOtroInput.required = esOtro;
 });
 
+function marcarComoEnviada(form) {
+  // Al pasar del formulario (largo) al mensaje de "gracias" (corto), la pagina se acorta
+  // de golpe y el navegador puede terminar mostrando lo que quedo en esa posicion (por
+  // ejemplo el mapa, que es lo siguiente en la pagina), sin que nadie haya pedido ese
+  // scroll. El boton de enviar normalmente queda mas abajo de lo que se ve en pantalla,
+  // asi que incluso encogiendo el panel con una animacion se termina revelando el mapa
+  // por debajo. Se fija la altura del panel al tamano del formulario para que la pagina
+  // no cambie de alto y la vista se quede donde estaba.
+  const panelInner = form.closest(".puerta-panel-inner");
+  if (panelInner) {
+    panelInner.style.minHeight = `${panelInner.getBoundingClientRect().height}px`;
+  }
+  form.closest(".puerta").classList.add("enviada");
+}
+
 document.querySelectorAll(".puerta-form").forEach((form) => {
   if (form.id === "panel-reserva") {
     form.addEventListener("submit", (evento) => {
@@ -798,7 +813,7 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
       const personas = document.getElementById("r-personas").value.trim();
       const mensaje = `Hola, soy ${nombre}, ${documentoTipo} ${documentoNumero}, mi teléfono es ${telefono}. Quiero reservar mesa para ${personas} personas el ${fecha} a las ${hora}.`;
       window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
-      form.closest(".puerta").classList.add("enviada");
+      marcarComoEnviada(form);
     });
     return;
   }
@@ -808,7 +823,7 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
   if (!config) {
     form.addEventListener("submit", (evento) => {
       evento.preventDefault();
-      form.closest(".puerta").classList.add("enviada");
+      marcarComoEnviada(form);
     });
     return;
   }
@@ -842,7 +857,7 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
         return;
       }
 
-      form.closest(".puerta").classList.add("enviada");
+      marcarComoEnviada(form);
     } catch {
       if (errorEl) errorEl.textContent = "No pudimos enviar el formulario. Revisa tu conexión e intenta de nuevo.";
     } finally {
