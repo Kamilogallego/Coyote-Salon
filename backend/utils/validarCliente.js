@@ -8,12 +8,10 @@ const CAMPOS_REQUERIDOS = [
   "ciudad",
   "genero",
   "fecha_nacimiento",
-  "es_padre",
-  "tiene_pareja",
   "medio_contacto",
-  "mayor_edad",
-  "habeas_data",
 ];
+
+const CAMPOS_BOOLEANOS = ["es_padre", "tiene_pareja", "mayor_edad", "habeas_data"];
 
 const LONGITUDES_MAXIMAS = {
   nombre: 150,
@@ -32,14 +30,22 @@ function validar(body) {
 
   for (const campo of CAMPOS_REQUERIDOS) {
     const valor = body[campo];
-    if (valor === undefined || valor === null || valor === "") {
+    if (typeof valor !== "string" || valor.trim() === "") {
       errores.push(`El campo "${campo}" es obligatorio`);
+    }
+  }
+
+  for (const campo of CAMPOS_BOOLEANOS) {
+    if (typeof body[campo] !== "boolean") {
+      errores.push(`El campo "${campo}" tiene un formato inválido`);
     }
   }
 
   for (const [campo, maximo] of Object.entries(LONGITUDES_MAXIMAS)) {
     const valor = body[campo];
-    if (typeof valor === "string" && valor.length > maximo) {
+    if (valor !== undefined && typeof valor !== "string") {
+      errores.push(`El campo "${campo}" tiene un formato inválido`);
+    } else if (typeof valor === "string" && valor.length > maximo) {
       errores.push(`El campo "${campo}" no puede superar ${maximo} caracteres`);
     }
   }

@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
 const session = require("express-session");
 const pgSession = require("connect-pg-simple")(session);
 
@@ -36,7 +37,17 @@ app.use(
   })
 );
 
-app.use(express.json());
+app.use(express.json({ limit: "20kb" }));
+
+const limiteApiGeneral = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 300,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Demasiadas solicitudes desde esta red. Intenta de nuevo en unos minutos." },
+});
+app.use("/api", limiteApiGeneral);
+
 app.use(
   session({
     store: new pgSession({ pool, tableName: "session", createTableIfMissing: true }),

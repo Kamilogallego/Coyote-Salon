@@ -52,3 +52,13 @@ test("validar: acepta un campo justo en el límite de longitud", () => {
   const errores = validar({ ...registroValido, nombre: "a".repeat(150) });
   assert.ok(!errores.some((e) => e.includes("150 caracteres")));
 });
+
+test("validar: rechaza campos de texto que no son string (array/objeto)", () => {
+  const errores = validar({ ...registroValido, nombre: ["a", "b"] });
+  assert.ok(errores.some((e) => e.includes("nombre")));
+});
+
+test("validar: rechaza campos booleanos que no son boolean", () => {
+  const errores = validar({ ...registroValido, mayor_edad: "true" });
+  assert.ok(errores.some((e) => e.includes("mayor_edad")));
+});

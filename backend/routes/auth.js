@@ -17,7 +17,7 @@ const limiteLogin = rateLimit({
 router.post("/login", limiteLogin, asyncHandler(async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
+  if (typeof username !== "string" || typeof password !== "string" || !username || !password) {
     return res.status(400).json({ error: "Usuario y contraseña son obligatorios" });
   }
 
