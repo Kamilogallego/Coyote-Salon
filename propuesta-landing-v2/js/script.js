@@ -431,6 +431,7 @@ function aplicarIdioma(lang) {
     { clave: "comunidad.titulo", es: '<span class="tilde-manual">U</span>nete a nuestra comunidad' },
     { clave: "sobre.titulo", es: 'Taquer<span class="tilde-manual">i</span>a Mex Mex' },
     { clave: "galeria.titulo", es: 'Galer<span class="tilde-manual">i</span>a' },
+    { clave: "puertas.titulo", es: 'S<span class="tilde-manual">e</span> parte de Coyote' },
   ];
   titulosConTildeManual.forEach(({ clave, es }) => {
     const el = document.querySelector(`[data-i18n="${clave}"]`);
