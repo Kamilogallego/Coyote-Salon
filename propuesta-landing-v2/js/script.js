@@ -423,17 +423,24 @@ function aplicarIdioma(lang) {
     }
   });
 
-  // La fuente decorativa del titulo no trae el glifo de la U con tilde (el navegador
-  // usaba otra fuente solo para esa letra). En espanol se separa la U en un span propio
-  // para poder dibujarle la tilde con CSS; en ingles el titulo no la necesita.
-  const tituloComunidad = document.querySelector('[data-i18n="comunidad.titulo"]');
-  if (tituloComunidad) {
+  // La fuente decorativa de los titulos no trae los glifos con tilde (el navegador usaba
+  // otra fuente solo para esa letra y se notaba). En espanol se separa la letra con tilde
+  // en un span propio para poder dibujarsela con CSS (ver .tilde-manual); en ingles esos
+  // titulos no la necesitan.
+  const titulosConTildeManual = [
+    { clave: "comunidad.titulo", es: '<span class="tilde-manual">U</span>nete a nuestra comunidad' },
+    { clave: "sobre.titulo", es: 'Taquer<span class="tilde-manual">i</span>a Mex Mex' },
+    { clave: "galeria.titulo", es: 'Galer<span class="tilde-manual">i</span>a' },
+  ];
+  titulosConTildeManual.forEach(({ clave, es }) => {
+    const el = document.querySelector(`[data-i18n="${clave}"]`);
+    if (!el) return;
     if (lang === "es") {
-      tituloComunidad.innerHTML = '<span class="acento-u">U</span>nete a nuestra comunidad';
+      el.innerHTML = es;
     } else {
-      tituloComunidad.textContent = t("comunidad.titulo");
+      el.textContent = t(clave);
     }
-  }
+  });
 
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const clave = el.getAttribute("data-i18n-placeholder");

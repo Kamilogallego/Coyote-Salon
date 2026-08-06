@@ -1494,16 +1494,16 @@ dialog.modal-legal h2 {
   margin-bottom: 0.9rem;
 }
 
-/* La fuente "Snyder" no trae el glifo de la U con tilde (el navegador la
-   reemplaza por otra fuente y se nota). En vez de la "Ú", se usa una "U"
-   normal (misma fuente) y se dibuja la tilde a mano como una rayita
-   inclinada, dentro de un span propio (ver aplicarIdioma en script.js). */
-.comunidad h2 .acento-u {
+/* La fuente "Snyder" no trae los glifos con tilde (el navegador cae a otra
+   fuente solo para esa letra y se nota). Se usa la letra normal (misma
+   fuente) y se le dibuja la tilde a mano como una rayita inclinada, dentro
+   de un span propio (ver aplicarIdioma en script.js). */
+.tilde-manual {
   position: relative;
   display: inline-block;
 }
 
-.comunidad h2 .acento-u::before {
+.tilde-manual::before {
   content: "";
   position: absolute;
   top: -0.62em;
