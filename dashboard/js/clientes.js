@@ -689,6 +689,7 @@ filtroTipoDocumento.addEventListener("change", cargarClientes);
 filtroGenero.addEventListener("change", cargarClientes);
 filtroMedio.addEventListener("change", cargarClientes);
 filtroPadre.addEventListener("change", cargarClientes);
+filtroNovedades.addEventListener("change", cargarClientes);
 filtroPareja.addEventListener("change", () => {
   actualizarVisibilidadAniversario();
   cargarClientes();
