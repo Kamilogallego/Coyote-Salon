@@ -90,6 +90,7 @@ ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS eliminado_en TIMESTAMP;
 ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS documento_tipo VARCHAR(30);
 ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS documento_numero VARCHAR(30);
 ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS experiencia TEXT;
+ALTER TABLE solicitudes_empleo ADD COLUMN IF NOT EXISTS disponibilidad VARCHAR(30);
 
 CREATE INDEX IF NOT EXISTS idx_solicitudes_empleo_fecha_registro ON solicitudes_empleo (fecha_registro);
 CREATE INDEX IF NOT EXISTS idx_solicitudes_empleo_eliminado_en ON solicitudes_empleo (eliminado_en);

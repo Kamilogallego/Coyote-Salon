@@ -9,6 +9,7 @@ const registroValido = {
   cargo: "Mesero/a",
   documento_tipo: "cedula",
   documento_numero: "1234567890",
+  disponibilidad: "Tiempo completo",
 };
 
 test("validar: acepta un registro completo y válido", () => {
@@ -42,4 +43,9 @@ test("validar: rechaza un tipo de documento invalido", () => {
 
 test("validar: experiencia es opcional", () => {
   assert.deepEqual(validar({ ...registroValido, experiencia: "" }), []);
+});
+
+test("validar: rechaza una disponibilidad invalida", () => {
+  const errores = validar({ ...registroValido, disponibilidad: "Solo mañanas" });
+  assert.ok(errores.some((e) => e.includes("Disponibilidad inválida")));
 });

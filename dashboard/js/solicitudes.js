@@ -37,11 +37,11 @@ const CONFIG_POR_TIPO = {
   empleo: {
     tituloNombre: "Nombre",
     tituloCategoria: "Cargo",
-    tituloDetalle: "Documento / Experiencia",
+    tituloDetalle: "Documento / Disponibilidad / Experiencia",
     nombre: (s) => s.nombre,
     categoria: (s) => s.cargo,
-    detalle: (s) => escapeHtml([formatearDocumento(s), s.experiencia].filter(Boolean).join(" — ")),
-    detalleTexto: (s) => [formatearDocumento(s), s.experiencia].filter(Boolean).join(" — "),
+    detalle: (s) => escapeHtml([formatearDocumento(s), s.disponibilidad, s.experiencia].filter(Boolean).join(" — ")),
+    detalleTexto: (s) => [formatearDocumento(s), s.disponibilidad, s.experiencia].filter(Boolean).join(" — "),
   },
   proveedores: {
     tituloNombre: "Empresa",

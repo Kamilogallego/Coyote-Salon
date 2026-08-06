@@ -23,10 +23,18 @@
       <img src="images/logo-coyote.png" alt="Coyote Salón Social" />
     </a>
     <div class="nav-links">
-      <a href="#sobre">Coyote</a>
-      <a href="#galeria">Ver más</a>
-      <a href="#ubicacion">Ubicación</a>
-      <a class="boton" href="#puertas">Únete</a>
+      <a href="#sobre" data-i18n="nav.coyote">Coyote</a>
+      <a href="#galeria" data-i18n="nav.vermas">Ver más</a>
+      <a href="#ubicacion" data-i18n="nav.ubicacion">Ubicación</a>
+      <a class="boton" href="#puertas" data-i18n="nav.unete">Únete</a>
+      <div class="lang-switch" role="group" aria-label="Idioma / Language">
+        <button type="button" class="lang-btn" data-lang="es" aria-pressed="true" aria-label="Español">
+          <span class="flag flag-es" aria-hidden="true"></span> ES
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-pressed="false" aria-label="English">
+          <span class="flag flag-en" aria-hidden="true"></span> EN
+        </button>
+      </div>
     </div>
   </div>
 </nav>
@@ -41,12 +49,12 @@
     <div class="hero-badge-halo">
       <img class="hero-badge" src="images/logo-coyote-blanco.png" alt="Coyote Salón Social" />
     </div>
-    <p class="eyebrow">Armenia, Quindío</p>
-    <h1>Tacos, burritos, tequila y música sin etiqueta</h1>
-    <p>El lugar de Armenia donde los tacos salen calientes, la casa se llena rápido y la noche se estira hasta que alguien apague la música.</p>
+    <p class="eyebrow" data-i18n="hero.eyebrow">Armenia, Quindío</p>
+    <h1 data-i18n="hero.titulo">Tacos, burritos, tequila y música sin etiqueta</h1>
+    <p data-i18n="hero.parrafo">El lugar de Armenia donde los tacos salen calientes, la casa se llena rápido y la noche se estira hasta que alguien apague la música.</p>
     <div class="hero-acciones">
-      <a class="boton" href="#puertas">Únete a Coyote</a>
-      <a class="boton blanco" href="#galeria">Ver más</a>
+      <a class="boton" href="#puertas" data-i18n="hero.boton1">Únete a Coyote</a>
+      <a class="boton blanco" href="#galeria" data-i18n="hero.boton2">Ver más</a>
     </div>
   </div>
   <span class="scroll-cue" aria-hidden="true"></span>
@@ -63,9 +71,9 @@
       <div class="sobre-cortina" aria-hidden="true"></div>
     </div>
     <div class="sobre-contenido reveal">
-      <p class="eyebrow">Sobre Coyote</p>
-      <h2>Taqueria Mex Mex</h2>
-      <p>
+      <p class="eyebrow" data-i18n="sobre.eyebrow">Sobre Coyote</p>
+      <h2 data-i18n="sobre.titulo">Taqueria Mex Mex</h2>
+      <p data-i18n="sobre.parrafo">
         Coyote es un salón social de tacos, burritos y micheladas en Armenia — de esos lugares donde llegas por la comida
         y te quedas por la música. Sillas plegables, mucho rojo y una barra que no para. Somos el equipo detrás de la
         barra, la cocina y la música: la gente que hace que cada noche en Coyote se sienta como estar en casa de un amigo.
@@ -73,11 +81,11 @@
       <div class="datos">
         <span class="dato">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
-          Armenia, Quindío
+          <span data-i18n="hero.eyebrow">Armenia, Quindío</span>
         </span>
         <span class="dato">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v7a3 3 0 0 0 6 0V3M9 10v11M18 3c-2 1.2-2 4-2 6s.7 3 2 3v9"/></svg>
-          Tacos, burritos &amp; micheladas
+          <span data-i18n="sobre.dato2">Tacos, burritos &amp; micheladas</span>
         </span>
         <a class="dato" href="https://www.instagram.com/coyotesalonsocial/" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
@@ -91,9 +99,9 @@
 <section class="galeria" id="galeria">
   <div class="wrap">
     <div class="encabezado centrado reveal">
-      <p class="eyebrow">Así se ve</p>
-      <h2>Galeria</h2>
-      <p>Desliza para ver más, clic en cualquier foto para ir a Instagram.</p>
+      <p class="eyebrow" data-i18n="galeria.eyebrow">Así se ve</p>
+      <h2 data-i18n="galeria.titulo">Galeria</h2>
+      <p data-i18n="galeria.parrafo">Desliza para ver más, clic en cualquier foto para ir a Instagram.</p>
     </div>
     <div class="carrusel-wrap">
       <button type="button" class="carrusel-flecha carrusel-anterior" aria-label="Foto anterior">
@@ -180,7 +188,7 @@
     <img class="lightbox-img" id="lightbox-img" src="" alt="" />
     <a class="lightbox-ig" href="https://www.instagram.com/coyotesalonsocial/" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
-      Ver en Instagram
+      <span data-i18n="lightbox.instagram">Ver en Instagram</span>
     </a>
   </div>
 </div>
@@ -188,9 +196,9 @@
 <section class="puertas" id="puertas">
   <div class="wrap">
     <div class="encabezado centrado reveal">
-      <p class="eyebrow">Se busca</p>
-      <h2>Se parte de Coyote</h2>
-      <p>Trabajo, talento y aliados — todas las formas de sumarte a la casa.</p>
+      <p class="eyebrow" data-i18n="puertas.eyebrow">Se busca</p>
+      <h2 data-i18n="puertas.titulo">Se parte de Coyote</h2>
+      <p data-i18n="puertas.parrafo">Trabajo, talento y aliados — todas las formas de sumarte a la casa.</p>
     </div>
 
     <div class="puertas-grid">
@@ -201,47 +209,64 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12" rx="1.5"/><path d="M8 7.5V6a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v1.5"/><path d="M3 12.5h18"/></svg>
           </span>
           <span class="puerta-texto">
-            <h3>Trabaja con nosotros</h3>
-            <p>Meseros, cocina, seguridad — súmate al equipo que hace que la casa funcione.</p>
-            <span class="puerta-cta">Postúlate
+            <h3 data-i18n="empleo.titulo">Trabaja con nosotros</h3>
+            <p data-i18n="empleo.desc">Meseros, cocina, seguridad — súmate al equipo que hace que la casa funcione.</p>
+            <span class="puerta-cta" data-i18n="empleo.cta">Postúlate
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
             </span>
           </span>
         </button>
         <div class="puerta-panel-wrap"><div class="puerta-panel-inner">
           <form class="puerta-form" id="panel-empleo">
-            <div class="campo"><label for="e-nombre">Nombre completo</label><input id="e-nombre" required /></div>
-            <div class="campo"><label for="e-telefono">Teléfono</label><input id="e-telefono" type="tel" required /></div>
-            <div class="campo"><label for="e-correo">Correo <span class="opcional">(opcional)</span></label><input id="e-correo" type="email" /></div>
+            <div class="campo"><label for="e-nombre" data-i18n="campo.nombre">Nombre completo</label><input id="e-nombre" required /></div>
+            <div class="campo"><label for="e-telefono" data-i18n="campo.telefono">Teléfono</label><input id="e-telefono" type="tel" required /></div>
+            <div class="campo"><label for="e-correo"><span data-i18n="campo.correo">Correo</span> <span class="opcional" data-i18n="campo.opcional">(opcional)</span></label><input id="e-correo" type="email" /></div>
             <div class="campo">
-              <label for="e-documento-tipo">Tipo de documento</label>
+              <label for="e-documento-tipo" data-i18n="campo.tipoDocumento">Tipo de documento</label>
               <select id="e-documento-tipo" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option value="cedula">Cédula de ciudadanía</option>
-                <option value="cedula_extranjeria">Cédula de extranjería</option>
-                <option value="pasaporte">Pasaporte</option>
+                <option value="" disabled selected data-i18n="campo.selecciona">Selecciona una opción</option>
+                <option value="cedula" data-i18n="doc.cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria" data-i18n="doc.cedulaExtranjeria">Cédula de extranjería</option>
+                <option value="pasaporte" data-i18n="doc.pasaporte">Pasaporte</option>
               </select>
             </div>
-            <div class="campo"><label for="e-documento-numero">Número de documento</label><input id="e-documento-numero" required /></div>
+            <div class="campo"><label for="e-documento-numero" data-i18n="campo.numeroDocumento">Número de documento</label><input id="e-documento-numero" required /></div>
             <div class="campo">
-              <label for="e-cargo">Cargo al que aplicas</label>
+              <label for="e-cargo" data-i18n="empleo.cargoLabel">Cargo al que aplicas</label>
               <select id="e-cargo" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option>Mesero/a</option>
-                <option>Cocina</option>
-                <option>Seguridad</option>
-                <option>Cajero/a</option>
-                <option>Cargo administrativo</option>
+                <option value="" disabled selected data-i18n="campo.selecciona">Selecciona una opción</option>
+                <option data-i18n="cargo.mesero">Mesero/a</option>
+                <option data-i18n="cargo.cocina">Cocina</option>
+                <option data-i18n="cargo.seguridad">Seguridad</option>
+                <option data-i18n="cargo.cajero">Cajero/a</option>
+                <option data-i18n="cargo.admin">Cargo administrativo</option>
               </select>
             </div>
-            <div class="campo"><label for="e-experiencia">Cuéntanos tu experiencia</label><textarea id="e-experiencia" rows="3"></textarea></div>
+            <div class="campo">
+              <label for="e-disponibilidad" data-i18n="empleo.disponibilidadLabel">Disponibilidad de tiempo</label>
+              <select id="e-disponibilidad" required>
+                <option value="" disabled selected data-i18n="campo.selecciona">Selecciona una opción</option>
+                <option data-i18n="disponibilidad.completo">Tiempo completo</option>
+                <option data-i18n="disponibilidad.medio">Medio tiempo</option>
+                <option data-i18n="disponibilidad.finde">Fines de semana</option>
+              </select>
+            </div>
+            <div class="campo"><label for="e-experiencia" data-i18n="empleo.experienciaLabel">Cuéntanos tu experiencia</label><textarea id="e-experiencia" rows="3"></textarea></div>
             <input class="campo-trampa" id="e-sitio-web" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" />
+            <div class="campo-checkbox">
+              <input type="checkbox" id="e-habeas-data" required />
+              <label for="e-habeas-data">
+                <span data-i18n="legal.acepto">Acepto los</span> <button type="button" class="link-modal" data-modal="terminos" data-i18n="legal.terminos">Términos y condiciones</button>
+                <span data-i18n="legal.autorizo">y autorizo el tratamiento de mis datos personales según la</span>
+                <button type="button" class="link-modal" data-modal="privacidad" data-i18n="legal.privacidad">Política de tratamiento de datos</button>.
+              </label>
+            </div>
             <p class="puerta-error" id="e-error" role="alert"></p>
-            <button class="boton enviar" type="submit">Enviar postulación</button>
+            <button class="boton enviar" type="submit" data-i18n="empleo.enviar">Enviar postulación</button>
           </form>
           <div class="gracias">
             <span class="gracias-sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span>
-            <p><strong>¡Listo!</strong><br>Recibimos tu postulación. Si encajas con una vacante te contactamos por teléfono.</p>
+            <p><strong data-i18n="empleo.graciasTitulo">¡Listo!</strong><br><span data-i18n="empleo.graciasMensaje">Recibimos tu postulación. Si encajas con una vacante te contactamos por teléfono.</span></p>
           </div>
         </div></div>
       </article>
@@ -252,35 +277,35 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="10" width="18" height="2.5" rx="1"/><path d="M5 12.5V18M19 12.5V18"/><path d="M9 10V7a3 3 0 0 1 6 0v3"/></svg>
           </span>
           <span class="puerta-texto">
-            <h3>Reserva tu mesa</h3>
-            <p>Dinos cuándo llegas y cuántos son, y te la dejamos lista.</p>
-            <span class="puerta-cta">Reserva ahora
+            <h3 data-i18n="reserva.titulo">Reserva tu mesa</h3>
+            <p data-i18n="reserva.desc">Dinos cuándo llegas y cuántos son, y te la dejamos lista.</p>
+            <span class="puerta-cta" data-i18n="reserva.cta">Reserva ahora
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
             </span>
           </span>
         </button>
         <div class="puerta-panel-wrap"><div class="puerta-panel-inner">
           <form class="puerta-form" id="panel-reserva">
-            <div class="campo"><label for="r-nombre">Nombre completo</label><input id="r-nombre" required /></div>
-            <div class="campo"><label for="r-telefono">Teléfono</label><input id="r-telefono" type="tel" required /></div>
+            <div class="campo"><label for="r-nombre" data-i18n="campo.nombre">Nombre completo</label><input id="r-nombre" required /></div>
+            <div class="campo"><label for="r-telefono" data-i18n="campo.telefono">Teléfono</label><input id="r-telefono" type="tel" required /></div>
             <div class="campo">
-              <label for="r-documento-tipo">Tipo de documento</label>
+              <label for="r-documento-tipo" data-i18n="campo.tipoDocumento">Tipo de documento</label>
               <select id="r-documento-tipo" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option value="cedula">Cédula de ciudadanía</option>
-                <option value="cedula_extranjeria">Cédula de extranjería</option>
-                <option value="pasaporte">Pasaporte</option>
+                <option value="" disabled selected data-i18n="campo.selecciona">Selecciona una opción</option>
+                <option value="cedula" data-i18n="doc.cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria" data-i18n="doc.cedulaExtranjeria">Cédula de extranjería</option>
+                <option value="pasaporte" data-i18n="doc.pasaporte">Pasaporte</option>
               </select>
             </div>
-            <div class="campo"><label for="r-documento-numero">Número de documento</label><input id="r-documento-numero" required /></div>
-            <div class="campo"><label for="r-fecha">Fecha</label><input id="r-fecha" type="date" required /></div>
-            <div class="campo"><label for="r-hora">Hora</label><input id="r-hora" type="time" required /></div>
-            <div class="campo"><label for="r-personas">Número de personas</label><input id="r-personas" type="number" min="1" required /></div>
-            <button class="boton enviar" type="submit">Enviar por WhatsApp</button>
+            <div class="campo"><label for="r-documento-numero" data-i18n="campo.numeroDocumento">Número de documento</label><input id="r-documento-numero" required /></div>
+            <div class="campo"><label for="r-fecha" data-i18n="reserva.fecha">Fecha</label><input id="r-fecha" type="date" required /></div>
+            <div class="campo"><label for="r-hora" data-i18n="reserva.hora">Hora</label><input id="r-hora" type="time" required /></div>
+            <div class="campo"><label for="r-personas" data-i18n="reserva.personas">Número de personas</label><input id="r-personas" type="number" min="1" required /></div>
+            <button class="boton enviar" type="submit" data-i18n="reserva.enviar">Enviar por WhatsApp</button>
           </form>
           <div class="gracias">
             <span class="gracias-sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span>
-            <p><strong>¡Listo!</strong><br>Se abrió WhatsApp con tu mensaje escrito — solo dale enviar.</p>
+            <p><strong data-i18n="reserva.graciasTitulo">¡Listo!</strong><br><span data-i18n="reserva.graciasMensaje">Se abrió WhatsApp con tu mensaje escrito — solo dale enviar.</span></p>
           </div>
         </div></div>
       </article>
@@ -291,47 +316,55 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.5L12 4l8.5 4.5L12 13z"/><path d="M3.5 8.5V16L12 20.5 20.5 16V8.5"/></svg>
           </span>
           <span class="puerta-texto">
-            <h3>Sé nuestro proveedor</h3>
-            <p>Licores, insumos, menaje — preséntanos lo que ofreces y tus condiciones.</p>
-            <span class="puerta-cta">Preséntate
+            <h3 data-i18n="proveedor.titulo">Sé nuestro proveedor</h3>
+            <p data-i18n="proveedor.desc">Licores, insumos, menaje — preséntanos lo que ofreces y tus condiciones.</p>
+            <span class="puerta-cta" data-i18n="proveedor.cta">Preséntate
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg>
             </span>
           </span>
         </button>
         <div class="puerta-panel-wrap"><div class="puerta-panel-inner">
           <form class="puerta-form" id="panel-proveedores">
-            <div class="campo"><label for="p-empresa">Nombre de la empresa</label><input id="p-empresa" required /></div>
-            <div class="campo"><label for="p-contacto">Persona de contacto</label><input id="p-contacto" required /></div>
-            <div class="campo"><label for="p-telefono">Teléfono</label><input id="p-telefono" type="tel" required /></div>
-            <div class="campo"><label for="p-correo">Correo <span class="opcional">(opcional)</span></label><input id="p-correo" type="email" /></div>
+            <div class="campo"><label for="p-empresa" data-i18n="proveedor.empresa">Nombre de la empresa</label><input id="p-empresa" required /></div>
+            <div class="campo"><label for="p-contacto" data-i18n="proveedor.contacto">Persona de contacto</label><input id="p-contacto" required /></div>
+            <div class="campo"><label for="p-telefono" data-i18n="campo.telefono">Teléfono</label><input id="p-telefono" type="tel" required /></div>
+            <div class="campo"><label for="p-correo"><span data-i18n="campo.correo">Correo</span> <span class="opcional" data-i18n="campo.opcional">(opcional)</span></label><input id="p-correo" type="email" /></div>
             <div class="campo">
-              <label for="p-documento-tipo">Tipo de documento</label>
+              <label for="p-documento-tipo" data-i18n="campo.tipoDocumento">Tipo de documento</label>
               <select id="p-documento-tipo" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option value="cedula">Cédula de ciudadanía</option>
-                <option value="cedula_extranjeria">Cédula de extranjería</option>
-                <option value="pasaporte">Pasaporte</option>
+                <option value="" disabled selected data-i18n="campo.selecciona">Selecciona una opción</option>
+                <option value="cedula" data-i18n="doc.cedula">Cédula de ciudadanía</option>
+                <option value="cedula_extranjeria" data-i18n="doc.cedulaExtranjeria">Cédula de extranjería</option>
+                <option value="pasaporte" data-i18n="doc.pasaporte">Pasaporte</option>
               </select>
             </div>
-            <div class="campo"><label for="p-documento-numero">Número de documento</label><input id="p-documento-numero" required /></div>
+            <div class="campo"><label for="p-documento-numero" data-i18n="campo.numeroDocumento">Número de documento</label><input id="p-documento-numero" required /></div>
             <div class="campo">
-              <label for="p-que">Qué suministras</label>
+              <label for="p-que" data-i18n="proveedor.queLabel">Qué suministras</label>
               <select id="p-que" required>
-                <option value="" disabled selected>Selecciona una opción</option>
-                <option>Licores y bebidas</option>
-                <option>Insumos</option>
-                <option>Menaje</option>
-                <option>Otro</option>
+                <option value="" disabled selected data-i18n="campo.selecciona">Selecciona una opción</option>
+                <option data-i18n="suministra.licores">Licores y bebidas</option>
+                <option data-i18n="suministra.insumos">Insumos</option>
+                <option data-i18n="suministra.menaje">Menaje</option>
+                <option value="Otro" data-i18n="suministra.otro">Otro</option>
               </select>
             </div>
-            <div class="campo campo-otro is-oculto" id="p-que-otro-campo"><label for="p-que-otro">¿Qué suministras?</label><input id="p-que-otro" placeholder="Especifica cuál" /></div>
+            <div class="campo campo-otro is-oculto" id="p-que-otro-campo"><label for="p-que-otro" data-i18n="proveedor.queLabel2">¿Qué suministras?</label><input id="p-que-otro" placeholder="Especifica cuál" data-i18n-placeholder="proveedor.especifica" /></div>
             <input class="campo-trampa" id="p-sitio-web" type="text" autocomplete="off" tabindex="-1" aria-hidden="true" />
+            <div class="campo-checkbox">
+              <input type="checkbox" id="p-habeas-data" required />
+              <label for="p-habeas-data">
+                <span data-i18n="legal.acepto">Acepto los</span> <button type="button" class="link-modal" data-modal="terminos" data-i18n="legal.terminos">Términos y condiciones</button>
+                <span data-i18n="legal.autorizo">y autorizo el tratamiento de mis datos personales según la</span>
+                <button type="button" class="link-modal" data-modal="privacidad" data-i18n="legal.privacidad">Política de tratamiento de datos</button>.
+              </label>
+            </div>
             <p class="puerta-error" id="p-error" role="alert"></p>
-            <button class="boton enviar" type="submit">Enviar presentación</button>
+            <button class="boton enviar" type="submit" data-i18n="proveedor.enviar">Enviar presentación</button>
           </form>
           <div class="gracias">
             <span class="gracias-sello"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L19 7"/></svg></span>
-            <p><strong>¡Gracias!</strong><br>El área de compras revisa tu propuesta y te contacta si hay un buen encaje.</p>
+            <p><strong data-i18n="proveedor.graciasTitulo">¡Gracias!</strong><br><span data-i18n="proveedor.graciasMensaje">El área de compras revisa tu propuesta y te contacta si hay un buen encaje.</span></p>
           </div>
         </div></div>
       </article>
@@ -353,12 +386,12 @@
         </iframe>
       </div>
       <div class="ubicacion-info">
-        <p class="eyebrow">¿Dónde queda Coyote?</p>
+        <p class="eyebrow" data-i18n="ubicacion.eyebrow">¿Dónde queda Coyote?</p>
         <h3>Av. 19 No. 33N-11</h3>
-        <p>Ed. Foresta Local 1 · Armenia, Quindío</p>
+        <p data-i18n="ubicacion.direccion2">Ed. Foresta Local 1 · Armenia, Quindío</p>
         <a class="boton contorno" href="https://maps.app.goo.gl/kxS9W5ZhX17tGD3N8" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12z"/><circle cx="12" cy="9" r="2.4"/></svg>
-          Cómo llegar
+          <span data-i18n="ubicacion.boton">Cómo llegar</span>
         </a>
       </div>
     </div>
@@ -378,15 +411,15 @@
     <span class="comunidad-icono">
       <img src="images/coyote-corredor.png" alt="" />
     </span>
-    <h2>Unete a nuestra comunidad</h2>
-    <p>Regístrate y empieza a acumular puntos con cada visita.</p>
-    <a class="boton blanco" href="https://coyote-salon.onrender.com/coyote/formulario/formulario.html" target="_blank" rel="noopener">Únete aquí</a>
+    <h2 data-i18n="comunidad.titulo">Unete a nuestra comunidad</h2>
+    <p data-i18n="comunidad.parrafo">Regístrate y empieza a acumular puntos con cada visita.</p>
+    <a class="boton blanco" href="https://coyote-salon.onrender.com/coyote/formulario/formulario.html" target="_blank" rel="noopener" data-i18n="comunidad.boton">Únete aquí</a>
   </div>
 </section>
 
 <footer>
   <img src="images/logo-coyote.png" alt="Coyote Salón Social" />
-  <p>Av. 19 No. 33N-11, Ed. Foresta Local 1 · Armenia, Quindío</p>
+  <p data-i18n="footer.direccion">Av. 19 No. 33N-11, Ed. Foresta Local 1 · Armenia, Quindío</p>
   <p class="enlaces">
     <a href="https://www.instagram.com/coyotesalonsocial/" target="_blank" rel="noopener">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="0.6" fill="currentColor" stroke="none"/></svg>
@@ -398,7 +431,26 @@
       WhatsApp
     </a>
   </p>
+  <p class="enlaces enlaces-legales">
+    <button type="button" class="link-modal" data-modal="terminos" data-i18n="legal.terminos">Términos y condiciones</button>
+    <span>·</span>
+    <button type="button" class="link-modal" data-modal="privacidad" data-i18n="legal.privacidad">Política de tratamiento de datos</button>
+  </p>
 </footer>
+
+<dialog id="modal-terminos" class="modal-legal">
+  <button type="button" class="modal-legal-cerrar-x" data-cerrar-modal aria-label="Cerrar">✕</button>
+  <h2 data-i18n="legal.terminos">Términos y condiciones</h2>
+  <div class="modal-legal-cuerpo" id="contenido-terminos"></div>
+  <button type="button" class="modal-legal-cerrar" data-cerrar-modal data-i18n="legal.cerrar">Cerrar</button>
+</dialog>
+
+<dialog id="modal-privacidad" class="modal-legal">
+  <button type="button" class="modal-legal-cerrar-x" data-cerrar-modal aria-label="Cerrar">✕</button>
+  <h2 data-i18n="legal.privacidad">Política de tratamiento de datos</h2>
+  <div class="modal-legal-cuerpo" id="contenido-privacidad"></div>
+  <button type="button" class="modal-legal-cerrar" data-cerrar-modal data-i18n="legal.cerrar">Cerrar</button>
+</dialog>
 
 <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23/build/js/intlTelInputWithUtils.min.js"></script>
 <script src="js/script.js"></script>

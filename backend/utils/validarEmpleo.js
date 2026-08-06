@@ -1,6 +1,7 @@
-const CAMPOS_REQUERIDOS = ["nombre", "telefono", "cargo", "documento_tipo", "documento_numero"];
+const CAMPOS_REQUERIDOS = ["nombre", "telefono", "cargo", "documento_tipo", "documento_numero", "disponibilidad"];
 
 const TIPOS_DOCUMENTO_VALIDOS = ["cedula", "cedula_extranjeria", "pasaporte"];
+const DISPONIBILIDAD_VALIDAS = ["Tiempo completo", "Medio tiempo", "Fines de semana"];
 
 const LONGITUDES_MAXIMAS = {
   nombre: 150,
@@ -9,6 +10,7 @@ const LONGITUDES_MAXIMAS = {
   cargo: 50,
   documento_tipo: 30,
   documento_numero: 30,
+  disponibilidad: 30,
   experiencia: 2000,
 };
 
@@ -37,6 +39,10 @@ function validar(body) {
 
   if (body.documento_tipo && !TIPOS_DOCUMENTO_VALIDOS.includes(body.documento_tipo)) {
     errores.push("Tipo de documento inválido");
+  }
+
+  if (body.disponibilidad && !DISPONIBILIDAD_VALIDAS.includes(body.disponibilidad)) {
+    errores.push("Disponibilidad inválida");
   }
 
   return errores;
