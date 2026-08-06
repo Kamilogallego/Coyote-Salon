@@ -785,10 +785,6 @@ queOtroSelect?.addEventListener("change", () => {
   queOtroInput.required = esOtro;
 });
 
-function irAUbicacion() {
-  document.getElementById("ubicacion")?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 document.querySelectorAll(".puerta-form").forEach((form) => {
   if (form.id === "panel-reserva") {
     form.addEventListener("submit", (evento) => {
@@ -803,7 +799,6 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
       const mensaje = `Hola, soy ${nombre}, ${documentoTipo} ${documentoNumero}, mi teléfono es ${telefono}. Quiero reservar mesa para ${personas} personas el ${fecha} a las ${hora}.`;
       window.open(`https://api.whatsapp.com/send?phone=${NUMERO_WHATSAPP}&text=${encodeURIComponent(mensaje)}`, "_blank", "noopener");
       form.closest(".puerta").classList.add("enviada");
-      irAUbicacion();
     });
     return;
   }
@@ -814,7 +809,6 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
     form.addEventListener("submit", (evento) => {
       evento.preventDefault();
       form.closest(".puerta").classList.add("enviada");
-      irAUbicacion();
     });
     return;
   }
@@ -849,7 +843,6 @@ document.querySelectorAll(".puerta-form").forEach((form) => {
       }
 
       form.closest(".puerta").classList.add("enviada");
-      irAUbicacion();
     } catch {
       if (errorEl) errorEl.textContent = "No pudimos enviar el formulario. Revisa tu conexión e intenta de nuevo.";
     } finally {
