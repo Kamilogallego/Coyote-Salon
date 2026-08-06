@@ -59,22 +59,7 @@ CREATE TABLE IF NOT EXISTS admin_users (
 );
 
 DROP TABLE IF EXISTS solicitudes;
-
-CREATE TABLE IF NOT EXISTS solicitudes_artistas (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(150) NOT NULL,
-    telefono VARCHAR(30) NOT NULL,
-    correo VARCHAR(150),
-    tipo_servicio VARCHAR(50) NOT NULL,
-    portafolio VARCHAR(300) NOT NULL,
-    fecha_registro TIMESTAMP NOT NULL DEFAULT NOW(),
-    eliminado_en TIMESTAMP
-);
-
-ALTER TABLE solicitudes_artistas ADD COLUMN IF NOT EXISTS eliminado_en TIMESTAMP;
-
-CREATE INDEX IF NOT EXISTS idx_solicitudes_artistas_fecha_registro ON solicitudes_artistas (fecha_registro);
-CREATE INDEX IF NOT EXISTS idx_solicitudes_artistas_eliminado_en ON solicitudes_artistas (eliminado_en);
+DROP TABLE IF EXISTS solicitudes_artistas;
 
 CREATE TABLE IF NOT EXISTS solicitudes_empleo (
     id SERIAL PRIMARY KEY,

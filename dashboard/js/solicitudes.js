@@ -1,6 +1,10 @@
 import { confirmarAccion } from "./modales.js";
 import { escapeHtml, formatearFecha, ETIQUETAS_DOCUMENTO } from "./utils.js";
 
+const modalDetalle = document.getElementById("modal-detalle");
+const detalleTitulo = document.getElementById("detalle-titulo");
+const detalleContenido = document.getElementById("detalle-contenido");
+
 function formatearDocumento(s) {
   if (!s.documento_tipo || !s.documento_numero) return "";
   return `${ETIQUETAS_DOCUMENTO[s.documento_tipo] || s.documento_tipo}: ${s.documento_numero}`;
@@ -16,24 +20,14 @@ const thDetalle = document.getElementById("th-solicitudes-detalle");
 const tablaPapeleraSolicitudes = document.getElementById("tabla-papelera-solicitudes");
 const resumenPapeleraSolicitudes = document.getElementById("resumen-papelera-solicitudes");
 
-const TIPOS = ["artistas", "empleo", "proveedores"];
+const TIPOS = ["empleo", "proveedores"];
 
 const ETIQUETAS_TIPO = {
-  artistas: "Artista",
   empleo: "Empleo",
   proveedores: "Proveedor",
 };
 
 const CONFIG_POR_TIPO = {
-  artistas: {
-    tituloNombre: "Nombre",
-    tituloCategoria: "Tipo de servicio",
-    tituloDetalle: "Portafolio",
-    nombre: (s) => s.nombre,
-    categoria: (s) => s.tipo_servicio,
-    detalle: (s) => (s.portafolio ? `<a href="${escapeHtml(s.portafolio)}" target="_blank" rel="noopener">${escapeHtml(s.portafolio)}</a>` : ""),
-    detalleTexto: (s) => s.portafolio || "",
-  },
   empleo: {
     tituloNombre: "Nombre",
     tituloCategoria: "Cargo",
@@ -42,6 +36,15 @@ const CONFIG_POR_TIPO = {
     categoria: (s) => s.cargo,
     detalle: (s) => escapeHtml([formatearDocumento(s), s.disponibilidad, s.experiencia].filter(Boolean).join(" — ")),
     detalleTexto: (s) => [formatearDocumento(s), s.disponibilidad, s.experiencia].filter(Boolean).join(" — "),
+    camposDetalle: (s) => [
+      ["Teléfono", s.telefono],
+      ["Correo", s.correo],
+      ["Cargo", s.cargo],
+      ["Documento", formatearDocumento(s)],
+      ["Disponibilidad", s.disponibilidad],
+      ["Experiencia", s.experiencia],
+      ["Registrado", formatearFecha(s.fecha_registro)],
+    ],
   },
   proveedores: {
     tituloNombre: "Empresa",
@@ -51,10 +54,18 @@ const CONFIG_POR_TIPO = {
     categoria: (s) => s.que_suministra,
     detalle: (s) => escapeHtml([s.contacto, formatearDocumento(s)].filter(Boolean).join(" · ")),
     detalleTexto: (s) => [s.contacto, formatearDocumento(s)].filter(Boolean).join(" · "),
+    camposDetalle: (s) => [
+      ["Contacto", s.contacto],
+      ["Teléfono", s.telefono],
+      ["Correo", s.correo],
+      ["Qué suministra", s.que_suministra],
+      ["Documento", formatearDocumento(s)],
+      ["Registrado", formatearFecha(s.fecha_registro)],
+    ],
   },
 };
 
-let tipoActual = "artistas";
+let tipoActual = "empleo";
 let solicitudesActuales = [];
 let papeleraSolicitudesActual = [];
 
@@ -145,12 +156,34 @@ function renderizarTablaSolicitudes() {
       <td>${config.detalle(s)}</td>
       <td>${formatearFecha(s.fecha_registro)}</td>
       <td class="fila-acciones">
+        <button type="button" class="btn-ver" data-id="${s.id}" title="Ver detalle">👁</button>
         <button type="button" class="btn-eliminar-solicitud" data-id="${s.id}" title="Eliminar">🗑</button>
       </td>
     </tr>
   `
     )
     .join("");
+}
+
+function verDetalleSolicitud(id) {
+  const config = CONFIG_POR_TIPO[tipoActual];
+  const s = solicitudesActuales.find((solicitud) => solicitud.id === id);
+  if (!s) return;
+
+  detalleTitulo.textContent = config.nombre(s);
+
+  detalleContenido.innerHTML = config
+    .camposDetalle(s)
+    .map(
+      ([etiqueta, valor]) => `
+      <div class="detalle-campo">
+        <span class="detalle-etiqueta">${escapeHtml(etiqueta)}</span>
+        <span class="detalle-valor">${escapeHtml(valor || "—")}</span>
+      </div>`
+    )
+    .join("");
+
+  modalDetalle.showModal();
 }
 
 async function eliminarSolicitud(id) {
@@ -179,6 +212,12 @@ async function eliminarSolicitud(id) {
 }
 
 tabla.addEventListener("click", (evento) => {
+  const botonVer = evento.target.closest(".btn-ver");
+  if (botonVer) {
+    verDetalleSolicitud(Number(botonVer.dataset.id));
+    return;
+  }
+
   const boton = evento.target.closest(".btn-eliminar-solicitud");
   if (!boton) return;
   eliminarSolicitud(Number(boton.dataset.id));

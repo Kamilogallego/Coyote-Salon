@@ -4,17 +4,15 @@ const { requireAuth } = require("../middleware/auth");
 const asyncHandler = require("../middleware/asyncHandler");
 const { tieneCampoTrampaLleno, seEnvioMuyRapido } = require("../utils/antiBot");
 
-const solicitudesArtistasRepository = require("../repositories/solicitudesArtistasRepository");
 const solicitudesEmpleoRepository = require("../repositories/solicitudesEmpleoRepository");
 const solicitudesProveedoresRepository = require("../repositories/solicitudesProveedoresRepository");
 
-const { validar: validarArtista } = require("../utils/validarArtista");
 const { validar: validarEmpleo } = require("../utils/validarEmpleo");
 const { validar: validarProveedor } = require("../utils/validarProveedor");
 
 const router = express.Router();
 
-const DIAS_RETENCION_PAPELERA = solicitudesArtistasRepository.DIAS_RETENCION_PAPELERA;
+const DIAS_RETENCION_PAPELERA = solicitudesEmpleoRepository.DIAS_RETENCION_PAPELERA;
 
 function parsearId(req, res, next) {
   const id = Number(req.params.id);
@@ -95,28 +93,6 @@ function eliminarSolicitudDefinitivo(repositorio, mensajeNoEncontrado) {
   });
 }
 
-// --- Artistas ---
-router.post("/artistas", limiteRegistro, registrarSolicitud(solicitudesArtistasRepository, validarArtista));
-router.get("/artistas", requireAuth, listarSolicitudes(solicitudesArtistasRepository));
-router.delete(
-  "/artistas/:id",
-  requireAuth,
-  parsearId,
-  eliminarSolicitud(solicitudesArtistasRepository, "Solicitud de artista no encontrada")
-);
-router.post(
-  "/artistas/:id/restaurar",
-  requireAuth,
-  parsearId,
-  restaurarSolicitud(solicitudesArtistasRepository, "Solicitud de artista no encontrada en la papelera")
-);
-router.delete(
-  "/artistas/:id/definitivo",
-  requireAuth,
-  parsearId,
-  eliminarSolicitudDefinitivo(solicitudesArtistasRepository, "Solicitud de artista no encontrada en la papelera")
-);
-
 // --- Empleo ---
 router.post("/empleo", limiteRegistro, registrarSolicitud(solicitudesEmpleoRepository, validarEmpleo));
 router.get("/empleo", requireAuth, listarSolicitudes(solicitudesEmpleoRepository));
@@ -167,19 +143,16 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     await Promise.all([
-      solicitudesArtistasRepository.purgarVencidos(),
       solicitudesEmpleoRepository.purgarVencidos(),
       solicitudesProveedoresRepository.purgarVencidos(),
     ]);
 
-    const [artistas, empleo, proveedores] = await Promise.all([
-      solicitudesArtistasRepository.obtenerPapelera(),
+    const [empleo, proveedores] = await Promise.all([
       solicitudesEmpleoRepository.obtenerPapelera(),
       solicitudesProveedoresRepository.obtenerPapelera(),
     ]);
 
     const solicitudes = [
-      ...artistas.map((s) => ({ tipo: "artistas", id: s.id, nombre: s.nombre, detalle: s.tipo_servicio, eliminado_en: s.eliminado_en })),
       ...empleo.map((s) => ({ tipo: "empleo", id: s.id, nombre: s.nombre, detalle: s.cargo, eliminado_en: s.eliminado_en })),
       ...proveedores.map((s) => ({ tipo: "proveedores", id: s.id, nombre: s.nombre_empresa, detalle: s.que_suministra, eliminado_en: s.eliminado_en })),
     ].sort((a, b) => new Date(b.eliminado_en) - new Date(a.eliminado_en));
@@ -190,7 +163,6 @@ router.get(
 
 async function purgarPapeleraVencida() {
   await Promise.all([
-    solicitudesArtistasRepository.purgarVencidos(),
     solicitudesEmpleoRepository.purgarVencidos(),
     solicitudesProveedoresRepository.purgarVencidos(),
   ]);
