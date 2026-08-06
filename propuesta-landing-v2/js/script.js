@@ -423,6 +423,18 @@ function aplicarIdioma(lang) {
     }
   });
 
+  // La fuente decorativa del titulo no trae el glifo de la U con tilde (el navegador
+  // usaba otra fuente solo para esa letra). En espanol se separa la U en un span propio
+  // para poder dibujarle la tilde con CSS; en ingles el titulo no la necesita.
+  const tituloComunidad = document.querySelector('[data-i18n="comunidad.titulo"]');
+  if (tituloComunidad) {
+    if (lang === "es") {
+      tituloComunidad.innerHTML = '<span class="acento-u">U</span>nete a nuestra comunidad';
+    } else {
+      tituloComunidad.textContent = t("comunidad.titulo");
+    }
+  }
+
   document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
     const clave = el.getAttribute("data-i18n-placeholder");
     const valor = t(clave);
