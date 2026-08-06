@@ -422,13 +422,14 @@ tbody tr.fila-por-eliminar {
   table-layout: fixed;
 }
 
-.tabla-solicitudes-grid th:nth-child(1) { width: 16%; }
-.tabla-solicitudes-grid th:nth-child(2) { width: 12%; }
-.tabla-solicitudes-grid th:nth-child(3) { width: 18%; }
-.tabla-solicitudes-grid th:nth-child(4) { width: 14%; }
-.tabla-solicitudes-grid th:nth-child(5) { width: 20%; }
-.tabla-solicitudes-grid th:nth-child(6) { width: 12%; }
-.tabla-solicitudes-grid th:nth-child(7) { width: 8%; }
+.tabla-solicitudes-grid th:nth-child(1) { width: 14%; }
+.tabla-solicitudes-grid th:nth-child(2) { width: 11%; }
+.tabla-solicitudes-grid th:nth-child(3) { width: 17%; }
+.tabla-solicitudes-grid th:nth-child(4) { width: 13%; }
+.tabla-solicitudes-grid th:nth-child(5) { width: 13%; }
+.tabla-solicitudes-grid th:nth-child(6) { width: 13%; }
+.tabla-solicitudes-grid th:nth-child(7) { width: 9%; }
+.tabla-solicitudes-grid th:nth-child(8) { width: 10%; }
 
 .dias-restantes-urgente {
   color: var(--coyote-rojo);
