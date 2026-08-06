@@ -237,6 +237,8 @@ const CONTENIDO_TERMINOS = {
     <p>
       Para dudas sobre estos Términos y Condiciones, escríbanos a <strong>privacidad@coyotesalonsocial.com</strong>.
     </p>
+
+    <p class="nota-legal">Este sitio y sus formularios fueron desarrollados con asistencia de inteligencia artificial.</p>
   `,
   en: `
     <p class="politica-fecha">Last updated: August 6, 2026</p>
@@ -277,6 +279,8 @@ const CONTENIDO_TERMINOS = {
     <p>
       For questions about these Terms and Conditions, write to us at <strong>privacidad@coyotesalonsocial.com</strong>.
     </p>
+
+    <p class="nota-legal">This site and its forms were developed with the assistance of artificial intelligence.</p>
   `,
 };
 
