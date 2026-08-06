@@ -435,3 +435,18 @@ tbody tr.fila-por-eliminar {
   color: var(--coyote-rojo);
   font-weight: 700;
 }
+
+.etiqueta-nuevo {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.35rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 999px;
+  background: var(--coyote-rojo);
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}

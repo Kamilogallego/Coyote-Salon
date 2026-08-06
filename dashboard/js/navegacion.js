@@ -23,12 +23,15 @@ function irAPagina(pagina) {
 }
 
 document.querySelectorAll(".nav-item[data-page]").forEach((btn) => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", async () => {
     irAPagina(btn.dataset.page);
     if (btn.dataset.page === "papelera") cargarPapelera();
     if (btn.dataset.page === "compartir") cargarCompartir();
     if (btn.dataset.page === "solicitudes") {
-      marcarSolicitudesVistas();
+      // Espera a que se guarde la marca de "visto" antes de recargar la tabla: si las dos
+      // llamadas corren en paralelo, la que termina de ultimas puede pisar el contador con
+      // el valor viejo y el badge se queda pegado sin bajar a 0.
+      await marcarSolicitudesVistas();
       cargarSolicitudes();
     }
   });

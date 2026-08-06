@@ -5,6 +5,14 @@ const modalDetalle = document.getElementById("modal-detalle");
 const detalleTitulo = document.getElementById("detalle-titulo");
 const detalleContenido = document.getElementById("detalle-contenido");
 
+function esDeHoy(fechaISO) {
+  const fecha = new Date(fechaISO);
+  const hoy = new Date();
+  return (
+    fecha.getFullYear() === hoy.getFullYear() && fecha.getMonth() === hoy.getMonth() && fecha.getDate() === hoy.getDate()
+  );
+}
+
 function formatearDocumento(s) {
   if (!s.documento_tipo || !s.documento_numero) return "";
   return `${ETIQUETAS_DOCUMENTO[s.documento_tipo] || s.documento_tipo}: ${s.documento_numero}`;
@@ -176,7 +184,7 @@ function renderizarTablaSolicitudes() {
     .map(
       (s) => `
     <tr data-row-id="${s.id}">
-      <td>${escapeHtml(config.nombre(s))}</td>
+      <td>${escapeHtml(config.nombre(s))}${esDeHoy(s.fecha_registro) ? ' <span class="etiqueta-nuevo">Nuevo</span>' : ""}</td>
       <td>${escapeHtml(s.telefono)}</td>
       <td>${escapeHtml(s.correo || "")}</td>
       <td>${escapeHtml(config.categoria(s))}</td>
