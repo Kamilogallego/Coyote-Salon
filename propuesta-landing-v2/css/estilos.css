@@ -1509,10 +1509,10 @@ dialog.modal-legal h2 {
   top: -0.62em;
   left: 50%;
   width: 0.15em;
-  height: 0.4em;
+  height: 0.42em;
   background: currentColor;
   border-radius: 2px;
-  transform: translateX(-50%) rotate(30deg);
+  transform: translateX(-50%) rotate(48deg);
 }
 
 .comunidad p {
