@@ -540,25 +540,63 @@ document.querySelectorAll(".sobre-video, .comunidad-video").forEach((video) => {
 const carrusel = document.getElementById("carrusel-galeria");
 const mapaClones = new Map();
 if (carrusel) {
-  carrusel.scrollLeft = 0;
-  const items = Array.from(carrusel.querySelectorAll(".carrusel-item"));
-  const desplazar = () => items[0].getBoundingClientRect().width + 16;
-  const scrollMaximo = () => carrusel.scrollWidth - carrusel.clientWidth;
+  const originales = Array.from(carrusel.querySelectorAll(".carrusel-item"));
+  const NUM_CLONES = Math.min(3, originales.length);
+
+  const crearClon = (item, indiceOriginal) => {
+    const clon = item.cloneNode(true);
+    clon.classList.add("carrusel-clon");
+    clon.setAttribute("aria-hidden", "true");
+    clon.tabIndex = -1;
+    mapaClones.set(clon, indiceOriginal);
+    return clon;
+  };
+
+  const primerItemOriginal = carrusel.firstChild;
+  originales.slice(-NUM_CLONES).forEach((item) => {
+    carrusel.insertBefore(crearClon(item, originales.indexOf(item)), primerItemOriginal);
+  });
+  originales.slice(0, NUM_CLONES).forEach((item) => {
+    carrusel.appendChild(crearClon(item, originales.indexOf(item)));
+  });
+
+  carrusel.scrollLeft = originales[0].offsetLeft;
+
+  const desplazar = () => originales[0].getBoundingClientRect().width + 16;
 
   document.querySelector(".carrusel-anterior")?.addEventListener("click", () => {
-    if (carrusel.scrollLeft <= 4) {
-      carrusel.scrollTo({ left: scrollMaximo(), behavior: "smooth" });
-    } else {
-      carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
-    }
+    carrusel.scrollBy({ left: -desplazar(), behavior: "smooth" });
   });
   document.querySelector(".carrusel-siguiente")?.addEventListener("click", () => {
-    if (carrusel.scrollLeft >= scrollMaximo() - 4) {
-      carrusel.scrollTo({ left: 0, behavior: "smooth" });
-    } else {
-      carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
-    }
+    carrusel.scrollBy({ left: desplazar(), behavior: "smooth" });
   });
+
+  const reposicionarSiEsClon = () => {
+    const centro = carrusel.scrollLeft + carrusel.clientWidth / 2;
+    let masCercano = null;
+    let distanciaMin = Infinity;
+    carrusel.querySelectorAll(".carrusel-item").forEach((el) => {
+      const centroEl = el.offsetLeft + el.getBoundingClientRect().width / 2;
+      const distancia = Math.abs(centroEl - centro);
+      if (distancia < distanciaMin) {
+        distanciaMin = distancia;
+        masCercano = el;
+      }
+    });
+    if (masCercano && mapaClones.has(masCercano)) {
+      carrusel.scrollLeft = originales[mapaClones.get(masCercano)].offsetLeft;
+    }
+  };
+
+  if ("onscrollend" in window) {
+    carrusel.addEventListener("scrollend", reposicionarSiEsClon);
+  } else {
+    let temporizadorLoop;
+    carrusel.addEventListener("scroll", () => {
+      clearTimeout(temporizadorLoop);
+      temporizadorLoop = setTimeout(reposicionarSiEsClon, 120);
+    });
+  }
 }
 
 const lightbox = document.getElementById("lightbox");
