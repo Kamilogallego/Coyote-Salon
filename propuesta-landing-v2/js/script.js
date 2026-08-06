@@ -105,7 +105,7 @@ const TRANSLATIONS = {
     "ubicacion.eyebrow": "¿Dónde queda Coyote?",
     "ubicacion.direccion2": "Ed. Foresta Local 1 · Armenia, Quindío",
     "ubicacion.boton": "Cómo llegar",
-    "comunidad.titulo": "Unete a nuestra comunidad",
+    "comunidad.titulo": "Únete a nuestra comunidad",
     "comunidad.parrafo": "Regístrate y empieza a acumular puntos con cada visita.",
     "comunidad.boton": "Únete aquí",
     "footer.direccion": "Av. 19 No. 33N-11, Ed. Foresta Local 1 · Armenia, Quindío",
